@@ -2,7 +2,8 @@ import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 import { makeProject } from "test/factories/make-project";
 
 import { Project } from "./project";
-import { StatusValues } from "./value-objects/status";
+import { ProjectStatusValues } from "./value-objects/project-status";
+import { DueDate } from "./value-objects/due-date";
 
 describe("Project", () => {
   it("should create a project", () => {
@@ -31,7 +32,7 @@ describe("Project", () => {
     expect(sut.values.status.canArchive()).toBeTruthy();
 
     sut.archive();
-    expect(sut.values.status.value).toBe(StatusValues.Archived);
+    expect(sut.values.status.value).toBe(ProjectStatusValues.Archived);
     expect(sut.values.status.canArchive()).toBeFalsy();
   });
 
@@ -39,7 +40,7 @@ describe("Project", () => {
     const sut = makeProject();
 
     sut.delete();
-    expect(sut.values.status.value).toBe(StatusValues.Deleted);
+    expect(sut.values.status.value).toBe(ProjectStatusValues.Deleted);
     expect(sut.values.deletedAt).not.toBeNull();
   });
 
@@ -47,7 +48,7 @@ describe("Project", () => {
     const date = new Date("2000-01-01T08:00:00");
     vi.setSystemTime(date);
 
-    const sut = makeProject({ dueDate: new Date("2000-01-02T08:00:00") });
+    const sut = makeProject({ dueDate: DueDate.create(new Date("2000-01-02T08:00:00")) });
 
     expect(sut.isExpired()).toBe(false);
 
@@ -67,7 +68,7 @@ describe("Project", () => {
     sut.delete();
     sut.archive();
 
-    expect(sut.values.status.value).toBe(StatusValues.Deleted);
+    expect(sut.values.status.value).toBe(ProjectStatusValues.Deleted);
   });
 
   it("should be able to reactivate a project", () => {
@@ -75,10 +76,10 @@ describe("Project", () => {
 
     sut.archive();
     expect(sut.values.status.canActivate()).toBeTruthy();
-    expect(sut.values.status.value).toBe(StatusValues.Archived);
+    expect(sut.values.status.value).toBe(ProjectStatusValues.Archived);
 
     sut.reactivate();
-    expect(sut.values.status.value).toBe(StatusValues.Active);
+    expect(sut.values.status.value).toBe(ProjectStatusValues.Active);
   });
 
   it("should not be able to reactivate a deleted (or active) project", () => {
@@ -88,7 +89,7 @@ describe("Project", () => {
     expect(sut.values.status.canActivate()).toBeFalsy();
 
     sut.reactivate();
-    expect(sut.values.status.value).toBe(StatusValues.Deleted);
+    expect(sut.values.status.value).toBe(ProjectStatusValues.Deleted);
   });
 
   afterAll(() => {

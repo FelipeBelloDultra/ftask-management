@@ -2,23 +2,24 @@ import { Entity } from "~/core/entity/entity";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 import { Optional } from "~/core/types/optional";
 
-import { Status } from "./value-objects/status";
+import { ProjectStatus } from "./value-objects/project-status";
 import { Slug } from "./value-objects/slug";
+import { DueDate } from "./value-objects/due-date";
 
 export interface ProjectProps {
   name: string;
   slug: Slug;
   description: string | null;
   ownerId: UniqueEntityID;
-  dueDate: Date | null;
-  status: Status;
+  dueDate: DueDate | null;
+  status: ProjectStatus;
   deletedAt: Date | null;
   updatedAt: Date;
   createdAt: Date;
 }
 
 export class Project extends Entity<ProjectProps> {
-  private update() {
+  private edited() {
     this.props.updatedAt = new Date();
   }
 
@@ -27,8 +28,7 @@ export class Project extends Entity<ProjectProps> {
       return false;
     }
 
-    const date = new Date();
-    return this.props.dueDate.getTime() < date.getTime();
+    return this.props.dueDate.isExpired();
   }
 
   public reactivate() {
@@ -37,7 +37,7 @@ export class Project extends Entity<ProjectProps> {
     }
 
     this.props.status.setActive();
-    this.update();
+    this.edited();
   }
 
   public archive() {
@@ -46,13 +46,13 @@ export class Project extends Entity<ProjectProps> {
     }
 
     this.props.status.setArchived();
-    this.update();
+    this.edited();
   }
 
   public delete() {
     this.props.status.setDeleted();
     this.props.deletedAt = new Date();
-    this.update();
+    this.edited();
   }
 
   public static create(
@@ -65,7 +65,7 @@ export class Project extends Entity<ProjectProps> {
         deletedAt: props.deletedAt ?? null,
         updatedAt: props.updatedAt ?? new Date(),
         createdAt: props.updatedAt ?? new Date(),
-        status: props.status ?? Status.create(),
+        status: props.status ?? ProjectStatus.create(),
         slug: props.slug ?? Slug.createFromText(props.name),
       },
       id,
