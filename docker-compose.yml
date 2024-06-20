@@ -1,0 +1,19 @@
+services:
+    postgres_db:
+        image: bitnami/postgresql:16.2.0
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRESQL_USERNAME=docker
+            - POSTGRESQL_PASSWORD=docker
+        volumes:
+            - postgresql_data:/bitnami/postgresql
+        networks:
+            - ftask-management_net
+
+volumes:
+    postgresql_data:
+        driver: local
+
+networks:
+  ftask-management_net:
