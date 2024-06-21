@@ -1,7 +1,8 @@
 export enum TaskStatusValues {
   Waiting = "waiting",
-  InProgress = "in-progress",
+  InProgress = "in_progress",
   Done = "done",
+  Deleted = "deleted",
 }
 
 export class TaskStatus {
@@ -15,6 +16,22 @@ export class TaskStatus {
     this._value = value;
   }
 
+  public canSetDone() {
+    return this._value !== TaskStatusValues.Deleted && this._value !== TaskStatusValues.Done;
+  }
+
+  public canSetDeleted() {
+    return this._value !== TaskStatusValues.Deleted;
+  }
+
+  public canSetInProgress() {
+    return this._value !== TaskStatusValues.Deleted && this._value !== TaskStatusValues.InProgress;
+  }
+
+  public canSetWaiting() {
+    return this._value !== TaskStatusValues.Deleted && this._value !== TaskStatusValues.Waiting;
+  }
+
   public setDone() {
     this._value = TaskStatusValues.Done;
   }
@@ -25,6 +42,10 @@ export class TaskStatus {
 
   public setWaiting() {
     this._value = TaskStatusValues.Waiting;
+  }
+
+  public setDeleted() {
+    this._value = TaskStatusValues.Deleted;
   }
 
   public static create(value?: TaskStatusValues) {

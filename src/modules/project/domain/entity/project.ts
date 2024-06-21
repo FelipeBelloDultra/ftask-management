@@ -32,18 +32,14 @@ export class Project extends Entity<ProjectProps> {
   }
 
   public reactivate() {
-    if (!this.props.status.canActivate()) {
-      return;
-    }
+    if (!this.props.status.canActivate()) return;
 
     this.props.status.setActive();
     this.edited();
   }
 
   public archive() {
-    if (!this.props.status.canArchive()) {
-      return;
-    }
+    if (!this.props.status.canArchive()) return;
 
     this.props.status.setArchived();
     this.edited();

@@ -1,13 +1,13 @@
 import { ProjectStatus, ProjectStatusValues } from "./project-status";
 
 describe("Status", () => {
-  it("should be able to create a status with default value", () => {
+  it("should be able to create a project status with default value", () => {
     const sut = ProjectStatus.create();
 
     expect(sut.value).toBe(ProjectStatusValues.Active);
   });
 
-  it("should be able to update the status value", () => {
+  it("should be able to update the project status value", () => {
     const sut = ProjectStatus.create();
 
     sut.setArchived();

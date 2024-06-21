@@ -1,3 +1,14 @@
 import { Entity } from "~/core/entity/entity";
+import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 
-export class Owner extends Entity {}
+export interface OwnerProps {
+  userId: UniqueEntityID;
+  userEmail: string;
+  userName: string;
+}
+
+export class Owner extends Entity {
+  public static create(props: OwnerProps, id?: UniqueEntityID) {
+    return new Owner(props, id);
+  }
+}
