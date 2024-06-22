@@ -2,9 +2,9 @@ import { Entity } from "~/core/entity/entity";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 
 export interface OwnerProps {
-  userId: UniqueEntityID;
-  userEmail: string;
-  userName: string;
+  accountId: UniqueEntityID;
+  accountEmail: string;
+  accountName: string;
 }
 
 export class Owner extends Entity<OwnerProps> {

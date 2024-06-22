@@ -8,8 +8,8 @@ export class FakeOwnerRepository implements OwnerRepository {
     this.owners.push(owner);
   }
 
-  public async findByUserId(ownerId: string): Promise<Owner | null> {
-    const owner = this.owners.find((owner) => owner.values.userId.toValue() === ownerId);
+  public async findByAccountId(ownerId: string): Promise<Owner | null> {
+    const owner = this.owners.find((owner) => owner.values.accountId.toValue() === ownerId);
 
     return owner || null;
   }

@@ -8,9 +8,9 @@ export class FakeMemberRepository implements MemberRepository {
     this.members.push(member);
   }
 
-  public async findByUserEmailAndProjectId(email: string, projectId: string): Promise<Member | null> {
+  public async findByAccountEmailAndProjectId(email: string, projectId: string): Promise<Member | null> {
     const member = this.members.find(
-      (member) => member.values.userEmail === email && member.values.projectId.toValue() === projectId,
+      (member) => member.values.accountEmail === email && member.values.projectId.toValue() === projectId,
     );
 
     return member || null;

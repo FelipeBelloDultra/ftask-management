@@ -6,9 +6,9 @@ import { Owner, OwnerProps } from "~/modules/project/domain/entity/owner";
 export function makeOwner(override: Partial<OwnerProps> = {}, id?: UniqueEntityID): Owner {
   const owner = Owner.create(
     {
-      userEmail: faker.internet.email(),
-      userName: faker.person.fullName(),
-      userId: UniqueEntityID.create(),
+      accountEmail: faker.internet.email(),
+      accountName: faker.person.fullName(),
+      accountId: UniqueEntityID.create(),
       ...override,
     },
     id,

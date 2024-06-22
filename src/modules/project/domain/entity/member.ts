@@ -2,10 +2,10 @@ import { Entity } from "~/core/entity/entity";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 
 export interface MemberProps {
-  userId: UniqueEntityID;
+  accountId: UniqueEntityID;
   projectId: UniqueEntityID;
-  userEmail: string;
-  userName: string;
+  accountEmail: string;
+  accountName: string;
 }
 
 export class Member extends Entity<MemberProps> {
