@@ -2,21 +2,24 @@ import { Either, left, right } from "~/core/either";
 import { Project } from "~/modules/project/domain/entity/project";
 import { DueDate } from "~/modules/project/domain/entity/value-objects/due-date";
 import { Owner } from "~/modules/project/domain/entity/owner";
+import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 
 import { ProjectRepository } from "../repositories/project.repository";
 import { AccountRepository } from "../repositories/account.repository";
 import { OwnerRepository } from "../repositories/owner.repository";
 
-import { DuplicatedProjectSlug } from "./errors/duplicated-project-slug.error";
-import { AccountNotFound } from "./errors/account-not-found.error";
+import { DuplicatedProjectSlugError } from "./errors/duplicated-project-slug.error";
+import { AccountNotFoundError } from "./errors/account-not-found.error";
 
 type Input = {
-  accountId: string;
+  ownerAccountId: string;
   name: string;
   description: string | null;
   dueDate: Date | null;
 };
-type Output = Either<DuplicatedProjectSlug | AccountNotFound, { project: Project }>;
+type OnError = DuplicatedProjectSlugError | AccountNotFoundError;
+type OnSuccess = { project: Project };
+type Output = Either<OnError, OnSuccess>;
 
 export class CreateProjectUseCase {
   public constructor(
@@ -26,12 +29,14 @@ export class CreateProjectUseCase {
   ) {}
 
   public async execute(input: Input): Promise<Output> {
-    const account = await this.accountRepository.findById(input.accountId);
+    const accountId = UniqueEntityID.create(input.ownerAccountId);
+
+    const account = await this.accountRepository.findById(accountId);
     if (!account) {
-      return left(new AccountNotFound());
+      return left(new AccountNotFoundError());
     }
 
-    const owner = await this.ownerRepository.findByAccountId(input.accountId);
+    const owner = await this.ownerRepository.findByAccountId(accountId);
     let ownerId = owner?.id;
     if (!owner) {
       const owner = Owner.create({
@@ -54,7 +59,7 @@ export class CreateProjectUseCase {
 
     const projectBySlug = await this.projectRepository.findBySlug(project.values.slug);
     if (projectBySlug) {
-      return left(new DuplicatedProjectSlug());
+      return left(new DuplicatedProjectSlugError());
     }
 
     await this.projectRepository.create(project);

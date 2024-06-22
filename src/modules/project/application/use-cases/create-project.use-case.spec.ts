@@ -6,30 +6,30 @@ import { makeOwner } from "test/factories/make-owner";
 import { makeProject } from "test/factories/make-project";
 
 import { CreateProjectUseCase } from "./create-project.use-case";
-import { DuplicatedProjectSlug } from "./errors/duplicated-project-slug.error";
-import { AccountNotFound } from "./errors/account-not-found.error";
+import { DuplicatedProjectSlugError } from "./errors/duplicated-project-slug.error";
+import { AccountNotFoundError } from "./errors/account-not-found.error";
 
 describe("CreateProjectUseCase", () => {
   let sut: CreateProjectUseCase;
-  let projectRepository: FakeProjectRepository;
-  let accountRepository: FakeAccountRepository;
-  let ownerRepository: FakeOwnerRepository;
+  let fakeProjectRepository: FakeProjectRepository;
+  let fakeAccountRepository: FakeAccountRepository;
+  let fakeOwnerRepository: FakeOwnerRepository;
 
   beforeEach(() => {
-    projectRepository = new FakeProjectRepository();
-    accountRepository = new FakeAccountRepository();
-    ownerRepository = new FakeOwnerRepository();
+    fakeProjectRepository = new FakeProjectRepository();
+    fakeAccountRepository = new FakeAccountRepository();
+    fakeOwnerRepository = new FakeOwnerRepository();
 
-    sut = new CreateProjectUseCase(projectRepository, accountRepository, ownerRepository);
+    sut = new CreateProjectUseCase(fakeProjectRepository, fakeAccountRepository, fakeOwnerRepository);
   });
 
   it("should create new project and create owner for this one", async () => {
     const account = makeAccount();
 
-    await accountRepository.create(account);
+    await fakeAccountRepository.create(account);
 
     const input = {
-      accountId: account.id.toValue(),
+      ownerAccountId: account.id.toValue(),
       name: "Project name",
       description: "Project description",
       dueDate: new Date("2000-01-01T08:00:00"),
@@ -38,9 +38,9 @@ describe("CreateProjectUseCase", () => {
     const result = await sut.execute(input);
 
     expect(result.isRight()).toBeTruthy();
-    expect(projectRepository.projects.length).toBe(1);
-    expect(ownerRepository.owners.length).toBe(1);
-    expect(ownerRepository.owners[0].values.accountId.equals(account.id)).toBeTruthy();
+    expect(fakeProjectRepository.projects.length).toBe(1);
+    expect(fakeOwnerRepository.owners.length).toBe(1);
+    expect(fakeOwnerRepository.owners[0].values.accountId.equals(account.id)).toBeTruthy();
   });
 
   it("should create new project and use older owner", async () => {
@@ -49,11 +49,11 @@ describe("CreateProjectUseCase", () => {
       accountId: account.id,
     });
 
-    await accountRepository.create(account);
-    await ownerRepository.create(owner);
+    await fakeAccountRepository.create(account);
+    await fakeOwnerRepository.create(owner);
 
     const input = {
-      accountId: account.id.toValue(),
+      ownerAccountId: account.id.toValue(),
       name: "Project name",
       description: "Project description",
       dueDate: null,
@@ -62,9 +62,9 @@ describe("CreateProjectUseCase", () => {
     const result = await sut.execute(input);
 
     expect(result.isRight()).toBeTruthy();
-    expect(projectRepository.projects.length).toBe(1);
-    expect(ownerRepository.owners.length).toBe(1);
-    expect(ownerRepository.owners[0].values.accountId.equals(account.id)).toBeTruthy();
+    expect(fakeProjectRepository.projects.length).toBe(1);
+    expect(fakeOwnerRepository.owners.length).toBe(1);
+    expect(fakeOwnerRepository.owners[0].values.accountId.equals(account.id)).toBeTruthy();
   });
 
   it("should not be able to create project with duplicated slug", async () => {
@@ -73,11 +73,11 @@ describe("CreateProjectUseCase", () => {
       name: "Project name",
     });
 
-    await accountRepository.create(account);
-    await projectRepository.create(project);
+    await fakeAccountRepository.create(account);
+    await fakeProjectRepository.create(project);
 
     const input = {
-      accountId: account.id.toValue(),
+      ownerAccountId: account.id.toValue(),
       name: "Project name",
       description: "Project description",
       dueDate: null,
@@ -86,12 +86,12 @@ describe("CreateProjectUseCase", () => {
     const result = await sut.execute(input);
 
     expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeInstanceOf(DuplicatedProjectSlug);
+    expect(result.value).toBeInstanceOf(DuplicatedProjectSlugError);
   });
 
   it("should not be able to create project with invalid account", async () => {
     const input = {
-      accountId: "invalid-id",
+      ownerAccountId: "invalid-id",
       name: "Project name",
       description: "Project description",
       dueDate: null,
@@ -100,6 +100,6 @@ describe("CreateProjectUseCase", () => {
     const result = await sut.execute(input);
 
     expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeInstanceOf(AccountNotFound);
+    expect(result.value).toBeInstanceOf(AccountNotFoundError);
   });
 });

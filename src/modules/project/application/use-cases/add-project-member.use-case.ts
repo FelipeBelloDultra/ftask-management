@@ -1,49 +1,75 @@
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { Either, right } from "~/core/either";
+import { Either, left, right } from "~/core/either";
+import { Member } from "~/modules/project/domain/entity/member";
 
-import { Member } from "../../domain/entity/member";
 import { MemberRepository } from "../repositories/member.repository";
 import { ProjectRepository } from "../repositories/project.repository";
 import { AccountRepository } from "../repositories/account.repository";
+import { OwnerRepository } from "../repositories/owner.repository";
+
+import { AccountNotFoundError } from "./errors/account-not-found.error";
+import { ProjectMemberAlreadyExistsError } from "./errors/project-member-already-exists.error";
+import { ProjectNotFoundError } from "./errors/project-not-found.error";
+import { OwnerCannotBeAddedAsMemberError } from "./errors/owner-cannot-be-added-as-member.error";
+import { NotAllowedError } from "./errors/not-allowed.error";
 
 type Input = {
   projectId: string;
-  accountEmail: string;
+  memberAccountEmail: string;
+  ownerAccountId: string;
 };
-type Output = Either<never, { member: Member }>;
+type OnError =
+  | AccountNotFoundError
+  | NotAllowedError
+  | ProjectMemberAlreadyExistsError
+  | ProjectNotFoundError
+  | OwnerCannotBeAddedAsMemberError;
+type OnSuccess = { member: Member };
+type Output = Either<OnError, OnSuccess>;
 
 export class AddProjectMemberUseCase {
   public constructor(
     private readonly memberRepository: MemberRepository,
     private readonly projectRepository: ProjectRepository,
     private readonly accountRepository: AccountRepository,
+    private readonly ownerRepository: OwnerRepository,
   ) {}
 
   public async execute(input: Input): Promise<Output> {
-    const [account, project] = await Promise.all([
-      this.accountRepository.findByEmail(input.accountEmail),
-      this.projectRepository.findById(input.projectId),
-    ]);
+    const projectId = UniqueEntityID.create(input.projectId);
 
-    if (!account) {
-      throw new Error("Account not found");
-    }
-
+    const project = await this.projectRepository.findById(projectId);
     if (!project) {
-      throw new Error("Project not found");
+      return left(new ProjectNotFoundError());
     }
 
-    const memberWasRegistered = await this.memberRepository.findByAccountEmailAndProjectId(
-      account.id.toValue(),
-      input.projectId,
-    );
+    const owner = await this.ownerRepository.findByAccountId(UniqueEntityID.create(input.ownerAccountId));
+    if (!owner) {
+      return left(new AccountNotFoundError());
+    }
+
+    if (owner.values.accountEmail === input.memberAccountEmail) {
+      return left(new OwnerCannotBeAddedAsMemberError());
+    }
+
+    const isProjectOwner = project.values.ownerId.equals(owner.id);
+    if (!isProjectOwner) {
+      return left(new NotAllowedError());
+    }
+
+    const account = await this.accountRepository.findByEmail(input.memberAccountEmail);
+    if (!account) {
+      return left(new AccountNotFoundError());
+    }
+
+    const memberWasRegistered = !!(await this.memberRepository.findByAccountAndProjectId(account.id, projectId));
     if (memberWasRegistered) {
-      throw new Error("Member already registered");
+      return left(new ProjectMemberAlreadyExistsError());
     }
 
     const member = Member.create({
-      projectId: UniqueEntityID.create(input.projectId),
-      accountEmail: input.accountEmail,
+      projectId: projectId,
+      accountEmail: input.memberAccountEmail,
       accountId: account.id,
       accountName: account.values.name,
     });
