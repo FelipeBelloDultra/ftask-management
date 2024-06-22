@@ -21,11 +21,13 @@
     "test:cov": "vitest run --coverage -c vitest.config.mts"
   },
   "dependencies": {
-    "@prisma/client": "5.15.1"
+    "@prisma/client": "5.15.1",
+    "bcryptjs": "2.4.3"
   },
   "devDependencies": {
     "@faker-js/faker": "8.4.1",
     "@tsconfig/node20": "20.1.4",
+    "@types/bcryptjs": "2.4.6",
     "@types/node": "20.14.6",
     "@typescript-eslint/eslint-plugin": "7.13.1",
     "@typescript-eslint/parser": "7.13.1",
