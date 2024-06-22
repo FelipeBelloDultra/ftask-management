@@ -1,3 +1,4 @@
+import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 import { ProjectRepository } from "~/modules/project/application/repositories/project.repository";
 import { Project } from "~/modules/project/domain/entity/project";
 import { Slug } from "~/modules/project/domain/entity/value-objects/slug";
@@ -5,8 +6,8 @@ import { Slug } from "~/modules/project/domain/entity/value-objects/slug";
 export class FakeProjectRepository implements ProjectRepository {
   public readonly projects: Project[] = [];
 
-  public async findById(projectId: string): Promise<Project | null> {
-    const project = this.projects.find((project) => project.id.toValue() === projectId);
+  public async findById(projectId: UniqueEntityID): Promise<Project | null> {
+    const project = this.projects.find((project) => project.id.equals(projectId));
 
     return project || null;
   }

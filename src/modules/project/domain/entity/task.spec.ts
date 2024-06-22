@@ -15,6 +15,7 @@ describe("Task", () => {
     const sut = makeTask();
 
     sut.complete();
+    sut.complete();
     expect(sut.values.status.value).toBe(TaskStatusValues.Done);
   });
 
@@ -24,6 +25,7 @@ describe("Task", () => {
     sut.complete();
 
     sut.wait();
+    sut.wait();
     expect(sut.values.status.value).toBe(TaskStatusValues.Waiting);
   });
 
@@ -31,12 +33,14 @@ describe("Task", () => {
     const sut = makeTask();
 
     sut.start();
+    sut.start();
     expect(sut.values.status.value).toBe(TaskStatusValues.InProgress);
   });
 
   it("should be able to start a task", () => {
     const sut = makeTask();
 
+    sut.delete();
     sut.delete();
     expect(sut.values.status.value).toBe(TaskStatusValues.Deleted);
     expect(sut.values.deletedAt).toBeInstanceOf(Date);
