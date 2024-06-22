@@ -2,6 +2,10 @@
   "name": "ftask-management-backend",
   "version": "1.0.0",
   "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "scripts": {
     "type-check": "tsc --noEmit",
     "prebuild": "rm -rf dist",
@@ -12,13 +16,10 @@
     "db:migrate:dev": "prisma migrate dev",
     "db:preview": "prisma studio",
     "test": "vitest run -c vitest.config.mts",
+    "test:ui": "vitest --ui -c vitest.config.mts",
     "test:watch": "vitest -c vitest.config.mts",
     "test:cov": "vitest run --coverage -c vitest.config.mts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "@prisma/client": "5.15.1"
   },
@@ -29,6 +30,7 @@
     "@typescript-eslint/eslint-plugin": "7.13.1",
     "@typescript-eslint/parser": "7.13.1",
     "@vitest/coverage-v8": "1.6.0",
+    "@vitest/ui": "1.6.0",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-import-resolver-typescript": "3.6.1",
