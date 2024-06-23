@@ -1,10 +1,10 @@
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 import { Either, left, right } from "~/core/either";
-import { Member } from "~/project/domain/entity/member";
+import { Member } from "~/account/domain/entity/member";
 import { AccountRepository } from "~/account/application/repositories/account.repository";
-import { MemberRepository } from "~/project/application/repositories/member.repository";
+import { MemberRepository } from "~/account/application/repositories/member.repository";
 import { ProjectRepository } from "~/project/application/repositories/project.repository";
-import { OwnerRepository } from "~/project/application/repositories/owner.repository";
+import { OwnerRepository } from "~/account/application/repositories/owner.repository";
 
 import { AccountNotFoundError } from "./errors/account-not-found.error";
 import { ProjectMemberAlreadyExistsError } from "./errors/project-member-already-exists.error";

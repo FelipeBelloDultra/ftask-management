@@ -1,11 +1,11 @@
 import { Either, left, right } from "~/core/either";
 import { Project } from "~/project/domain/entity/project";
 import { DueDate } from "~/project/domain/entity/value-objects/due-date";
-import { Owner } from "~/project/domain/entity/owner";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 import { AccountRepository } from "~/account/application/repositories/account.repository";
 import { ProjectRepository } from "~/project/application/repositories/project.repository";
-import { OwnerRepository } from "~/project/application/repositories/owner.repository";
+import { OwnerRepository } from "~/account/application/repositories/owner.repository";
+import { Owner } from "~/account/domain/entity/owner";
 
 import { DuplicatedProjectSlugError } from "./errors/duplicated-project-slug.error";
 import { AccountNotFoundError } from "./errors/account-not-found.error";
