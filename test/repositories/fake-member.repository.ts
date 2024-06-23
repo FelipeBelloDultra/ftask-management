@@ -1,6 +1,6 @@
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { MemberRepository } from "~/modules/project/application/repositories/member.repository";
-import { Member } from "~/modules/project/domain/entity/member";
+import { MemberRepository } from "~/project/application/repositories/member.repository";
+import { Member } from "~/project/domain/entity/member";
 
 export class FakeMemberRepository implements MemberRepository {
   public readonly members: Member[] = [];

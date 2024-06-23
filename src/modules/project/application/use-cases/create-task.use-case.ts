@@ -1,12 +1,11 @@
 import { Either, left, right } from "~/core/either";
-import { Task } from "~/modules/project/domain/entity/task";
+import { Task } from "~/project/domain/entity/task";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { DueDate } from "~/modules/project/domain/entity/value-objects/due-date";
-
-import { TaskRepository } from "../repositories/task.repository";
-import { ProjectRepository } from "../repositories/project.repository";
-import { MemberRepository } from "../repositories/member.repository";
-import { OwnerRepository } from "../repositories/owner.repository";
+import { DueDate } from "~/project/domain/entity/value-objects/due-date";
+import { OwnerRepository } from "~/project/application/repositories/owner.repository";
+import { TaskRepository } from "~/project/application/repositories/task.repository";
+import { ProjectRepository } from "~/project/application/repositories/project.repository";
+import { MemberRepository } from "~/project/application/repositories/member.repository";
 
 import { AccountNotFoundError } from "./errors/account-not-found.error";
 import { ProjectNotFoundError } from "./errors/project-not-found.error";

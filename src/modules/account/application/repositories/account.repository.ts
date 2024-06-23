@@ -1,5 +1,5 @@
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { Account } from "~/modules/account/domain/entity/account";
+import { Account } from "~/account/domain/entity/account";
 
 export abstract class AccountRepository {
   public abstract findById(accountId: UniqueEntityID): Promise<Account | null>;

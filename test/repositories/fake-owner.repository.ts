@@ -1,6 +1,6 @@
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { OwnerRepository } from "~/modules/project/application/repositories/owner.repository";
-import { Owner } from "~/modules/project/domain/entity/owner";
+import { OwnerRepository } from "~/project/application/repositories/owner.repository";
+import { Owner } from "~/project/domain/entity/owner";
 
 export class FakeOwnerRepository implements OwnerRepository {
   public readonly owners: Owner[] = [];

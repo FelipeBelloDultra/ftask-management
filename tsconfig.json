@@ -5,7 +5,9 @@
     "baseUrl": "./",
     "types": ["vitest/globals"],
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["src/*"],
+      "~/account/*": ["src/modules/account/*"],
+      "~/project/*": ["src/modules/project/*"]
     }
   }
 }

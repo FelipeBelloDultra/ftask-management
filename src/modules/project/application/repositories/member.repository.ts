@@ -1,5 +1,5 @@
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { Member } from "~/modules/project/domain/entity/member";
+import { Member } from "~/project/domain/entity/member";
 
 export abstract class MemberRepository {
   public abstract create(member: Member): Promise<void>;

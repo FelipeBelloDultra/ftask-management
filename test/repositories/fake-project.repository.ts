@@ -1,7 +1,7 @@
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { ProjectRepository } from "~/modules/project/application/repositories/project.repository";
-import { Project } from "~/modules/project/domain/entity/project";
-import { Slug } from "~/modules/project/domain/entity/value-objects/slug";
+import { ProjectRepository } from "~/project/application/repositories/project.repository";
+import { Project } from "~/project/domain/entity/project";
+import { Slug } from "~/project/domain/entity/value-objects/slug";
 
 export class FakeProjectRepository implements ProjectRepository {
   public readonly projects: Project[] = [];
