@@ -1,8 +1,8 @@
 import { Either, left, right } from "~/core/either";
-import { Account } from "~/modules/project/domain/entity/account";
+import { Account } from "~/modules/account/domain/entity/account";
+import { Password } from "~/modules/account/domain/entity/value-objects/password";
 
 import { AccountRepository } from "../repositories/account.repository";
-import { Password } from "../../domain/entity/value-objects/password";
 
 import { AccountAlreadyExistsError } from "./errors/account-already-exists.error";
 

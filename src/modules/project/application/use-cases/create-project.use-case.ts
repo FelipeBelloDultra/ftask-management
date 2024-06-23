@@ -3,9 +3,9 @@ import { Project } from "~/modules/project/domain/entity/project";
 import { DueDate } from "~/modules/project/domain/entity/value-objects/due-date";
 import { Owner } from "~/modules/project/domain/entity/owner";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import { AccountRepository } from "~/modules/account/application/repositories/account.repository";
 
 import { ProjectRepository } from "../repositories/project.repository";
-import { AccountRepository } from "../repositories/account.repository";
 import { OwnerRepository } from "../repositories/owner.repository";
 
 import { DuplicatedProjectSlugError } from "./errors/duplicated-project-slug.error";

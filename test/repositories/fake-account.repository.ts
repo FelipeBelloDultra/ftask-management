@@ -1,6 +1,6 @@
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { AccountRepository } from "~/modules/project/application/repositories/account.repository";
-import { Account } from "~/modules/project/domain/entity/account";
+import { AccountRepository } from "~/modules/account/application/repositories/account.repository";
+import { Account } from "~/modules/account/domain/entity/account";
 
 export class FakeAccountRepository implements AccountRepository {
   public readonly accounts: Account[] = [];
