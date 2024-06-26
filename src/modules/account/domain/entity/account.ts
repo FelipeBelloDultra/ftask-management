@@ -1,7 +1,7 @@
 import { Entity } from "~/core/entity/entity";
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 
-import { Password } from "./value-objects/password";
+import type { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import type { Password } from "./value-objects/password";
 
 export interface AccountProps {
   name: string;

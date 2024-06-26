@@ -1,8 +1,10 @@
 import { faker } from "@faker-js/faker";
 
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { Task, TaskProps } from "~/project/domain/entity/task";
+import { Task } from "~/project/domain/entity/task";
 import { DueDate } from "~/project/domain/entity/value-objects/due-date";
+
+import type { TaskProps } from "~/project/domain/entity/task";
 
 export function makeTask(override: Partial<TaskProps> = {}, id?: UniqueEntityID): Task {
   const task = Task.create(

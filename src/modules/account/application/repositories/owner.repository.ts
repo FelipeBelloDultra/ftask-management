@@ -1,7 +1,7 @@
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { Owner } from "~/account/domain/entity/owner";
+import type { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import type { Owner } from "~/account/domain/entity/owner";
 
-export abstract class OwnerRepository {
-  public abstract create(owner: Owner): Promise<void>;
-  public abstract findByAccountId(ownerId: UniqueEntityID): Promise<Owner | null>;
+export interface OwnerRepository {
+  create(owner: Owner): Promise<void>;
+  findByAccountId(ownerId: UniqueEntityID): Promise<Owner | null>;
 }
