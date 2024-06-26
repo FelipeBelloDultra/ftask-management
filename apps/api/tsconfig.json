@@ -1,9 +1,8 @@
 {
-  "extends": "@tsconfig/node20/tsconfig.json",
+  "extends": "@ftask-management/typescript-config/node.json",
   "compilerOptions": {
     "outDir": "./dist",
     "baseUrl": "./",
-    "types": ["vitest/globals"],
     "paths": {
       "~/*": ["src/*"],
       "~/account/*": ["src/modules/account/*"],
