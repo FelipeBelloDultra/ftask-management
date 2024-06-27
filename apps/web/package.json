@@ -26,6 +26,12 @@
   },
   "prettier": "@ftask-management/prettier",
   "eslintConfig": {
+    "ignorePatterns": [
+      "dist",
+      "coverage",
+      "node_modules",
+      ".next"
+    ],
     "extends": [
       "@ftask-management/eslint-config/nextjs.js"
     ]
