@@ -11,7 +11,7 @@
     "prebuild": "rm -rf dist",
     "build": "tsc -p tsconfig.build.json",
     "postbuild": "tsc-alias -p tsconfig.build.json",
-    "lint:check": "eslint --ext .ts src/ test/",
+    "lint": "eslint --ext .ts src/ test/",
     "lint:fix": "eslint --fix --ext .ts src/ test/",
     "db:migrate:dev": "prisma migrate dev",
     "db:preview": "prisma studio",
