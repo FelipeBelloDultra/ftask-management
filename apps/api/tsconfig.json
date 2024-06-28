@@ -1,0 +1,13 @@
+{
+  "extends": "@ftask-management/typescript-config/node.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "types": ["vitest/globals"],
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["src/*"],
+      "~/account/*": ["src/modules/account/*"],
+      "~/project/*": ["src/modules/project/*"]
+    }
+  }
+}

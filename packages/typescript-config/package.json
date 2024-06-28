@@ -1,0 +1,21 @@
+{
+  "name": "@ftask-management/typescript-config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "files": [
+    "node.json",
+    "nextjs.json"
+  ],
+  "devDependencies": {
+    "@tsconfig/node20": "20.1.4",
+    "@ftask-management/eslint-config": "*",
+    "@ftask-management/prettier": "*"
+  },
+  "prettier": "@ftask-management/prettier",
+  "eslintConfig": {
+    "extends": [
+      "@ftask-management/eslint-config/node.js"
+    ]
+  }
+}

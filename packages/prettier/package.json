@@ -1,0 +1,9 @@
+{
+  "name": "@ftask-management/prettier",
+  "version": "0.0.0",
+  "main": "index.mjs",
+  "private": true,
+  "devDependencies": {
+    "prettier": "3.3.2"
+  }
+}

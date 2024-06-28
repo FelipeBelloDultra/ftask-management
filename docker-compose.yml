@@ -16,4 +16,4 @@ volumes:
         driver: local
 
 networks:
-  ftask-management_net:
+    ftask-management_net:
