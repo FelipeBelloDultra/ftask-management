@@ -1,7 +1,9 @@
 import { faker } from "@faker-js/faker";
 
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { Owner, OwnerProps } from "~/account/domain/entity/owner";
+import { Owner } from "~/account/domain/entity/owner";
+
+import type { OwnerProps } from "~/account/domain/entity/owner";
 
 export function makeOwner(override: Partial<OwnerProps> = {}, id?: UniqueEntityID): Owner {
   const owner = Owner.create(

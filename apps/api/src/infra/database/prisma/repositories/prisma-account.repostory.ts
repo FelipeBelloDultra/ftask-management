@@ -1,9 +1,9 @@
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { AccountRepository } from "~/modules/account/application/repositories/account.repository";
-import { Account } from "~/modules/account/domain/entity/account";
-
 import { AccountMapper } from "../mappers/account-mapper";
-import { PrismaConnection } from "../prisma-connection";
+
+import type { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import type { AccountRepository } from "~/modules/account/application/repositories/account.repository";
+import type { Account } from "~/modules/account/domain/entity/account";
+import type { PrismaConnection } from "../prisma-connection";
 
 export class PrismaAccountRepository implements AccountRepository {
   public constructor(private readonly prismaConnection: PrismaConnection) {}

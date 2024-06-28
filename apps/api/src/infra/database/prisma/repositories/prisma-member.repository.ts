@@ -1,9 +1,9 @@
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { MemberRepository } from "~/modules/account/application/repositories/member.repository";
-import { Member } from "~/modules/account/domain/entity/member";
-
 import { MemberMapper } from "../mappers/member-mapper";
-import { PrismaConnection } from "../prisma-connection";
+
+import type { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import type { MemberRepository } from "~/modules/account/application/repositories/member.repository";
+import type { Member } from "~/modules/account/domain/entity/member";
+import type { PrismaConnection } from "../prisma-connection";
 
 export class PrismaMemberRepository implements MemberRepository {
   public constructor(private readonly prismaConnection: PrismaConnection) {}

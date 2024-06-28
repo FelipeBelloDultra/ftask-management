@@ -1,10 +1,10 @@
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { ProjectRepository } from "~/modules/project/application/repositories/project.repository";
-import { Project } from "~/modules/project/domain/entity/project";
-import { Slug } from "~/modules/project/domain/entity/value-objects/slug";
-
-import { PrismaConnection } from "../prisma-connection";
 import { ProjectMapper } from "../mappers/project-mapper";
+
+import type { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import type { ProjectRepository } from "~/modules/project/application/repositories/project.repository";
+import type { Project } from "~/modules/project/domain/entity/project";
+import type { Slug } from "~/modules/project/domain/entity/value-objects/slug";
+import type { PrismaConnection } from "../prisma-connection";
 
 export class PrismaProjectRepository implements ProjectRepository {
   public constructor(private readonly prismaConnection: PrismaConnection) {}

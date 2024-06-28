@@ -1,7 +1,7 @@
-import { Member as PrismaMember } from "@prisma/client";
-
 import { Member } from "~/account/domain/entity/member";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+
+import type { Member as PrismaMember } from "@prisma/client";
 
 interface PrismaMemberWithAccount {
   id: string;

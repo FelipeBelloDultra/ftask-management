@@ -1,5 +1,6 @@
 import { Entity } from "~/core/entity/entity";
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+
+import type { UniqueEntityID } from "~/core/entity/unique-entity-id";
 
 export interface OwnerProps {
   accountId: UniqueEntityID;

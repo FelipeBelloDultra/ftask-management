@@ -1,8 +1,10 @@
-import { Either, left, right } from "~/core/either";
-import { AccountRepository } from "~/account/application/repositories/account.repository";
-import { CryptographyProvider } from "~/application/providers/cryptography.provider";
+import { left, right } from "~/core/either";
 
 import { InvalidCombinationError } from "./errors/invalid-combination.error";
+
+import type { Either } from "~/core/either";
+import type { AccountRepository } from "~/account/application/repositories/account.repository";
+import type { CryptographyProvider } from "~/application/providers/cryptography.provider";
 
 type Input = {
   email: string;

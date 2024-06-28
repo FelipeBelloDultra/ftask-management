@@ -1,7 +1,7 @@
-import { Owner as PrismaOwner } from "@prisma/client";
-
 import { Owner } from "~/account/domain/entity/owner";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+
+import type { Owner as PrismaOwner } from "@prisma/client";
 
 interface PrismaOwnerWithAccount {
   id: string;
