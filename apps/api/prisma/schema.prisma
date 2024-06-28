@@ -29,7 +29,7 @@ model Owner {
   id   String @id @default(uuid())
   role Roles  @default(owner)
 
-  accountId String  @map("account_id")
+  accountId String  @unique @map("account_id")
   account   Account @relation(fields: [accountId], references: [id])
 
   projects Project[]

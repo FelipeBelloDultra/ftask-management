@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const environmentSchema = z.object({
   DATABASE_URL: z.string(),
-  JWT_SECRET: z.string().default("secret"),
+  HTTP_SERVER_PORT: z.coerce.number().default(3333),
 });
 
 const parsedEnv = environmentSchema.safeParse(process.env);

@@ -73,6 +73,9 @@ CREATE TABLE "tasks" (
 CREATE UNIQUE INDEX "accounts_email_key" ON "accounts"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "owners_account_id_key" ON "owners"("account_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "members_project_id_account_id_key" ON "members"("project_id", "account_id");
 
 -- CreateIndex
