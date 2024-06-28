@@ -2,6 +2,7 @@
   "extends": "@ftask-management/typescript-config/node.json",
   "compilerOptions": {
     "outDir": "./dist",
+    "types": ["vitest/globals"],
     "baseUrl": "./",
     "paths": {
       "~/*": ["src/*"],

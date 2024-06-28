@@ -1,9 +1,9 @@
-import { PrismaConnection } from "../prisma-connection";
-import { OwnerMapper } from "../mappers/owner-mapper";
-
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 import { OwnerRepository } from "~/modules/account/application/repositories/owner.repository";
 import { Owner } from "~/modules/account/domain/entity/owner";
+
+import { OwnerMapper } from "../mappers/owner-mapper";
+import { PrismaConnection } from "../prisma-connection";
 
 export class PrismaOwnerRepository implements OwnerRepository {
   public constructor(private readonly prismaConnection: PrismaConnection) {}

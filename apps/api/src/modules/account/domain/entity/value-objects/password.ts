@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+import * as bcrypt from "bcryptjs";
 
 export class Password {
   private readonly PASSWORD_SALT_ROUNDS = 8;
