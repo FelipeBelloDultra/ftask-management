@@ -1,11 +1,10 @@
 import { Entity } from "~/core/entity/entity";
+import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import { Optional } from "~/core/types/optional";
 
+import { DueDate } from "./value-objects/due-date";
 import { Slug } from "./value-objects/slug";
 import { TaskStatus } from "./value-objects/task-status";
-
-import type { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import type { Optional } from "~/core/types/optional";
-import type { DueDate } from "./value-objects/due-date";
 
 export interface TaskProps {
   assigneeId: UniqueEntityID;

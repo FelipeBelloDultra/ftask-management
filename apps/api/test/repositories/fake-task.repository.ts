@@ -1,5 +1,5 @@
-import type { TaskRepository } from "~/project/application/repositories/task.repository";
-import type { Task } from "~/project/domain/entity/task";
+import { TaskRepository } from "~/project/application/repositories/task.repository";
+import { Task } from "~/project/domain/entity/task";
 
 export class FakeTaskRepository implements TaskRepository {
   public readonly tasks: Task[] = [];

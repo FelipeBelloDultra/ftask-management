@@ -1,6 +1,6 @@
-import type { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import type { AccountRepository } from "~/account/application/repositories/account.repository";
-import type { Account } from "~/account/domain/entity/account";
+import { AccountRepository } from "~/account/application/repositories/account.repository";
+import { Account } from "~/account/domain/entity/account";
+import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 
 export class FakeAccountRepository implements AccountRepository {
   public readonly accounts: Account[] = [];

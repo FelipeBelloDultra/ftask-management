@@ -1,9 +1,10 @@
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 import { makeProject } from "test/factories/make-project";
 
+import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+
 import { Project } from "./project";
-import { ProjectStatusValues } from "./value-objects/project-status";
 import { DueDate } from "./value-objects/due-date";
+import { ProjectStatusValues } from "./value-objects/project-status";
 
 describe("Project", () => {
   it("should create a project", () => {

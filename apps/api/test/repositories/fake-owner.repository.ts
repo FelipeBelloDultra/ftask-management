@@ -1,6 +1,6 @@
-import type { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import type { Owner } from "~/account/domain/entity/owner";
-import type { OwnerRepository } from "~/account/application/repositories/owner.repository";
+import { OwnerRepository } from "~/account/application/repositories/owner.repository";
+import { Owner } from "~/account/domain/entity/owner";
+import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 
 export class FakeOwnerRepository implements OwnerRepository {
   public readonly owners: Owner[] = [];

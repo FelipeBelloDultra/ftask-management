@@ -1,13 +1,13 @@
-import { FakeProjectRepository } from "test/repositories/fake-project.repository";
-import { FakeAccountRepository } from "test/repositories/fake-account.repository";
-import { FakeOwnerRepository } from "test/repositories/fake-owner.repository";
 import { makeAccount } from "test/factories/make-account";
 import { makeOwner } from "test/factories/make-owner";
 import { makeProject } from "test/factories/make-project";
+import { FakeAccountRepository } from "test/repositories/fake-account.repository";
+import { FakeOwnerRepository } from "test/repositories/fake-owner.repository";
+import { FakeProjectRepository } from "test/repositories/fake-project.repository";
 
 import { CreateProjectUseCase } from "./create-project.use-case";
-import { DuplicatedProjectSlugError } from "./errors/duplicated-project-slug.error";
 import { AccountNotFoundError } from "./errors/account-not-found.error";
+import { DuplicatedProjectSlugError } from "./errors/duplicated-project-slug.error";
 
 describe("CreateProjectUseCase", () => {
   let sut: CreateProjectUseCase;

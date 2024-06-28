@@ -1,9 +1,7 @@
 import { faker } from "@faker-js/faker";
 
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { Project } from "~/project/domain/entity/project";
-
-import type { ProjectProps } from "~/project/domain/entity/project";
+import { Project, ProjectProps } from "~/project/domain/entity/project";
 
 export function makeProject(override: Partial<ProjectProps> = {}, id?: UniqueEntityID): Project {
   const project = Project.create(

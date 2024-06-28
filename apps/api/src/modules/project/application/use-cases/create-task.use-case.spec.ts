@@ -1,17 +1,17 @@
-import { FakeProjectRepository } from "test/repositories/fake-project.repository";
-import { FakeOwnerRepository } from "test/repositories/fake-owner.repository";
-import { FakeTaskRepository } from "test/repositories/fake-task.repository";
-import { FakeMemberRepository } from "test/repositories/fake-member.repository";
-import { makeProject } from "test/factories/make-project";
+import { makeAccount } from "test/factories/make-account";
 import { makeMember } from "test/factories/make-member";
 import { makeOwner } from "test/factories/make-owner";
-import { makeAccount } from "test/factories/make-account";
+import { makeProject } from "test/factories/make-project";
+import { FakeMemberRepository } from "test/repositories/fake-member.repository";
+import { FakeOwnerRepository } from "test/repositories/fake-owner.repository";
+import { FakeProjectRepository } from "test/repositories/fake-project.repository";
+import { FakeTaskRepository } from "test/repositories/fake-task.repository";
 
 import { CreateTaskUseCase } from "./create-task.use-case";
 import { AccountNotFoundError } from "./errors/account-not-found.error";
-import { ProjectNotFoundError } from "./errors/project-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "./errors/project-member-not-found.error";
+import { ProjectNotFoundError } from "./errors/project-not-found.error";
 
 describe("CreateTaskUseCase", () => {
   let sut: CreateTaskUseCase;

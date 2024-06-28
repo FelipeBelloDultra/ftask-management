@@ -1,18 +1,16 @@
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { left, right } from "~/core/either";
+import { AccountRepository } from "~/account/application/repositories/account.repository";
+import { MemberRepository } from "~/account/application/repositories/member.repository";
+import { OwnerRepository } from "~/account/application/repositories/owner.repository";
 import { Member } from "~/account/domain/entity/member";
+import { Either, left, right } from "~/core/either";
+import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import { ProjectRepository } from "~/project/application/repositories/project.repository";
 
 import { AccountNotFoundError } from "./errors/account-not-found.error";
+import { NotAllowedError } from "./errors/not-allowed.error";
+import { OwnerCannotBeAddedAsMemberError } from "./errors/owner-cannot-be-added-as-member.error";
 import { ProjectMemberAlreadyExistsError } from "./errors/project-member-already-exists.error";
 import { ProjectNotFoundError } from "./errors/project-not-found.error";
-import { OwnerCannotBeAddedAsMemberError } from "./errors/owner-cannot-be-added-as-member.error";
-import { NotAllowedError } from "./errors/not-allowed.error";
-
-import type { OwnerRepository } from "~/account/application/repositories/owner.repository";
-import type { ProjectRepository } from "~/project/application/repositories/project.repository";
-import type { MemberRepository } from "~/account/application/repositories/member.repository";
-import type { AccountRepository } from "~/account/application/repositories/account.repository";
-import type { Either } from "~/core/either";
 
 type Input = {
   projectId: string;

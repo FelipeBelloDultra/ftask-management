@@ -1,8 +1,8 @@
-import { TaskMapper } from "../mappers/task-mapper";
+import { TaskRepository } from "~/modules/project/application/repositories/task.repository";
+import { Task } from "~/modules/project/domain/entity/task";
 
-import type { TaskRepository } from "~/modules/project/application/repositories/task.repository";
-import type { Task } from "~/modules/project/domain/entity/task";
-import type { PrismaConnection } from "../prisma-connection";
+import { TaskMapper } from "../mappers/task-mapper";
+import { PrismaConnection } from "../prisma-connection";
 
 export class PrismaTaskRepository implements TaskRepository {
   public constructor(private readonly prismaConnection: PrismaConnection) {}

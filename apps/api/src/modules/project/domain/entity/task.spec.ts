@@ -1,8 +1,8 @@
 import { makeTask } from "test/factories/make-task";
 
 import { Task } from "./task";
-import { TaskStatusValues } from "./value-objects/task-status";
 import { DueDate } from "./value-objects/due-date";
+import { TaskStatusValues } from "./value-objects/task-status";
 
 describe("Task", () => {
   it("should be able to create a task instance", () => {

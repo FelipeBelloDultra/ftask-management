@@ -1,5 +1,5 @@
-import type { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import type { Member } from "~/account/domain/entity/member";
+import { Member } from "~/account/domain/entity/member";
+import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 
 export abstract class MemberRepository {
   public abstract create(member: Member): Promise<void>;

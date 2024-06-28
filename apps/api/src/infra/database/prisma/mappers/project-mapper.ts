@@ -1,10 +1,10 @@
+import { Project as PrismaProject } from "@prisma/client";
+
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 import { Project } from "~/modules/project/domain/entity/project";
 import { DueDate } from "~/modules/project/domain/entity/value-objects/due-date";
 import { ProjectStatus, ProjectStatusValues } from "~/modules/project/domain/entity/value-objects/project-status";
 import { Slug } from "~/modules/project/domain/entity/value-objects/slug";
-
-import type { Project as PrismaProject } from "@prisma/client";
 
 export class ProjectMapper {
   public static toDomain(prismaProject: PrismaProject): Project {

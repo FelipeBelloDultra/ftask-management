@@ -1,18 +1,16 @@
-import { left, right } from "~/core/either";
-import { Task } from "~/project/domain/entity/task";
+import { MemberRepository } from "~/account/application/repositories/member.repository";
+import { OwnerRepository } from "~/account/application/repositories/owner.repository";
+import { Either, left, right } from "~/core/either";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import { ProjectRepository } from "~/project/application/repositories/project.repository";
+import { TaskRepository } from "~/project/application/repositories/task.repository";
+import { Task } from "~/project/domain/entity/task";
 import { DueDate } from "~/project/domain/entity/value-objects/due-date";
 
 import { AccountNotFoundError } from "./errors/account-not-found.error";
-import { ProjectNotFoundError } from "./errors/project-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "./errors/project-member-not-found.error";
-
-import type { TaskRepository } from "~/project/application/repositories/task.repository";
-import type { ProjectRepository } from "~/project/application/repositories/project.repository";
-import type { MemberRepository } from "~/account/application/repositories/member.repository";
-import type { OwnerRepository } from "~/account/application/repositories/owner.repository";
-import type { Either } from "~/core/either";
+import { ProjectNotFoundError } from "./errors/project-not-found.error";
 
 type Input = {
   dueDate: Date;

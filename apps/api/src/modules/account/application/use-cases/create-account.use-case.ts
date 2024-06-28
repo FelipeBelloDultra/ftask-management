@@ -1,11 +1,9 @@
-import { left, right } from "~/core/either";
+import { AccountRepository } from "~/account/application/repositories/account.repository";
 import { Account } from "~/account/domain/entity/account";
 import { Password } from "~/account/domain/entity/value-objects/password";
+import { Either, left, right } from "~/core/either";
 
 import { AccountAlreadyExistsError } from "./errors/account-already-exists.error";
-
-import type { AccountRepository } from "~/account/application/repositories/account.repository";
-import type { Either } from "~/core/either";
 
 type Input = {
   name: string;

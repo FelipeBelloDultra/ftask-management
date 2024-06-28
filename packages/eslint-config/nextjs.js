@@ -29,7 +29,7 @@ module.exports = {
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {
-        prefer: "type-imports",
+        prefer: "no-type-imports",
         disallowTypeAnnotations: true,
         fixStyle: "separate-type-imports",
       },
@@ -47,8 +47,19 @@ module.exports = {
     "import/order": [
       1,
       {
+        pathGroups: [
+          {
+            pattern: "~/**",
+            group: "internal",
+            position: "after",
+          },
+        ],
         groups: ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"],
         "newlines-between": "always",
+        alphabetize: {
+          order: "asc",
+          caseInsensitive: true,
+        },
       },
     ],
     "import/newline-after-import": "error",

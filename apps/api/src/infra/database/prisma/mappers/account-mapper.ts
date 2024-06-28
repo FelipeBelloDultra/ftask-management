@@ -1,8 +1,8 @@
+import { Account as PrismaAccount } from "@prisma/client";
+
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 import { Account } from "~/modules/account/domain/entity/account";
 import { Password } from "~/modules/account/domain/entity/value-objects/password";
-
-import type { Account as PrismaAccount } from "@prisma/client";
 
 export class AccountMapper {
   public static toDomain(prismaAccount: PrismaAccount): Account {

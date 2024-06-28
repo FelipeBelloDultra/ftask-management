@@ -1,7 +1,8 @@
-import { FakeAccountRepository } from "test/repositories/fake-account.repository";
 import { makeAccount } from "test/factories/make-account";
-import { Password } from "~/account/domain/entity/value-objects/password";
 import { FakeCryptographyProvider } from "test/providers/fake-cryptography.provider";
+import { FakeAccountRepository } from "test/repositories/fake-account.repository";
+
+import { Password } from "~/account/domain/entity/value-objects/password";
 
 import { AuthenticateAccountUseCase } from "./authenticate-account.use-case";
 import { InvalidCombinationError } from "./errors/invalid-combination.error";
