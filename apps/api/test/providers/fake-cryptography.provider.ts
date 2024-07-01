@@ -1,4 +1,4 @@
-import type { CryptographyProvider } from "~/application/providers/cryptography.provider";
+import { CryptographyProvider } from "~/application/providers/cryptography.provider";
 
 export class FakeCryptographyProvider implements CryptographyProvider {
   public async encrypt(value: Record<string, unknown>, expiresIn = "30m"): Promise<string> {
