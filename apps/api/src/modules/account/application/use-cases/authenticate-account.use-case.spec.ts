@@ -1,5 +1,5 @@
 import { makeAccount } from "test/factories/make-account";
-import { FakeCryptographyProvider } from "test/providers/fake-cryptography.provider";
+import { FakeJwtProvider } from "test/providers/fake-jwt.provider";
 import { FakeAccountRepository } from "test/repositories/fake-account.repository";
 
 import { Password } from "~/account/domain/entity/value-objects/password";
@@ -10,13 +10,13 @@ import { InvalidCombinationError } from "./errors/invalid-combination.error";
 describe("AuthenticateAccountUseCase", () => {
   let sut: AuthenticateAccountUseCase;
   let fakeAccountRepository: FakeAccountRepository;
-  let fakeCryptographyProvider: FakeCryptographyProvider;
+  let fakeJwtProvider: FakeJwtProvider;
 
   beforeEach(() => {
     fakeAccountRepository = new FakeAccountRepository();
-    fakeCryptographyProvider = new FakeCryptographyProvider();
+    fakeJwtProvider = new FakeJwtProvider();
 
-    sut = new AuthenticateAccountUseCase(fakeAccountRepository, fakeCryptographyProvider);
+    sut = new AuthenticateAccountUseCase(fakeAccountRepository, fakeJwtProvider);
   });
 
   it("should be able to authenticate an account", async () => {

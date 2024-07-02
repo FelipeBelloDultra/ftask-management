@@ -1,5 +1,5 @@
 import { AccountRepository } from "~/account/application/repositories/account.repository";
-import { CryptographyProvider } from "~/application/providers/cryptography.provider";
+import { JwtProvider } from "~/application/providers/jwt.provider";
 import { Either, left, right } from "~/core/either";
 
 import { InvalidCombinationError } from "./errors/invalid-combination.error";
@@ -18,7 +18,7 @@ type Output = Either<OnError, OnSuccess>;
 export class AuthenticateAccountUseCase {
   public constructor(
     private readonly accountRepository: AccountRepository,
-    private readonly cryptographyProvider: CryptographyProvider,
+    private readonly jwtProvider: JwtProvider,
   ) {}
 
   public async execute(input: Input): Promise<Output> {
@@ -38,8 +38,8 @@ export class AuthenticateAccountUseCase {
     };
 
     const [accessToken, refreshToken] = await Promise.all([
-      this.cryptographyProvider.encrypt(signature),
-      this.cryptographyProvider.encrypt(signature, "30d"),
+      this.jwtProvider.encrypt(signature),
+      this.jwtProvider.encrypt(signature, "30d"),
     ]);
 
     return right({

@@ -1,6 +1,6 @@
-import { CryptographyProvider } from "~/application/providers/cryptography.provider";
+import { JwtProvider } from "~/application/providers/jwt.provider";
 
-export class FakeCryptographyProvider implements CryptographyProvider {
+export class FakeJwtProvider implements JwtProvider {
   public async encrypt(value: Record<string, unknown>, expiresIn = "30m"): Promise<string> {
     return JSON.stringify({
       ...value,
