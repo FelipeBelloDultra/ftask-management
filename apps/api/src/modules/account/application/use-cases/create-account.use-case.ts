@@ -1,3 +1,5 @@
+import { inject, injectable } from "tsyringe";
+
 import { AccountRepository } from "~/account/application/repositories/account.repository";
 import { Account } from "~/account/domain/entity/account";
 import { Password } from "~/account/domain/entity/value-objects/password";
@@ -14,8 +16,12 @@ type OnError = AccountAlreadyExistsError;
 type OnSuccess = { account: Account };
 type Output = Either<OnError, OnSuccess>;
 
+@injectable()
 export class CreateAccountUseCase {
-  public constructor(private readonly accountRepository: AccountRepository) {}
+  public constructor(
+    @inject("AccountRepository")
+    private readonly accountRepository: AccountRepository,
+  ) {}
 
   public async execute(input: Input): Promise<Output> {
     const existingAccount = await this.accountRepository.findByEmail(input.email);

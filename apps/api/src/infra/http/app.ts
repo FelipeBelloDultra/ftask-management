@@ -1,8 +1,12 @@
-import express from "express";
+import "express-async-errors";
+import express, { NextFunction, Request, Response } from "express";
 import { container } from "tsyringe";
+import { ZodError } from "zod";
+import { fromZodError } from "zod-validation-error";
 
 import { PrismaConnection } from "../database/prisma/prisma-connection";
 
+import { ControllerException } from "./controller";
 import { Routes } from "./routes";
 
 const expressInstance = express();
@@ -26,8 +30,37 @@ export class App {
     this.expressInstance.use("/api", this.routes.router);
   }
 
+  public setGlobalErrorHandler() {
+    this.expressInstance.use((err: Error, request: Request, response: Response, _: NextFunction) => {
+      if (err instanceof ZodError) {
+        return response.status(400).json({
+          status_code: 400,
+          message: "Validation failed",
+          errors: fromZodError(err).details,
+        });
+      }
+
+      if (err instanceof ControllerException) {
+        return response.status(err.statusCode).json({
+          status_code: err.statusCode,
+          message: err.message,
+          errors: err.errors,
+        });
+      }
+
+      console.log(err);
+
+      return response.status(500).json({
+        status_code: 500,
+        message: "Internal server error",
+        errors: [],
+      });
+    });
+  }
+
   public registerMiddlewares() {
     this.expressInstance.use(express.json());
     this.registerRoutes();
+    this.setGlobalErrorHandler();
   }
 }
