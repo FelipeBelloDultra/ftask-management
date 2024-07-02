@@ -1,4 +1,5 @@
 import express from "express";
+import { container } from "tsyringe";
 
 import { PrismaConnection } from "../database/prisma/prisma-connection";
 
@@ -6,7 +7,7 @@ import { Routes } from "./routes";
 
 const expressInstance = express();
 const routes = new Routes();
-const prismaConnection = new PrismaConnection();
+const prismaConnection = container.resolve<PrismaConnection>("PrismaConnection");
 
 export class App {
   public readonly expressInstance = expressInstance;

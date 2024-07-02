@@ -1,4 +1,7 @@
+import "reflect-metadata";
 import "dotenv/config";
+
+import "../container";
 
 import { env } from "~/config/env";
 
@@ -23,7 +26,6 @@ class Server {
 
     process.on("SIGTERM", async () => {
       await this.stopServices();
-      console.log("ops");
 
       server.close();
     });

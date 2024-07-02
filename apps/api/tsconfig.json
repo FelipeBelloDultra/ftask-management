@@ -1,6 +1,8 @@
 {
   "extends": "@ftask-management/typescript-config/node.json",
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "outDir": "./dist",
     "types": ["vitest/globals"],
     "baseUrl": "./",

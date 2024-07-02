@@ -1,3 +1,5 @@
+import { inject, injectable } from "tsyringe";
+
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 import { OwnerRepository } from "~/modules/account/application/repositories/owner.repository";
 import { Owner } from "~/modules/account/domain/entity/owner";
@@ -5,8 +7,12 @@ import { Owner } from "~/modules/account/domain/entity/owner";
 import { OwnerMapper } from "../mappers/owner-mapper";
 import { PrismaConnection } from "../prisma-connection";
 
+@injectable()
 export class PrismaOwnerRepository implements OwnerRepository {
-  public constructor(private readonly prismaConnection: PrismaConnection) {}
+  public constructor(
+    @inject("PrismaConnection")
+    private readonly prismaConnection: PrismaConnection,
+  ) {}
 
   public async create(owner: Owner): Promise<void> {
     await this.prismaConnection.owner.create({
