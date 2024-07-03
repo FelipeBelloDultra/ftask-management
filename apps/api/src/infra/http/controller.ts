@@ -21,7 +21,7 @@ export abstract class Controller {
   public abstract readonly PATH: string;
   public abstract readonly METHOD: ControllerMethods;
 
-  public constructor({ middlewares }: ControllerConstructor = {}) {
+  public constructor({ middlewares }: ControllerConstructor = { middlewares: [] }) {
     this.middlewares = middlewares;
   }
 

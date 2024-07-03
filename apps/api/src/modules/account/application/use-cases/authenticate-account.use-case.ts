@@ -38,8 +38,7 @@ export class AuthenticateAccountUseCase {
     }
 
     const signature = {
-      id: account.id.toValue(),
-      email: account.values.email,
+      sub: account.id.toValue(),
     };
 
     const [accessToken, refreshToken] = await Promise.all([
