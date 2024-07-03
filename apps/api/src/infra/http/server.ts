@@ -34,6 +34,7 @@ class Server {
 
 const server = new Server();
 
-server.boot().catch(() => {
+server.boot().catch((e) => {
+  console.log(e);
   server.stopServices();
 });

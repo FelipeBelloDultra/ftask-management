@@ -1,10 +1,12 @@
-import { Request, Response, Router } from "express";
+import { Request, RequestHandler, Response, Router } from "express";
 import { z } from "zod";
 
 import { AccountAlreadyExistsError } from "~/modules/account/application/use-cases/errors/account-already-exists.error";
 import { makeCreateAccount } from "~/modules/account/application/use-cases/factories/make-create-account";
 
-import { Controller, ControllerException } from "../controller";
+import { Controller } from "../controller";
+import { HttpException } from "../http-exception";
+import { Middleware } from "../middleware";
 
 const schema = z.object({
   name: z.string().min(6).max(255),
@@ -16,8 +18,16 @@ export class CreateAccountController implements Controller {
   public readonly router = Router();
   public readonly PATH = "/account";
 
-  public registerRoute() {
-    this.router.post(this.PATH, this.handler.bind(this));
+  public registerRoute(middlewares?: Array<Middleware>) {
+    const handlers: Array<RequestHandler> = [];
+
+    if (middlewares?.length) {
+      handlers.push(...middlewares.map((middleware) => middleware.handler()));
+    }
+
+    handlers.push(this.handler.bind(this));
+
+    this.router.post(this.PATH, ...handlers);
   }
 
   public async handler(req: Request, res: Response) {
@@ -35,7 +45,7 @@ export class CreateAccountController implements Controller {
     }
 
     if (result.value instanceof AccountAlreadyExistsError) {
-      throw new ControllerException({
+      throw new HttpException({
         message: "Email already used",
         statusCode: 409,
         errors: [{ message: "Email already used" }],

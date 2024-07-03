@@ -6,7 +6,7 @@ import { fromZodError } from "zod-validation-error";
 
 import { PrismaConnection } from "../database/prisma/prisma-connection";
 
-import { ControllerException } from "./controller";
+import { HttpException } from "./http-exception";
 import { Routes } from "./routes";
 
 const expressInstance = express();
@@ -40,7 +40,7 @@ export class App {
         });
       }
 
-      if (err instanceof ControllerException) {
+      if (err instanceof HttpException) {
         return response.status(err.statusCode).json({
           status_code: err.statusCode,
           message: err.message,
