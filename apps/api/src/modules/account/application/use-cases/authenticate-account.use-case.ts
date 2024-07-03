@@ -1,3 +1,5 @@
+import { inject, injectable } from "tsyringe";
+
 import { AccountRepository } from "~/account/application/repositories/account.repository";
 import { JwtProvider } from "~/application/providers/jwt.provider";
 import { Either, left, right } from "~/core/either";
@@ -15,9 +17,12 @@ type OnSuccess = {
 };
 type Output = Either<OnError, OnSuccess>;
 
+@injectable()
 export class AuthenticateAccountUseCase {
   public constructor(
+    @inject("AccountRepository")
     private readonly accountRepository: AccountRepository,
+    @inject("JwtProvider")
     private readonly jwtProvider: JwtProvider,
   ) {}
 
