@@ -15,11 +15,14 @@
     "lint": "eslint --ext .ts src/ test/",
     "lint:fix": "eslint --fix --ext .ts src/ test/",
     "db:migrate:dev": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
     "db:preview": "prisma studio",
     "test": "vitest run -c vitest.config.mts",
     "test:ui": "vitest --ui -c vitest.config.mts",
     "test:watch": "vitest -c vitest.config.mts",
-    "test:cov": "vitest run --coverage -c vitest.config.mts"
+    "test:cov": "vitest run --coverage -c vitest.config.mts",
+    "test:e2e:watch": "vitest -c vitest.e2e.config.mts",
+    "test:e2e": "vitest run -c vitest.e2e.config.mts"
   },
   "dependencies": {
     "@prisma/client": "5.15.1",
