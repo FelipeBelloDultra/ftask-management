@@ -1,5 +1,9 @@
 import "express-async-errors";
+
+import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
+import helmet from "helmet";
+import morgan from "morgan";
 import { container } from "tsyringe";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
@@ -60,6 +64,9 @@ export class App {
 
   public registerMiddlewares() {
     this.expressInstance.use(express.json());
+    this.expressInstance.use(cors());
+    this.expressInstance.use(morgan("short"));
+    this.expressInstance.use(helmet());
     this.registerRoutes();
     this.setGlobalErrorHandler();
   }
