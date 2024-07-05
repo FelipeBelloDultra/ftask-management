@@ -38,3 +38,6 @@ yarn-error.log*
 *.pem
 
 requirements.md
+
+apps/api/storage/logs/*
+!apps/api/storage/logs/.gitkeep

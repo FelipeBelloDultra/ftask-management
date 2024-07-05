@@ -2,12 +2,12 @@ import { container, Lifecycle } from "tsyringe";
 
 import { JwtProvider } from "~/application/providers/jwt.provider";
 
-import { JsonWebTokenJwtProvider } from "./jsonwebtoken-jwt.provider";
+import { JsonWebTokenJwt } from "./jsonwebtoken-jwt";
 
 container.register<JwtProvider>(
   "JwtProvider",
   {
-    useClass: JsonWebTokenJwtProvider,
+    useClass: JsonWebTokenJwt,
   },
   {
     lifecycle: Lifecycle.Singleton,

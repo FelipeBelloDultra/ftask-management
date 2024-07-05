@@ -3,7 +3,7 @@ import { sign, verify } from "jsonwebtoken";
 import { JwtProvider } from "~/application/providers/jwt.provider";
 import { env } from "~/config/env";
 
-export class JsonWebTokenJwtProvider implements JwtProvider {
+export class JsonWebTokenJwt implements JwtProvider {
   public async encrypt(value: Record<string, unknown>, expiresIn?: string | undefined): Promise<string> {
     const token = sign(value, env.JWT_SECRET, {
       expiresIn: expiresIn || env.JWT_EXPIRES_IN,
