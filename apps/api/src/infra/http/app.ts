@@ -1,5 +1,7 @@
 import "express-async-errors";
 
+import { Server } from "node:http";
+
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
@@ -13,28 +15,24 @@ import { PrismaConnection } from "../database/prisma/prisma-connection";
 import { HttpException } from "./http-exception";
 import { Routes } from "./routes";
 
-const expressInstance = express();
-const routes = new Routes();
-const prismaConnection = container.resolve<PrismaConnection>("PrismaConnection");
-
 export class App {
-  public readonly expressInstance = expressInstance;
-  public readonly prismaConnection = prismaConnection;
-  public readonly routes = routes;
+  public readonly expressInstance = express();
+  private readonly routes = new Routes();
+  private readonly prismaConnection = container.resolve<PrismaConnection>("PrismaConnection");
 
-  public async connectPrisma() {
-    return await prismaConnection.connect();
+  private async connectPrisma() {
+    return await this.prismaConnection.connect();
   }
 
-  public async disconnectPrisma() {
-    return await prismaConnection.disconnect();
+  private async disconnectPrisma() {
+    return await this.prismaConnection.disconnect();
   }
 
   private registerRoutes() {
     this.expressInstance.use("/api", this.routes.router);
   }
 
-  public setGlobalErrorHandler() {
+  private setGlobalErrorHandler() {
     this.expressInstance.use((err: Error, request: Request, response: Response, _: NextFunction) => {
       if (err instanceof ZodError) {
         return response.status(400).json({
@@ -62,12 +60,47 @@ export class App {
     });
   }
 
-  public registerMiddlewares() {
+  private registerMiddlewares() {
     this.expressInstance.use(express.json());
     this.expressInstance.use(cors());
     this.expressInstance.use(morgan("short"));
     this.expressInstance.use(helmet());
     this.registerRoutes();
     this.setGlobalErrorHandler();
+  }
+
+  private async startServices() {
+    await this.connectPrisma();
+    this.registerMiddlewares();
+  }
+
+  private async stopServices() {
+    await this.disconnectPrisma();
+  }
+
+  public async boot(httpServerPort: number) {
+    try {
+      await this.startServices();
+
+      const server = this.expressInstance.listen(httpServerPort);
+      this.addGracefulShutdownHandlers(server);
+    } catch (error) {
+      console.log(error);
+      this.stopServices();
+    }
+  }
+
+  private addGracefulShutdownHandlers(server: Server) {
+    const EVENTS = ["uncaughtException", "unhandledRejection", "SIGTERM", "SIGINT"] as const;
+
+    EVENTS.forEach((event) => {
+      process.on(event, async () => {
+        this.stopServices().then(() => {
+          server.close(() => {
+            process.exit(0);
+          });
+        });
+      });
+    });
   }
 }
