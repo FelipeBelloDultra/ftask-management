@@ -1,17 +1,26 @@
 import { PrismaClient } from "@prisma/client";
+import { inject, injectable } from "tsyringe";
 
+import { LoggerProvider } from "~/application/providers/logger.provider";
+
+@injectable()
 export class PrismaConnection extends PrismaClient {
-  public constructor() {
+  public constructor(
+    @inject("LoggerProvider")
+    private readonly logger: LoggerProvider,
+  ) {
     super({
       log: ["warn", "error"],
     });
   }
 
   public async connect() {
-    return await this.$connect();
+    await this.$connect();
+    this.logger.info("[DATABASE]: connection established");
   }
 
   public async disconnect() {
-    return await this.$disconnect();
+    await this.$disconnect();
+    this.logger.warn("[DATABASE]: connection closed");
   }
 }

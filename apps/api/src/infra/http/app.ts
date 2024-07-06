@@ -12,6 +12,7 @@ import { container } from "tsyringe";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 
+import { LoggerProvider } from "~/application/providers/logger.provider";
 import { env } from "~/config/env";
 
 import { PrismaConnection } from "../database/prisma/prisma-connection";
@@ -23,6 +24,7 @@ export class App {
   public readonly expressInstance = express();
   private readonly routes = new Routes();
   private readonly prismaConnection = container.resolve<PrismaConnection>("PrismaConnection");
+  private readonly logger = container.resolve<LoggerProvider>("LoggerProvider");
 
   private async connectPrisma() {
     return await this.prismaConnection.connect();
@@ -54,7 +56,7 @@ export class App {
         });
       }
 
-      console.log(err);
+      this.logger.error(err);
 
       return response.status(500).json({
         status_code: 500,
@@ -89,7 +91,7 @@ export class App {
       const server = this.expressInstance.listen(env.HTTP_SERVER_PORT);
       this.addGracefulShutdownHandlers(server);
     } catch (error) {
-      console.log(error);
+      this.logger.error(error as unknown as object);
       this.stopServices();
     }
   }
@@ -100,6 +102,8 @@ export class App {
     EVENTS.forEach((event) => {
       process.on(event, async () => {
         this.stopServices().then(() => {
+          this.logger.warn("Service stopping");
+
           server.close(() => {
             process.exit(0);
           });
