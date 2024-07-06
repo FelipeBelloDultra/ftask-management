@@ -1,4 +1,6 @@
+import "reflect-metadata";
 import "express-async-errors";
+import "../container";
 
 import { Server } from "node:http";
 
@@ -9,6 +11,8 @@ import morgan from "morgan";
 import { container } from "tsyringe";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
+
+import { env } from "~/config/env";
 
 import { PrismaConnection } from "../database/prisma/prisma-connection";
 
@@ -69,20 +73,20 @@ export class App {
     this.setGlobalErrorHandler();
   }
 
-  private async startServices() {
+  public async startServices() {
     await this.connectPrisma();
     this.registerMiddlewares();
   }
 
-  private async stopServices() {
+  public async stopServices() {
     await this.disconnectPrisma();
   }
 
-  public async boot(httpServerPort: number) {
+  public async boot() {
     try {
       await this.startServices();
 
-      const server = this.expressInstance.listen(httpServerPort);
+      const server = this.expressInstance.listen(env.HTTP_SERVER_PORT);
       this.addGracefulShutdownHandlers(server);
     } catch (error) {
       console.log(error);
