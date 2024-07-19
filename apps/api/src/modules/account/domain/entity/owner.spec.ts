@@ -1,4 +1,4 @@
-import { makeOwner } from "test/factories/make-owner";
+import { makeOwner } from "~/test/factories/make-owner";
 
 import { Owner } from "./owner";
 

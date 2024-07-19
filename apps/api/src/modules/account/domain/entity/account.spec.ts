@@ -1,4 +1,4 @@
-import { makeAccount } from "test/factories/make-account";
+import { makeAccount } from "~/test/factories/make-account";
 
 import { Account } from "./account";
 

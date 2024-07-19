@@ -1,5 +1,6 @@
-import { Request, Response } from "express";
 import { z } from "zod";
+
+import { Request, Response } from "express";
 
 import { InvalidCombinationError } from "~/modules/account/application/use-cases/errors/invalid-combination.error";
 import { makeAuthenticateAccount } from "~/modules/account/application/use-cases/factories/make-authenticate-account";

@@ -1,5 +1,6 @@
-import { Request, Response } from "express";
 import { z } from "zod";
+
+import { Request, Response } from "express";
 
 import { AccountAlreadyExistsError } from "~/modules/account/application/use-cases/errors/account-already-exists.error";
 import { makeCreateAccount } from "~/modules/account/application/use-cases/factories/make-create-account";

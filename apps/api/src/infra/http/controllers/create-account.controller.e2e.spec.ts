@@ -1,9 +1,9 @@
 import supertest from "supertest";
-import { makeAccount } from "test/factories/make-account";
 import { container } from "tsyringe";
 
 import { PrismaConnection } from "~/infra/database/prisma/prisma-connection";
 import { Password } from "~/modules/account/domain/entity/value-objects/password";
+import { makeAccount } from "~/test/factories/make-account";
 
 import { App } from "../app";
 

@@ -1,5 +1,5 @@
-import { makeAccount } from "test/factories/make-account";
-import { FakeAccountRepository } from "test/repositories/fake-account.repository";
+import { makeAccount } from "~/test/factories/make-account";
+import { FakeAccountRepository } from "~/test/repositories/fake-account.repository";
 
 import { CreateAccountUseCase } from "./create-account.use-case";
 import { AccountAlreadyExistsError } from "./errors/account-already-exists.error";

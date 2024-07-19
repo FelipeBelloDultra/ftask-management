@@ -15,6 +15,6 @@ export default defineConfig({
       ],
     },
     include: ["src/**/*.spec.ts", "!src/**/*.e2e.spec.ts"],
-    setupFiles: ["test/container/index.ts"],
+    setupFiles: ["/test/container/index.ts"],
   },
 });

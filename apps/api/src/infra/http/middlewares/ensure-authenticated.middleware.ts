@@ -1,5 +1,6 @@
-import { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
+
+import { NextFunction, Request, Response } from "express";
 
 import { JwtProvider } from "~/application/providers/jwt.provider";
 

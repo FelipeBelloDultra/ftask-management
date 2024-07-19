@@ -9,7 +9,8 @@
     "paths": {
       "~/*": ["src/*"],
       "~/account/*": ["src/modules/account/*"],
-      "~/project/*": ["src/modules/project/*"]
+      "~/project/*": ["src/modules/project/*"],
+      "~/test/*": ["test/*"]
     }
   }
 }

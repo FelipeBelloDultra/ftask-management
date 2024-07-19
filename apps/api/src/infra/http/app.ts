@@ -5,12 +5,13 @@ import "../container";
 import { Server } from "node:http";
 
 import cors from "cors";
-import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import { container } from "tsyringe";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
+
+import express, { NextFunction, Request, Response } from "express";
 
 import { LoggerProvider } from "~/application/providers/logger.provider";
 import { env } from "~/config/env";

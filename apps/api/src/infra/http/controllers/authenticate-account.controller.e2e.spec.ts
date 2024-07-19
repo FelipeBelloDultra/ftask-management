@@ -1,8 +1,8 @@
 import supertest from "supertest";
-import { AccountFactory } from "test/factories/make-account";
 import { container } from "tsyringe";
 
 import { Password } from "~/modules/account/domain/entity/value-objects/password";
+import { AccountFactory } from "~/test/factories/make-account";
 
 import { App } from "../app";
 

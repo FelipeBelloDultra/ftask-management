@@ -1,6 +1,5 @@
-import { makeProject } from "test/factories/make-project";
-
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import { makeProject } from "~/test/factories/make-project";
 
 import { Project } from "./project";
 import { DueDate } from "./value-objects/due-date";

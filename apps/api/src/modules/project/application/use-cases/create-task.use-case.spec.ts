@@ -1,11 +1,11 @@
-import { makeAccount } from "test/factories/make-account";
-import { makeMember } from "test/factories/make-member";
-import { makeOwner } from "test/factories/make-owner";
-import { makeProject } from "test/factories/make-project";
-import { FakeMemberRepository } from "test/repositories/fake-member.repository";
-import { FakeOwnerRepository } from "test/repositories/fake-owner.repository";
-import { FakeProjectRepository } from "test/repositories/fake-project.repository";
-import { FakeTaskRepository } from "test/repositories/fake-task.repository";
+import { makeAccount } from "~/test/factories/make-account";
+import { makeMember } from "~/test/factories/make-member";
+import { makeOwner } from "~/test/factories/make-owner";
+import { makeProject } from "~/test/factories/make-project";
+import { FakeMemberRepository } from "~/test/repositories/fake-member.repository";
+import { FakeOwnerRepository } from "~/test/repositories/fake-owner.repository";
+import { FakeProjectRepository } from "~/test/repositories/fake-project.repository";
+import { FakeTaskRepository } from "~/test/repositories/fake-task.repository";
 
 import { CreateTaskUseCase } from "./create-task.use-case";
 import { AccountNotFoundError } from "./errors/account-not-found.error";
