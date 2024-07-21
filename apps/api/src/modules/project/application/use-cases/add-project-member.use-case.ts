@@ -1,12 +1,15 @@
+import { inject, injectable } from "tsyringe";
+
 import { AccountRepository } from "~/account/application/repositories/account.repository";
 import { MemberRepository } from "~/account/application/repositories/member.repository";
-import { OwnerRepository } from "~/account/application/repositories/owner.repository";
 import { Member } from "~/account/domain/entity/member";
 import { Either, left, right } from "~/core/either";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import { ProjectMemberRepository } from "~/project/application/repositories/project-member.repository";
 import { ProjectRepository } from "~/project/application/repositories/project.repository";
+import { ProjectMember } from "~/project/domain/entity/project-member";
 
-import { AccountNotFoundError } from "./errors/account-not-found.error";
+import { MemberNotFoundError } from "./errors/member-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { OwnerCannotBeAddedAsMemberError } from "./errors/owner-cannot-be-added-as-member.error";
 import { ProjectMemberAlreadyExistsError } from "./errors/project-member-already-exists.error";
@@ -18,63 +21,73 @@ type Input = {
   ownerAccountId: string;
 };
 type OnError =
-  | AccountNotFoundError
   | NotAllowedError
+  | MemberNotFoundError
   | ProjectMemberAlreadyExistsError
   | ProjectNotFoundError
   | OwnerCannotBeAddedAsMemberError;
-type OnSuccess = { member: Member };
+type OnSuccess = { projectMember: ProjectMember };
 type Output = Either<OnError, OnSuccess>;
 
+@injectable()
 export class AddProjectMemberUseCase {
   public constructor(
+    @inject("MemberRepository")
     private readonly memberRepository: MemberRepository,
+    @inject("ProjectRepository")
     private readonly projectRepository: ProjectRepository,
+    @inject("AccountRepository")
     private readonly accountRepository: AccountRepository,
-    private readonly ownerRepository: OwnerRepository,
+    @inject("ProjectMemberRepository")
+    private readonly projectMemberRepository: ProjectMemberRepository,
   ) {}
 
   public async execute(input: Input): Promise<Output> {
     const projectId = UniqueEntityID.create(input.projectId);
-
     const project = await this.projectRepository.findById(projectId);
     if (!project) {
       return left(new ProjectNotFoundError());
     }
 
-    const owner = await this.ownerRepository.findByAccountId(UniqueEntityID.create(input.ownerAccountId));
-    if (!owner) {
-      return left(new AccountNotFoundError());
-    }
-
-    if (owner.values.accountEmail === input.memberAccountEmail) {
-      return left(new OwnerCannotBeAddedAsMemberError());
-    }
-
-    const isProjectOwner = project.values.ownerId.equals(owner.id);
-    if (!isProjectOwner) {
+    const ownerAccountId = UniqueEntityID.create(input.ownerAccountId);
+    if (!project.values.ownerId.equals(ownerAccountId)) {
       return left(new NotAllowedError());
     }
 
     const account = await this.accountRepository.findByEmail(input.memberAccountEmail);
     if (!account) {
-      return left(new AccountNotFoundError());
+      return left(new MemberNotFoundError());
     }
 
-    const memberWasRegistered = !!(await this.memberRepository.findByAccountAndProjectId(account.id, projectId));
-    if (memberWasRegistered) {
+    let member: Member | null = null;
+    member = await this.memberRepository.findByAccountId(account.id);
+
+    if (member && member.values.accountId.equals(ownerAccountId)) {
+      return left(new OwnerCannotBeAddedAsMemberError());
+    }
+
+    if (!member) {
+      member = Member.create({
+        accountId: account.id,
+      });
+
+      await this.memberRepository.create(member);
+    }
+
+    const projectMemberAlreadyExists = await this.projectMemberRepository.findByMemberAndProjectId(
+      member.id,
+      project.id,
+    );
+    if (projectMemberAlreadyExists) {
       return left(new ProjectMemberAlreadyExistsError());
     }
 
-    const member = Member.create({
-      projectId: projectId,
-      accountEmail: input.memberAccountEmail,
-      accountId: account.id,
-      accountName: account.values.name,
+    const projectMember = ProjectMember.create({
+      memberId: member.id,
+      projectId: project.id,
     });
+    await this.projectMemberRepository.create(projectMember);
 
-    await this.memberRepository.create(member);
-
-    return right({ member });
+    return right({ projectMember });
   }
 }

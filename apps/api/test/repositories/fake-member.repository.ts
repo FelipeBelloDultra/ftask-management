@@ -9,16 +9,14 @@ export class FakeMemberRepository implements MemberRepository {
     this.members.push(member);
   }
 
-  public async findByAccountAndProjectId(accountId: UniqueEntityID, projectId: UniqueEntityID): Promise<Member | null> {
-    const member = this.members.find(
-      (member) => member.values.accountId.equals(accountId) && member.values.projectId.equals(projectId),
-    );
+  public async findById(id: UniqueEntityID): Promise<Member | null> {
+    const member = this.members.find((member) => member.id.equals(id));
 
     return member || null;
   }
 
-  public async findById(id: UniqueEntityID): Promise<Member | null> {
-    const member = this.members.find((member) => member.id.equals(id));
+  public async findByAccountId(accountId: UniqueEntityID): Promise<Member | null> {
+    const member = this.members.find((member) => member.values.accountId.equals(accountId));
 
     return member || null;
   }

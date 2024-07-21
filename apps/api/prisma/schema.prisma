@@ -28,12 +28,13 @@ model Account {
 
 model Member {
   id        String @id @default(uuid())
-  accountId String @map("account_id")
+  accountId String @unique @map("account_id")
 
   account  Account            @relation(fields: [accountId], references: [id])
   tasks    Task[]
   projects ProjectHasMember[]
 
+  @@unique([id, accountId])
   @@map("members")
 }
 

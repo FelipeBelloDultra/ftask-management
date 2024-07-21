@@ -1,19 +1,36 @@
-import { faker } from "@faker-js/faker";
+import { inject, injectable } from "tsyringe";
 
 import { Member, MemberProps } from "~/account/domain/entity/member";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import { MemberMapper } from "~/infra/database/prisma/mappers/member-mapper";
+import { PrismaConnection } from "~/infra/database/prisma/prisma-connection";
 
 export function makeMember(override: Partial<MemberProps> = {}, id?: UniqueEntityID): Member {
   const member = Member.create(
     {
-      accountEmail: faker.internet.email(),
-      accountName: faker.person.fullName(),
       accountId: UniqueEntityID.create(),
-      projectId: UniqueEntityID.create(),
       ...override,
     },
     id,
   );
 
   return member;
+}
+
+@injectable()
+export class MemberFactory {
+  public constructor(
+    @inject("PrismaConnection")
+    private readonly prismaConnection: PrismaConnection,
+  ) {}
+
+  public async makePrismaMember(override: Partial<MemberProps> = {}, id?: UniqueEntityID) {
+    const member = makeMember(override, id);
+
+    await this.prismaConnection.member.create({
+      data: MemberMapper.toPersistence(member),
+    });
+
+    return member;
+  }
 }

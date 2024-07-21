@@ -3,25 +3,11 @@ import { Member as PrismaMember } from "@prisma/client";
 import { Member } from "~/account/domain/entity/member";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 
-interface PrismaMemberWithAccount {
-  id: string;
-  projectId: string;
-  account: {
-    id: string;
-    email: string;
-    password: string;
-    name: string;
-  };
-}
-
 export class MemberMapper {
-  public static toDomain(prismaMember: PrismaMemberWithAccount): Member {
+  public static toDomain(prismaMember: PrismaMember): Member {
     return Member.create(
       {
-        accountEmail: prismaMember.account.email,
-        accountName: prismaMember.account.name,
-        projectId: UniqueEntityID.create(prismaMember.projectId),
-        accountId: UniqueEntityID.create(prismaMember.account.id),
+        accountId: UniqueEntityID.create(prismaMember.accountId),
       },
       UniqueEntityID.create(prismaMember.id),
     );
@@ -29,10 +15,8 @@ export class MemberMapper {
 
   public static toPersistence(member: Member): PrismaMember {
     return {
-      projectId: member.values.projectId.toValue(),
-      accountId: member.values.accountId.toValue(),
       id: member.id.toValue(),
-      role: "member",
+      accountId: member.values.accountId.toValue(),
     };
   }
 }
