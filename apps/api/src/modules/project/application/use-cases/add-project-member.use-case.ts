@@ -26,7 +26,7 @@ type OnError =
   | ProjectMemberAlreadyExistsError
   | ProjectNotFoundError
   | OwnerCannotBeAddedAsMemberError;
-type OnSuccess = { member: Member };
+type OnSuccess = { projectMember: ProjectMember };
 type Output = Either<OnError, OnSuccess>;
 
 @injectable()
@@ -88,6 +88,6 @@ export class AddProjectMemberUseCase {
     });
     await this.projectMemberRepository.create(projectMember);
 
-    return right({ member });
+    return right({ projectMember });
   }
 }

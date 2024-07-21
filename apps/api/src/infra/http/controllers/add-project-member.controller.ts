@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { z } from "zod";
 
+import { ProjectMemberPresenter } from "~/infra/presenters/project-member-presenter";
 import { makeAddProjectMember } from "~/modules/project/application/use-cases/factories/make-add-project-member";
 import { MemberNotFoundError } from "~/project/application/use-cases/errors/member-not-found.error";
 import { NotAllowedError } from "~/project/application/use-cases/errors/not-allowed.error";
@@ -43,7 +44,7 @@ export class AddProjectMemberController extends Controller {
     });
 
     if (result.isRight()) {
-      return res.status(201).send();
+      return res.status(201).json(ProjectMemberPresenter.toHTTP(result.value.projectMember));
     }
 
     switch (result.value.constructor) {

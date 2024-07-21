@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 
+import { AccountPresenter } from "~/infra/presenters/account-presenter";
 import { AccountAlreadyExistsError } from "~/modules/account/application/use-cases/errors/account-already-exists.error";
 import { makeCreateAccount } from "~/modules/account/application/use-cases/factories/make-create-account";
 
@@ -32,7 +33,7 @@ export class CreateAccountController extends Controller {
     });
 
     if (result.isRight()) {
-      return res.status(201).send();
+      return res.status(201).json(AccountPresenter.toHTTP(result.value.account));
     }
 
     if (result.value instanceof AccountAlreadyExistsError) {
