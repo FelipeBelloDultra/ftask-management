@@ -1,6 +1,5 @@
-import { z } from "zod";
-
 import { Request, Response } from "express";
+import { z } from "zod";
 
 import { AccountAlreadyExistsError } from "~/modules/account/application/use-cases/errors/account-already-exists.error";
 import { makeCreateAccount } from "~/modules/account/application/use-cases/factories/make-create-account";
@@ -15,8 +14,12 @@ const schema = z.object({
 });
 
 export class CreateAccountController extends Controller {
-  public PATH = "/account";
-  public METHOD = ControllerMethods.POST;
+  public constructor() {
+    super({
+      path: "/account",
+      method: ControllerMethods.POST,
+    });
+  }
 
   public async handler(req: Request, res: Response) {
     const { email, name, password } = schema.parse(req.body);

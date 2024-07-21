@@ -2,10 +2,6 @@ import { Request, RequestHandler, Response, Router } from "express";
 
 import { Middleware } from "./middleware";
 
-export interface ControllerConstructor {
-  middlewares?: Array<Middleware>;
-}
-
 export enum ControllerMethods {
   GET = "get",
   POST = "post",
@@ -15,14 +11,22 @@ export enum ControllerMethods {
   ALL = "all",
 }
 
+export interface ControllerConstructor {
+  middlewares?: Array<Middleware>;
+  method: ControllerMethods;
+  path: string;
+}
+
 export abstract class Controller {
   public readonly router = Router();
   public readonly middlewares?: Array<Middleware>;
-  public abstract readonly PATH: string;
-  public abstract readonly METHOD: ControllerMethods;
+  private readonly path: string;
+  private readonly method: ControllerMethods;
 
-  public constructor({ middlewares }: ControllerConstructor = { middlewares: [] }) {
-    this.middlewares = middlewares;
+  public constructor({ middlewares, method, path }: ControllerConstructor) {
+    this.middlewares = middlewares || [];
+    this.path = path;
+    this.method = method;
   }
 
   public registerRoute() {
@@ -34,7 +38,7 @@ export abstract class Controller {
 
     handlers.push(this.handler.bind(this));
 
-    this.router[this.METHOD](this.PATH, ...handlers);
+    this.router[this.method](this.path, ...handlers);
   }
 
   public abstract handler(req: Request, res: Response): Promise<Response>;
