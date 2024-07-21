@@ -7,7 +7,6 @@ import { ProjectMemberRepository } from "~/project/application/repositories/proj
 import { ProjectRepository } from "~/project/application/repositories/project.repository";
 import { ProjectMember } from "~/project/domain/entity/project-member";
 
-import { AccountNotFoundError } from "./errors/account-not-found.error";
 import { MemberNotFoundError } from "./errors/member-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { OwnerCannotBeAddedAsMemberError } from "./errors/owner-cannot-be-added-as-member.error";
@@ -20,7 +19,6 @@ type Input = {
   ownerAccountId: string;
 };
 type OnError =
-  | AccountNotFoundError
   | NotAllowedError
   | MemberNotFoundError
   | ProjectMemberAlreadyExistsError
@@ -38,18 +36,14 @@ export class AddProjectMemberUseCase {
   ) {}
 
   public async execute(input: Input): Promise<Output> {
-    const ownerAccount = await this.accountRepository.findById(UniqueEntityID.create(input.ownerAccountId));
-    if (!ownerAccount) {
-      return left(new AccountNotFoundError());
-    }
-
     const projectId = UniqueEntityID.create(input.projectId);
     const project = await this.projectRepository.findById(projectId);
     if (!project) {
       return left(new ProjectNotFoundError());
     }
 
-    if (!project.id.equals(ownerAccount.id)) {
+    const ownerAccountId = UniqueEntityID.create(input.ownerAccountId);
+    if (!project.values.ownerId.equals(ownerAccountId)) {
       return left(new NotAllowedError());
     }
 
@@ -61,7 +55,7 @@ export class AddProjectMemberUseCase {
     let member: Member | null = null;
     member = await this.memberRepository.findByAccountId(account.id);
 
-    if (member && member.id.equals(ownerAccount.id)) {
+    if (member && member.values.accountId.equals(ownerAccountId)) {
       return left(new OwnerCannotBeAddedAsMemberError());
     }
 

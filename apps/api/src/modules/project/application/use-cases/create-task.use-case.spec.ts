@@ -7,7 +7,6 @@ import { FakeProjectRepository } from "~/test/repositories/fake-project.reposito
 import { FakeTaskRepository } from "~/test/repositories/fake-task.repository";
 
 import { CreateTaskUseCase } from "./create-task.use-case";
-import { AccountNotFoundError } from "./errors/account-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "./errors/project-member-not-found.error";
 import { ProjectNotFoundError } from "./errors/project-not-found.error";
@@ -56,22 +55,6 @@ describe("CreateTaskUseCase", () => {
     expect(fakeTaskRepository.tasks.length).toBe(1);
   });
 
-  it("should not be able to create a new task with no owner", async () => {
-    const input = {
-      ownerAccountId: "invalid-owner-account-id",
-      projectId: "project-id",
-      assigneeId: "assignee-id",
-      title: "Task title",
-      description: "Task description",
-      dueDate: new Date(),
-    };
-
-    const result = await sut.execute(input);
-
-    expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeInstanceOf(AccountNotFoundError);
-  });
-
   it("should not be able to create a new task with no project", async () => {
     const account = makeAccount();
 
@@ -93,6 +76,8 @@ describe("CreateTaskUseCase", () => {
   it("should not be able to create a new task if the owner account id does not match the project owner account id", async () => {
     const account = makeAccount();
     const project = makeProject();
+
+    await Promise.all([fakeProjectRepository.create(project)]);
 
     const input = {
       ownerAccountId: account.id.toValue(),
@@ -116,7 +101,7 @@ describe("CreateTaskUseCase", () => {
     });
     const member = makeMember();
     const projectMember = makeProjectMember({
-      memberId: member.id,
+      memberId: account.id,
       projectId: project.id,
     });
 

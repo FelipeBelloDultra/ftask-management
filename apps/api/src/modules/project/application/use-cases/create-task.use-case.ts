@@ -6,7 +6,6 @@ import { TaskRepository } from "~/project/application/repositories/task.reposito
 import { Task } from "~/project/domain/entity/task";
 import { DueDate } from "~/project/domain/entity/value-objects/due-date";
 
-import { AccountNotFoundError } from "./errors/account-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "./errors/project-member-not-found.error";
 import { ProjectNotFoundError } from "./errors/project-not-found.error";
@@ -19,7 +18,7 @@ type Input = {
   title: string;
   ownerAccountId: string;
 };
-type OnError = AccountNotFoundError | ProjectNotFoundError | NotAllowedError | ProjectMemberNotFoundError;
+type OnError = ProjectNotFoundError | NotAllowedError | ProjectMemberNotFoundError;
 type OnSuccess = { task: Task };
 type Output = Either<OnError, OnSuccess>;
 
