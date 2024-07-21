@@ -1,3 +1,5 @@
+import { inject, injectable } from "tsyringe";
+
 import { AccountRepository } from "~/account/application/repositories/account.repository";
 import { MemberRepository } from "~/account/application/repositories/member.repository";
 import { Member } from "~/account/domain/entity/member";
@@ -27,11 +29,16 @@ type OnError =
 type OnSuccess = { member: Member };
 type Output = Either<OnError, OnSuccess>;
 
+@injectable()
 export class AddProjectMemberUseCase {
   public constructor(
+    @inject("MemberRepository")
     private readonly memberRepository: MemberRepository,
+    @inject("ProjectRepository")
     private readonly projectRepository: ProjectRepository,
+    @inject("AccountRepository")
     private readonly accountRepository: AccountRepository,
+    @inject("ProjectMemberRepository")
     private readonly projectMemberRepository: ProjectMemberRepository,
   ) {}
 
