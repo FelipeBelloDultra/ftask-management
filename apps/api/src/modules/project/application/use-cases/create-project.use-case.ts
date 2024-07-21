@@ -1,6 +1,4 @@
 import { AccountRepository } from "~/account/application/repositories/account.repository";
-import { OwnerRepository } from "~/account/application/repositories/owner.repository";
-import { Owner } from "~/account/domain/entity/owner";
 import { Either, left, right } from "~/core/either";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 import { ProjectRepository } from "~/project/application/repositories/project.repository";
@@ -24,7 +22,6 @@ export class CreateProjectUseCase {
   public constructor(
     private readonly projectRepository: ProjectRepository,
     private readonly accountRepository: AccountRepository,
-    private readonly ownerRepository: OwnerRepository,
   ) {}
 
   public async execute(input: Input): Promise<Output> {
@@ -35,25 +32,11 @@ export class CreateProjectUseCase {
       return left(new AccountNotFoundError());
     }
 
-    const owner = await this.ownerRepository.findByAccountId(accountId);
-    let ownerId = owner?.id;
-    if (!owner) {
-      const owner = Owner.create({
-        accountEmail: account.values.email,
-        accountId: account.id,
-        accountName: account.values.name,
-      });
-
-      await this.ownerRepository.create(owner);
-
-      ownerId = owner.id;
-    }
-
     const project = Project.create({
       name: input.name,
       description: input.description,
       dueDate: input.dueDate ? DueDate.create(input.dueDate) : null,
-      ownerId: ownerId!,
+      ownerId: accountId,
     });
 
     const projectBySlug = await this.projectRepository.findBySlug(project.values.slug);

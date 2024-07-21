@@ -20,18 +20,10 @@ export class PrismaMemberRepository implements MemberRepository {
     });
   }
 
-  public async findByAccountAndProjectId(accountId: UniqueEntityID, projectId: UniqueEntityID): Promise<Member | null> {
+  public async findById(id: UniqueEntityID): Promise<Member | null> {
     const member = await this.prismaConnection.member.findUnique({
       where: {
-        projectId_accountId: {
-          accountId: accountId.toValue(),
-          projectId: projectId.toValue(),
-        },
-      },
-      select: {
-        account: true,
-        projectId: true,
-        id: true,
+        id: id.toValue(),
       },
     });
 
@@ -40,15 +32,10 @@ export class PrismaMemberRepository implements MemberRepository {
     return MemberMapper.toDomain(member);
   }
 
-  public async findById(id: UniqueEntityID): Promise<Member | null> {
+  public async findByAccountId(accountId: UniqueEntityID): Promise<Member | null> {
     const member = await this.prismaConnection.member.findUnique({
       where: {
-        id: id.toValue(),
-      },
-      select: {
-        account: true,
-        projectId: true,
-        id: true,
+        accountId: accountId.toValue(),
       },
     });
 

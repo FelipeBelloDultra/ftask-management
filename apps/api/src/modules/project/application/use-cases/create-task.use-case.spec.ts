@@ -1,9 +1,8 @@
 import { makeAccount } from "~/test/factories/make-account";
 import { makeMember } from "~/test/factories/make-member";
-import { makeOwner } from "~/test/factories/make-owner";
 import { makeProject } from "~/test/factories/make-project";
-import { FakeMemberRepository } from "~/test/repositories/fake-member.repository";
-import { FakeOwnerRepository } from "~/test/repositories/fake-owner.repository";
+import { makeProjectMember } from "~/test/factories/make-project-member";
+import { FakeProjectMemberRepository } from "~/test/repositories/fake-project-member.repository";
 import { FakeProjectRepository } from "~/test/repositories/fake-project.repository";
 import { FakeTaskRepository } from "~/test/repositories/fake-task.repository";
 
@@ -16,40 +15,34 @@ import { ProjectNotFoundError } from "./errors/project-not-found.error";
 describe("CreateTaskUseCase", () => {
   let sut: CreateTaskUseCase;
   let fakeProjectRepository: FakeProjectRepository;
-  let fakeMemberRepository: FakeMemberRepository;
-  let fakeOwnerRepository: FakeOwnerRepository;
+  let fakeProjectMemberRepository: FakeProjectMemberRepository;
   let fakeTaskRepository: FakeTaskRepository;
 
   beforeEach(() => {
     fakeTaskRepository = new FakeTaskRepository();
     fakeProjectRepository = new FakeProjectRepository();
-    fakeMemberRepository = new FakeMemberRepository();
-    fakeOwnerRepository = new FakeOwnerRepository();
+    fakeProjectMemberRepository = new FakeProjectMemberRepository();
 
-    sut = new CreateTaskUseCase(fakeTaskRepository, fakeOwnerRepository, fakeProjectRepository, fakeMemberRepository);
+    sut = new CreateTaskUseCase(fakeTaskRepository, fakeProjectRepository, fakeProjectMemberRepository);
   });
 
   it("should be able to create a new task", async () => {
     const account = makeAccount();
-    const owner = makeOwner({
-      accountId: account.id,
-    });
     const project = makeProject({
-      ownerId: owner.id,
+      ownerId: account.id,
     });
     const member = makeMember({
       accountId: account.id,
+    });
+    const projectMember = makeProjectMember({
+      memberId: member.id,
       projectId: project.id,
     });
 
-    await Promise.all([
-      fakeProjectRepository.create(project),
-      fakeMemberRepository.create(member),
-      fakeOwnerRepository.create(owner),
-    ]);
+    await Promise.all([fakeProjectRepository.create(project), fakeProjectMemberRepository.create(projectMember)]);
 
     const input = {
-      ownerAccountId: owner.values.accountId.toValue(),
+      ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
       assigneeId: member.id.toValue(),
       title: "Task title",
@@ -81,13 +74,9 @@ describe("CreateTaskUseCase", () => {
 
   it("should not be able to create a new task with no project", async () => {
     const account = makeAccount();
-    const owner = makeOwner({
-      accountId: account.id,
-    });
-    await fakeOwnerRepository.create(owner);
 
     const input = {
-      ownerAccountId: owner.values.accountId.toValue(),
+      ownerAccountId: account.id.toValue(),
       projectId: "invalid-project-id",
       assigneeId: "assignee-id",
       title: "Task title",
@@ -103,15 +92,10 @@ describe("CreateTaskUseCase", () => {
 
   it("should not be able to create a new task if the owner account id does not match the project owner account id", async () => {
     const account = makeAccount();
-    const owner = makeOwner({
-      accountId: account.id,
-    });
     const project = makeProject();
 
-    await Promise.all([fakeProjectRepository.create(project), fakeOwnerRepository.create(owner)]);
-
     const input = {
-      ownerAccountId: owner.values.accountId.toValue(),
+      ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
       assigneeId: "member-id",
       title: "Task title",
@@ -127,22 +111,19 @@ describe("CreateTaskUseCase", () => {
 
   it("should not be able to assign a member to task if the member does not exist or isn't from this specific project", async () => {
     const account = makeAccount();
-    const owner = makeOwner({
-      accountId: account.id,
-    });
     const project = makeProject({
-      ownerId: owner.id,
+      ownerId: account.id,
     });
     const member = makeMember();
+    const projectMember = makeProjectMember({
+      memberId: member.id,
+      projectId: project.id,
+    });
 
-    await Promise.all([
-      fakeMemberRepository.create(member),
-      fakeProjectRepository.create(project),
-      fakeOwnerRepository.create(owner),
-    ]);
+    await Promise.all([fakeProjectMemberRepository.create(projectMember), fakeProjectRepository.create(project)]);
 
     const input = {
-      ownerAccountId: owner.values.accountId.toValue(),
+      ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
       assigneeId: member.id.toValue(),
       title: "Task title",

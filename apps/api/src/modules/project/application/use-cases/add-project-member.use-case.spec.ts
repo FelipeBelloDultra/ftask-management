@@ -1,10 +1,9 @@
 import { makeAccount } from "~/test/factories/make-account";
 import { makeMember } from "~/test/factories/make-member";
-import { makeOwner } from "~/test/factories/make-owner";
 import { makeProject } from "~/test/factories/make-project";
 import { FakeAccountRepository } from "~/test/repositories/fake-account.repository";
 import { FakeMemberRepository } from "~/test/repositories/fake-member.repository";
-import { FakeOwnerRepository } from "~/test/repositories/fake-owner.repository";
+import { FakeProjectMemberRepository } from "~/test/repositories/fake-project-member.repository";
 import { FakeProjectRepository } from "~/test/repositories/fake-project.repository";
 
 import { AddProjectMemberUseCase } from "./add-project-member.use-case";
@@ -19,39 +18,32 @@ describe("AddProjectMemberUseCase", () => {
   let fakeProjectRepository: FakeProjectRepository;
   let fakeAccountRepository: FakeAccountRepository;
   let fakeMemberRepository: FakeMemberRepository;
-  let fakeOwnerRepository: FakeOwnerRepository;
+  let fakeProjectMemberRepository: FakeProjectMemberRepository;
 
   beforeEach(() => {
     fakeProjectRepository = new FakeProjectRepository();
     fakeAccountRepository = new FakeAccountRepository();
     fakeMemberRepository = new FakeMemberRepository();
-    fakeOwnerRepository = new FakeOwnerRepository();
+    fakeProjectMemberRepository = new FakeProjectMemberRepository();
 
     sut = new AddProjectMemberUseCase(
       fakeMemberRepository,
       fakeProjectRepository,
       fakeAccountRepository,
-      fakeOwnerRepository,
+      fakeProjectMemberRepository,
     );
   });
 
   it("should be able to add a new project member", async () => {
     const account = makeAccount();
-    const owner = makeOwner({
-      accountId: account.id,
-    });
     const project = makeProject({
-      ownerId: owner.id,
+      ownerId: account.id,
     });
-    await Promise.all([
-      fakeOwnerRepository.create(owner),
-      fakeProjectRepository.create(project),
-      fakeAccountRepository.create(account),
-    ]);
+    await Promise.all([fakeProjectRepository.create(project), fakeAccountRepository.create(account)]);
 
     const input = {
       memberAccountEmail: account.values.email,
-      ownerAccountId: owner.values.accountId.toValue(),
+      ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
     };
 
@@ -92,15 +84,8 @@ describe("AddProjectMemberUseCase", () => {
 
   it("should not be able to create a project member if owner ins't owner from this project", async () => {
     const account = makeAccount();
-    const owner = makeOwner({
-      accountId: account.id,
-    });
     const project = makeProject();
-    await Promise.all([
-      fakeOwnerRepository.create(owner),
-      fakeProjectRepository.create(project),
-      fakeAccountRepository.create(account),
-    ]);
+    await Promise.all([fakeProjectRepository.create(project), fakeAccountRepository.create(account)]);
 
     const input = {
       memberAccountEmail: account.values.email,
@@ -116,21 +101,14 @@ describe("AddProjectMemberUseCase", () => {
 
   it("should not be able to create a project member if member email does not exists", async () => {
     const account = makeAccount();
-    const owner = makeOwner({
-      accountId: account.id,
-    });
     const project = makeProject({
-      ownerId: owner.id,
+      ownerId: account.id,
     });
-    await Promise.all([
-      fakeOwnerRepository.create(owner),
-      fakeProjectRepository.create(project),
-      fakeAccountRepository.create(account),
-    ]);
+    await Promise.all([fakeProjectRepository.create(project), fakeAccountRepository.create(account)]);
 
     const input = {
       memberAccountEmail: "invalid-member-account-email",
-      ownerAccountId: owner.values.accountId.toValue(),
+      ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
     };
 
@@ -142,27 +120,22 @@ describe("AddProjectMemberUseCase", () => {
 
   it("should not ble to create a project member if member was already registered", async () => {
     const account = makeAccount();
-    const owner = makeOwner({
-      accountId: account.id,
-    });
     const project = makeProject({
-      ownerId: owner.id,
+      ownerId: account.id,
     });
     const member = makeMember({
       accountId: account.id,
-      projectId: project.id,
     });
 
     await Promise.all([
       fakeMemberRepository.create(member),
       fakeAccountRepository.create(account),
-      fakeOwnerRepository.create(owner),
       fakeProjectRepository.create(project),
     ]);
 
     const input = {
       memberAccountEmail: account.values.email,
-      ownerAccountId: owner.values.accountId.toValue(),
+      ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
     };
 
@@ -174,23 +147,15 @@ describe("AddProjectMemberUseCase", () => {
 
   it("should not be able to create a member if member is owner from this project", async () => {
     const account = makeAccount();
-    const owner = makeOwner({
-      accountId: account.id,
-      accountEmail: account.values.email,
-    });
     const project = makeProject({
-      ownerId: owner.id,
+      ownerId: account.id,
     });
 
-    await Promise.all([
-      fakeAccountRepository.create(account),
-      fakeOwnerRepository.create(owner),
-      fakeProjectRepository.create(project),
-    ]);
+    await Promise.all([fakeAccountRepository.create(account), fakeProjectRepository.create(project)]);
 
     const input = {
-      memberAccountEmail: owner.values.accountEmail,
-      ownerAccountId: owner.values.accountId.toValue(),
+      memberAccountEmail: account.values.email,
+      ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
     };
 
