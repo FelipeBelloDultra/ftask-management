@@ -1,4 +1,4 @@
-import { inject } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 import { ProjectMemberRepository } from "~/modules/project/application/repositories/project-member.repository";
@@ -7,6 +7,7 @@ import { ProjectMember } from "~/modules/project/domain/entity/project-member";
 import { ProjectMemberMapper } from "../mappers/project-member-mapper";
 import { PrismaConnection } from "../prisma-connection";
 
+@injectable()
 export class PrismaProjectMemberRepository implements ProjectMemberRepository {
   public constructor(
     @inject("PrismaConnection")

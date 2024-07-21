@@ -4,8 +4,8 @@ export class ProjectMemberPresenter {
   public static toHTTP(projectMember: ProjectMember) {
     return {
       data: {
-        member_id: projectMember.memberId.toString(),
-        project_id: projectMember.projectId.toString(),
+        member_id: projectMember.memberId.toValue(),
+        project_id: projectMember.projectId.toValue(),
       },
     };
   }
