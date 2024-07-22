@@ -1,3 +1,5 @@
+import { inject, injectable } from "tsyringe";
+
 import { AccountRepository } from "~/account/application/repositories/account.repository";
 import { Either, left, right } from "~/core/either";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
@@ -18,9 +20,12 @@ type OnError = DuplicatedProjectSlugError | AccountNotFoundError;
 type OnSuccess = { project: Project };
 type Output = Either<OnError, OnSuccess>;
 
+@injectable()
 export class CreateProjectUseCase {
   public constructor(
+    @inject("ProjectRepository")
     private readonly projectRepository: ProjectRepository,
+    @inject("AccountRepository")
     private readonly accountRepository: AccountRepository,
   ) {}
 

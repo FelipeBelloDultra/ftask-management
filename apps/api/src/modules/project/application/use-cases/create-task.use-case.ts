@@ -1,3 +1,5 @@
+import { inject, injectable } from "tsyringe";
+
 import { Either, left, right } from "~/core/either";
 import { UniqueEntityID } from "~/core/entity/unique-entity-id";
 import { ProjectMemberRepository } from "~/project/application/repositories/project-member.repository";
@@ -22,10 +24,14 @@ type OnError = ProjectNotFoundError | NotAllowedError | ProjectMemberNotFoundErr
 type OnSuccess = { task: Task };
 type Output = Either<OnError, OnSuccess>;
 
+@injectable()
 export class CreateTaskUseCase {
   public constructor(
+    @inject("TaskRepository")
     private readonly taskRepository: TaskRepository,
+    @inject("ProjectRepository")
     private readonly projectRepository: ProjectRepository,
+    @inject("ProjectMemberRepository")
     private readonly projectMemberRepository: ProjectMemberRepository,
   ) {}
 
