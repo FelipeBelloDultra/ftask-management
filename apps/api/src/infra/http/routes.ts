@@ -1,33 +1,18 @@
 import { Router } from "express";
 
-import { Controller } from "./controller";
-import { AddProjectMemberController } from "./controllers/add-project-member.controller";
-import { AuthenticateAccountController } from "./controllers/authenticate-account.controller";
-import { CreateAccountController } from "./controllers/create-account.controller";
-import { CreateProjectController } from "./controllers/create-project.controller";
-import { CreateTaskController } from "./controllers/create-task.controller";
+import { AccountRoutes } from "./controllers/account";
+import { ProjectRoutes } from "./controllers/project";
 
-const createAccountController = new CreateAccountController();
-const authenticateAccountController = new AuthenticateAccountController();
-const addProjectMemberController = new AddProjectMemberController();
-const createProjectController = new CreateProjectController();
-const createTaskController = new CreateTaskController();
+const projectRoutes = new ProjectRoutes();
+const accountRoutes = new AccountRoutes();
 
 export class Routes {
-  private readonly controllers: Array<Controller> = [
-    createAccountController,
-    authenticateAccountController,
-    addProjectMemberController,
-    createProjectController,
-    createTaskController,
-  ];
+  private readonly routes = [projectRoutes, accountRoutes];
   public readonly router = Router();
 
   public constructor() {
-    this.controllers.forEach((routeController) => {
-      routeController.registerRoute();
-
-      this.router.use(routeController.router);
+    this.routes.forEach((routeConfig) => {
+      this.router.use(routeConfig.router);
     });
   }
 }

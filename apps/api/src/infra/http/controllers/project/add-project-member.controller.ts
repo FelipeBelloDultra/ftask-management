@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { z } from "zod";
 
+import { Controller, ControllerMethods } from "~/infra/http/controller";
+import { HttpException } from "~/infra/http/http-exception";
+import { EnsureAuthenticatedMiddleware } from "~/infra/http/middlewares/ensure-authenticated.middleware";
 import { ProjectMemberPresenter } from "~/infra/presenters/project-member-presenter";
 import { makeAddProjectMember } from "~/modules/project/application/use-cases/factories/make-add-project-member";
 import { MemberNotFoundError } from "~/project/application/use-cases/errors/member-not-found.error";
@@ -9,10 +12,6 @@ import { NotAllowedError } from "~/project/application/use-cases/errors/not-allo
 import { OwnerCannotBeAddedAsMemberError } from "~/project/application/use-cases/errors/owner-cannot-be-added-as-member.error";
 import { ProjectMemberAlreadyExistsError } from "~/project/application/use-cases/errors/project-member-already-exists.error";
 import { ProjectNotFoundError } from "~/project/application/use-cases/errors/project-not-found.error";
-
-import { Controller, ControllerMethods } from "../controller";
-import { HttpException } from "../http-exception";
-import { EnsureAuthenticatedMiddleware } from "../middlewares/ensure-authenticated.middleware";
 
 const schema = z.object({
   member_email: z.string().email().min(6).max(255),

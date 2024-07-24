@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 
+import { Controller, ControllerMethods } from "~/infra/http/controller";
+import { HttpException } from "~/infra/http/http-exception";
 import { InvalidCombinationError } from "~/modules/account/application/use-cases/errors/invalid-combination.error";
 import { makeAuthenticateAccount } from "~/modules/account/application/use-cases/factories/make-authenticate-account";
-
-import { Controller, ControllerMethods } from "../controller";
-import { HttpException } from "../http-exception";
 
 const schema = z.object({
   email: z.string().email().min(6).max(255),

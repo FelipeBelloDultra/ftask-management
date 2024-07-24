@@ -3,10 +3,9 @@ import { container } from "tsyringe";
 
 import { JwtProvider } from "~/application/providers/jwt.provider";
 import { PrismaConnection } from "~/infra/database/prisma/prisma-connection";
+import { App } from "~/infra/http/app";
 import { AccountFactory } from "~/test/factories/make-account";
 import { ProjectFactory } from "~/test/factories/make-project";
-
-import { App } from "../app";
 
 describe("[E2E] - Add project member - [POST /projects/:projectId/member]", () => {
   let app: App;

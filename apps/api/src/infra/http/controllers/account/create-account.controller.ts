@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 
+import { Controller, ControllerMethods } from "~/infra/http/controller";
+import { HttpException } from "~/infra/http/http-exception";
 import { AccountPresenter } from "~/infra/presenters/account-presenter";
 import { AccountAlreadyExistsError } from "~/modules/account/application/use-cases/errors/account-already-exists.error";
 import { makeCreateAccount } from "~/modules/account/application/use-cases/factories/make-create-account";
-
-import { Controller, ControllerMethods } from "../controller";
-import { HttpException } from "../http-exception";
 
 const schema = z.object({
   name: z.string().min(6).max(255),
