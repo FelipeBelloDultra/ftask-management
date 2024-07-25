@@ -5,16 +5,15 @@ import "../container";
 import { Server } from "node:http";
 
 import cors from "cors";
+import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import { container } from "tsyringe";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 
-import express, { NextFunction, Request, Response } from "express";
-
 import { LoggerProvider } from "~/application/providers/logger.provider";
-import { env } from "~/config/env";
+import { Env } from "~/config/env";
 
 import { PrismaConnection } from "../database/prisma/prisma-connection";
 
@@ -89,7 +88,7 @@ export class App {
     try {
       await this.startServices();
 
-      const server = this.expressInstance.listen(env.HTTP_SERVER_PORT);
+      const server = this.expressInstance.listen(Env.get("HTTP_SERVER_PORT"));
       this.addGracefulShutdownHandlers(server);
     } catch (error) {
       this.logger.error(error as unknown as object);
@@ -98,14 +97,18 @@ export class App {
   }
 
   private addGracefulShutdownHandlers(server: Server) {
-    const EVENTS = ["uncaughtException", "unhandledRejection", "SIGTERM", "SIGINT"] as const;
-
-    EVENTS.forEach((event) => {
+    ["uncaughtException", "unhandledRejection", "SIGTERM", "SIGINT"].forEach((event) => {
       process.on(event, async () => {
-        this.stopServices().then(() => {
-          this.logger.warn("Service stopping");
+        const time = new Date().getTime();
 
-          server.close(() => {
+        this.logger.error({ msg: `Received ${event}, stopping all services`, at: time });
+
+        server.close(() => {
+          this.logger.error({ msg: `Server stopped`, at: time });
+
+          this.stopServices().then(() => {
+            this.logger.error({ msg: `Services stopped`, at: time });
+
             process.exit(0);
           });
         });

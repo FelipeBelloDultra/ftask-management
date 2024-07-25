@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { inject, injectable } from "tsyringe";
 
 import { LoggerProvider } from "~/application/providers/logger.provider";
-import { env } from "~/config/env";
+import { Env } from "~/config/env";
 
 @injectable()
 export class PrismaConnection extends PrismaClient {
@@ -11,7 +11,7 @@ export class PrismaConnection extends PrismaClient {
     private readonly logger: LoggerProvider,
   ) {
     super({
-      log: env.NODE_ENV === "production" ? ["error"] : ["error", "query", "error"],
+      log: Env.isProduction() ? ["error"] : ["error", "query", "error"],
     });
   }
 

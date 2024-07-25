@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const environmentSchema = z.object({
+const SCHEMA = z.object({
   DATABASE_URL: z.string(),
   HTTP_SERVER_PORT: z.coerce.number().default(3333),
   JWT_SECRET: z.string(),
@@ -8,10 +8,32 @@ const environmentSchema = z.object({
   NODE_ENV: z.union([z.literal("production"), z.literal("development"), z.literal("test")]).default("development"),
 });
 
-const parsedEnv = environmentSchema.safeParse(process.env);
+type Schema = z.infer<typeof SCHEMA>;
 
-if (!parsedEnv.success) {
-  throw new Error(`Invalid env var: ${JSON.stringify(parsedEnv.error.formErrors.fieldErrors, undefined, 2)}`);
+function validateSchema() {
+  const validated = SCHEMA.safeParse(process.env);
+
+  if (!validated.success) {
+    throw new Error(`Invalid env vars: ${JSON.stringify(validated.error.formErrors.fieldErrors, undefined, 2)}`);
+  }
+
+  return validated.data;
 }
 
-export const env = parsedEnv.data;
+export class Env {
+  private static readonly schema = validateSchema();
+
+  public static isProduction() {
+    return this.get("NODE_ENV") === "production";
+  }
+
+  public static get<Key extends keyof Schema>(key: Key): Schema[Key] {
+    const value = this.schema[key];
+
+    if (!value) {
+      throw new Error(` Failed to get ${key} from schema`);
+    }
+
+    return value;
+  }
+}
