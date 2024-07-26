@@ -11,8 +11,21 @@ services:
         networks:
             - ftask-management_net
 
+    redis_cache:
+        image: bitnami/redis:7.0.15
+        ports:
+            - 6379:6379
+        environment:
+            - REDIS_PASSWORD=docker
+        volumes:
+            - redis_cache:/bitnami/redis/data
+        networks:
+            - ftask-management_net
+
 volumes:
     postgresql_data:
+        driver: local
+    redis_cache:
         driver: local
 
 networks:
