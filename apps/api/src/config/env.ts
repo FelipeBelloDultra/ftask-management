@@ -6,6 +6,10 @@ const SCHEMA = z.object({
   JWT_SECRET: z.string(),
   JWT_EXPIRES_IN: z.string().default("30m"),
   NODE_ENV: z.union([z.literal("production"), z.literal("development"), z.literal("test")]).default("development"),
+  REDIS_HOST: z.string(),
+  REDIS_PORT: z.coerce.number().default(6379),
+  REDIS_DB: z.coerce.number().default(0),
+  REDIS_PASSWORD: z.string(),
 });
 
 type Schema = z.infer<typeof SCHEMA>;

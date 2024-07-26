@@ -15,12 +15,12 @@ export class PrismaConnection extends PrismaClient {
     });
   }
 
-  public async connect() {
+  public async __connect() {
     await this.$connect();
     this.logger.info("[DATABASE]: connection established");
   }
 
-  public async disconnect() {
+  public async __disconnect() {
     await this.$disconnect();
     this.logger.warn("[DATABASE]: connection closed");
   }

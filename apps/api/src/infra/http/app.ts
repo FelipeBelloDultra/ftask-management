@@ -15,6 +15,7 @@ import { fromZodError } from "zod-validation-error";
 import { LoggerProvider } from "@/application/providers/logger.provider";
 import { Env } from "@/config/env";
 
+import { RedisConnection } from "../cache/redis/redis-connection";
 import { PrismaConnection } from "../database/prisma/prisma-connection";
 import { Events } from "../events";
 
@@ -26,13 +27,18 @@ export class App {
   private readonly routes = new Routes();
   private readonly prismaConnection = container.resolve<PrismaConnection>("PrismaConnection");
   private readonly logger = container.resolve<LoggerProvider>("LoggerProvider");
+  private readonly redisConnection = container.resolve<RedisConnection>("RedisConnection");
 
   private async connectPrisma() {
-    return await this.prismaConnection.connect();
+    return await this.prismaConnection.__connect();
   }
 
   private async disconnectPrisma() {
-    return await this.prismaConnection.disconnect();
+    return await this.prismaConnection.__disconnect();
+  }
+
+  private disconnectRedis() {
+    this.redisConnection.__disconnect();
   }
 
   private registerRoutes() {
@@ -84,6 +90,7 @@ export class App {
 
   public async stopServices() {
     await this.disconnectPrisma();
+    this.disconnectRedis();
   }
 
   public async boot() {
