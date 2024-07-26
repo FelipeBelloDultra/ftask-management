@@ -1,7 +1,7 @@
-import { makeAccount } from "~/test/factories/make-account";
-import { makeProject } from "~/test/factories/make-project";
-import { FakeAccountRepository } from "~/test/repositories/fake-account.repository";
-import { FakeProjectRepository } from "~/test/repositories/fake-project.repository";
+import { makeAccount } from "@/test/factories/make-account";
+import { makeProject } from "@/test/factories/make-project";
+import { FakeAccountRepository } from "@/test/repositories/fake-account.repository";
+import { FakeProjectRepository } from "@/test/repositories/fake-project.repository";
 
 import { CreateProjectUseCase } from "./create-project.use-case";
 import { AccountNotFoundError } from "./errors/account-not-found.error";

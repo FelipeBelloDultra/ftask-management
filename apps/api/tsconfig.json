@@ -7,10 +7,8 @@
     "types": ["vitest/globals"],
     "baseUrl": "./",
     "paths": {
-      "~/*": ["src/*"],
-      "~/account/*": ["src/modules/account/*"],
-      "~/project/*": ["src/modules/project/*"],
-      "~/test/*": ["test/*"]
+      "@/*": ["src/*"],
+      "@/test/*": ["test/*"]
     }
   }
 }

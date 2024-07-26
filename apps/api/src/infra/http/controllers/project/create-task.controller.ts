@@ -2,14 +2,14 @@ import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { z } from "zod";
 
-import { Controller, ControllerMethods } from "~/infra/http/controller";
-import { HttpException } from "~/infra/http/http-exception";
-import { EnsureAuthenticatedMiddleware } from "~/infra/http/middlewares/ensure-authenticated.middleware";
-import { TaskPresenter } from "~/infra/presenters/task-presenter";
-import { NotAllowedError } from "~/modules/project/application/use-cases/errors/not-allowed.error";
-import { ProjectMemberNotFoundError } from "~/modules/project/application/use-cases/errors/project-member-not-found.error";
-import { ProjectNotFoundError } from "~/modules/project/application/use-cases/errors/project-not-found.error";
-import { makeCreateTask } from "~/modules/project/application/use-cases/factories/make-create-task";
+import { Controller, ControllerMethods } from "@/infra/http/controller";
+import { HttpException } from "@/infra/http/http-exception";
+import { EnsureAuthenticatedMiddleware } from "@/infra/http/middlewares/ensure-authenticated.middleware";
+import { TaskPresenter } from "@/infra/presenters/task-presenter";
+import { NotAllowedError } from "@/modules/project/application/use-cases/errors/not-allowed.error";
+import { ProjectMemberNotFoundError } from "@/modules/project/application/use-cases/errors/project-member-not-found.error";
+import { ProjectNotFoundError } from "@/modules/project/application/use-cases/errors/project-not-found.error";
+import { makeCreateTask } from "@/modules/project/application/use-cases/factories/make-create-task";
 
 const schema = z.object({
   title: z.string().min(5).max(255),

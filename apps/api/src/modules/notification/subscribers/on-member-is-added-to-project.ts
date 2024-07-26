@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 
-import { DomainEvents } from "~/core/events/domain-events";
-import { EventHandler } from "~/core/events/event-handler";
-import { MemberRepository } from "~/modules/account/application/repositories/member.repository";
-import { ProjectRepository } from "~/modules/project/application/repositories/project.repository";
+import { DomainEvents } from "@/core/events/domain-events";
+import { EventHandler } from "@/core/events/event-handler";
+import { MemberRepository } from "@/modules/account/application/repositories/member.repository";
+import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
 
 import { SendNotificationUseCase } from "../application/use-cases/send-notification.use-case";
 import { MemberIsAddedToProjectEvent } from "../domain/events/member-is-added-to-project-event";

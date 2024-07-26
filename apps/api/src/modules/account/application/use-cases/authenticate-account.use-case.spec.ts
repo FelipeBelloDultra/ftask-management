@@ -1,7 +1,7 @@
-import { Password } from "~/account/domain/entity/value-objects/password";
-import { makeAccount } from "~/test/factories/make-account";
-import { FakeJwtProvider } from "~/test/providers/fake-jwt.provider";
-import { FakeAccountRepository } from "~/test/repositories/fake-account.repository";
+import { Password } from "@/modules/account/domain/entity/value-objects/password";
+import { makeAccount } from "@/test/factories/make-account";
+import { FakeJwtProvider } from "@/test/providers/fake-jwt.provider";
+import { FakeAccountRepository } from "@/test/repositories/fake-account.repository";
 
 import { AuthenticateAccountUseCase } from "./authenticate-account.use-case";
 import { InvalidCombinationError } from "./errors/invalid-combination.error";

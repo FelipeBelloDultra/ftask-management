@@ -1,10 +1,10 @@
 import { Task as PrismaTask } from "@prisma/client";
 
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { Task } from "~/modules/project/domain/entity/task";
-import { DueDate } from "~/modules/project/domain/entity/value-objects/due-date";
-import { Slug } from "~/modules/project/domain/entity/value-objects/slug";
-import { TaskStatus, TaskStatusValues } from "~/modules/project/domain/entity/value-objects/task-status";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { Task } from "@/modules/project/domain/entity/task";
+import { DueDate } from "@/modules/project/domain/entity/value-objects/due-date";
+import { Slug } from "@/modules/project/domain/entity/value-objects/slug";
+import { TaskStatus, TaskStatusValues } from "@/modules/project/domain/entity/value-objects/task-status";
 
 export class TaskMapper {
   public static toDomain(prismaTask: PrismaTask): Task {

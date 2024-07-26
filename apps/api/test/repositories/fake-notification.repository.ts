@@ -1,6 +1,6 @@
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { NotificationRepository } from "~/modules/notification/application/repositories/notification.repository";
-import { Notification } from "~/modules/notification/domain/entity/notification";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { NotificationRepository } from "@/modules/notification/application/repositories/notification.repository";
+import { Notification } from "@/modules/notification/domain/entity/notification";
 
 export class FakeNotificationRepository implements NotificationRepository {
   public readonly notifications: Notification[] = [];

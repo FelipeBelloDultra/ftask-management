@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { Controller } from "~/infra/http/controller";
+import { Controller } from "@/infra/http/controller";
 
 import { AuthenticateAccountController } from "./authenticate-account.controller";
 import { CreateAccountController } from "./create-account.controller";

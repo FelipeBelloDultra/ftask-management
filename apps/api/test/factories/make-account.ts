@@ -1,11 +1,11 @@
 import { faker } from "@faker-js/faker";
 import { inject, injectable } from "tsyringe";
 
-import { Account, AccountProps } from "~/account/domain/entity/account";
-import { Password } from "~/account/domain/entity/value-objects/password";
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { AccountMapper } from "~/infra/database/prisma/mappers/account-mapper";
-import { PrismaConnection } from "~/infra/database/prisma/prisma-connection";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { AccountMapper } from "@/infra/database/prisma/mappers/account-mapper";
+import { PrismaConnection } from "@/infra/database/prisma/prisma-connection";
+import { Account, AccountProps } from "@/modules/account/domain/entity/account";
+import { Password } from "@/modules/account/domain/entity/value-objects/password";
 
 export function makeAccount(override: Partial<AccountProps> = {}, id?: UniqueEntityID): Account {
   const account = Account.create(

@@ -1,4 +1,4 @@
-import { Either, left, right } from "~/core/either";
+import { Either, left, right } from "@/core/either";
 
 function doSomeThing(shouldSuccess: boolean): Either<string, number> {
   if (shouldSuccess) {

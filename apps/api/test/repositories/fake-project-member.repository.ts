@@ -1,6 +1,6 @@
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { ProjectMemberRepository } from "~/project/application/repositories/project-member.repository";
-import { ProjectMember } from "~/project/domain/entity/project-member";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { ProjectMemberRepository } from "@/modules/project/application/repositories/project-member.repository";
+import { ProjectMember } from "@/modules/project/domain/entity/project-member";
 
 export class FakeProjectMemberRepository implements ProjectMemberRepository {
   public readonly projectMembers: ProjectMember[] = [];

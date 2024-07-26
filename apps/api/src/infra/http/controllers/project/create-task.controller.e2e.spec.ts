@@ -1,15 +1,15 @@
 import supertest from "supertest";
 import { container } from "tsyringe";
 
-import { JwtProvider } from "~/application/providers/jwt.provider";
-import { PrismaConnection } from "~/infra/database/prisma/prisma-connection";
-import { App } from "~/infra/http/app";
-import { DueDate } from "~/modules/project/domain/entity/value-objects/due-date";
-import { AccountFactory } from "~/test/factories/make-account";
-import { MemberFactory } from "~/test/factories/make-member";
-import { ProjectFactory } from "~/test/factories/make-project";
-import { ProjectMemberFactory } from "~/test/factories/make-project-member";
-import { makeTask } from "~/test/factories/make-task";
+import { JwtProvider } from "@/application/providers/jwt.provider";
+import { PrismaConnection } from "@/infra/database/prisma/prisma-connection";
+import { App } from "@/infra/http/app";
+import { DueDate } from "@/modules/project/domain/entity/value-objects/due-date";
+import { AccountFactory } from "@/test/factories/make-account";
+import { MemberFactory } from "@/test/factories/make-member";
+import { ProjectFactory } from "@/test/factories/make-project";
+import { ProjectMemberFactory } from "@/test/factories/make-project-member";
+import { makeTask } from "@/test/factories/make-task";
 
 describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
   let app: App;

@@ -1,10 +1,10 @@
-import { makeAccount } from "~/test/factories/make-account";
-import { makeMember } from "~/test/factories/make-member";
-import { makeProject } from "~/test/factories/make-project";
-import { FakeAccountRepository } from "~/test/repositories/fake-account.repository";
-import { FakeMemberRepository } from "~/test/repositories/fake-member.repository";
-import { FakeProjectMemberRepository } from "~/test/repositories/fake-project-member.repository";
-import { FakeProjectRepository } from "~/test/repositories/fake-project.repository";
+import { makeAccount } from "@/test/factories/make-account";
+import { makeMember } from "@/test/factories/make-member";
+import { makeProject } from "@/test/factories/make-project";
+import { FakeAccountRepository } from "@/test/repositories/fake-account.repository";
+import { FakeMemberRepository } from "@/test/repositories/fake-member.repository";
+import { FakeProjectMemberRepository } from "@/test/repositories/fake-project-member.repository";
+import { FakeProjectRepository } from "@/test/repositories/fake-project.repository";
 
 import { AddProjectMemberUseCase } from "./add-project-member.use-case";
 import { MemberNotFoundError } from "./errors/member-not-found.error";

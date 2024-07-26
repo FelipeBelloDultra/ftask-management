@@ -1,4 +1,4 @@
-import { JwtProvider } from "~/application/providers/jwt.provider";
+import { JwtProvider } from "@/application/providers/jwt.provider";
 
 export class FakeJwtProvider implements JwtProvider {
   public async encrypt(value: Record<string, unknown>, expiresIn = "30m"): Promise<string> {

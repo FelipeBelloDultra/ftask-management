@@ -1,4 +1,4 @@
-import { makeNotification } from "~/test/factories/make-notification";
+import { makeNotification } from "@/test/factories/make-notification";
 
 import { Notification } from "./notification";
 

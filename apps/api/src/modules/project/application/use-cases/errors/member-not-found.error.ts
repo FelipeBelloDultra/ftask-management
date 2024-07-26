@@ -1,4 +1,4 @@
-import { UseCaseError } from "~/core/errors/use-case.error";
+import { UseCaseError } from "@/core/errors/use-case.error";
 
 export class MemberNotFoundError extends Error implements UseCaseError {
   public constructor() {

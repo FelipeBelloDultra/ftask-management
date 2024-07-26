@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 
-import { Member, MemberProps } from "~/account/domain/entity/member";
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { MemberMapper } from "~/infra/database/prisma/mappers/member-mapper";
-import { PrismaConnection } from "~/infra/database/prisma/prisma-connection";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { MemberMapper } from "@/infra/database/prisma/mappers/member-mapper";
+import { PrismaConnection } from "@/infra/database/prisma/prisma-connection";
+import { Member, MemberProps } from "@/modules/account/domain/entity/member";
 
 export function makeMember(override: Partial<MemberProps> = {}, id?: UniqueEntityID): Member {
   const member = Member.create(

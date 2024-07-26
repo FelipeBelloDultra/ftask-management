@@ -1,6 +1,6 @@
-import { Entity } from "~/core/entity/entity";
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { Optional } from "~/core/types/optional";
+import { Entity } from "@/core/entity/entity";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { Optional } from "@/core/types/optional";
 
 import { DueDate } from "./value-objects/due-date";
 import { ProjectStatus } from "./value-objects/project-status";

@@ -1,10 +1,10 @@
 import { faker } from "@faker-js/faker";
 import { inject, injectable } from "tsyringe";
 
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { NotificationMapper } from "~/infra/database/prisma/mappers/notification-mapper";
-import { PrismaConnection } from "~/infra/database/prisma/prisma-connection";
-import { Notification, NotificationProps } from "~/modules/notification/domain/entity/notification";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { NotificationMapper } from "@/infra/database/prisma/mappers/notification-mapper";
+import { PrismaConnection } from "@/infra/database/prisma/prisma-connection";
+import { Notification, NotificationProps } from "@/modules/notification/domain/entity/notification";
 
 export function makeNotification(override: Partial<NotificationProps> = {}, id?: UniqueEntityID): Notification {
   const notification = Notification.create(

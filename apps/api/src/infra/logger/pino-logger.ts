@@ -2,7 +2,7 @@ import { resolve } from "node:path";
 
 import pino from "pino";
 
-import { LoggerProvider } from "~/application/providers/logger.provider";
+import { LoggerProvider } from "@/application/providers/logger.provider";
 
 export class PinoLogger implements LoggerProvider {
   private readonly PATH = resolve(__dirname, "..", "..", "..", "storage", "logs", "app.log");

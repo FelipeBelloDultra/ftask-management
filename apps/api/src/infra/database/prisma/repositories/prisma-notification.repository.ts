@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { NotificationRepository } from "~/modules/notification/application/repositories/notification.repository";
-import { Notification } from "~/modules/notification/domain/entity/notification";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { NotificationRepository } from "@/modules/notification/application/repositories/notification.repository";
+import { Notification } from "@/modules/notification/domain/entity/notification";
 
 import { NotificationMapper } from "../mappers/notification-mapper";
 import { PrismaConnection } from "../prisma-connection";

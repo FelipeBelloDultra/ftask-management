@@ -12,8 +12,8 @@ import { container } from "tsyringe";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 
-import { LoggerProvider } from "~/application/providers/logger.provider";
-import { Env } from "~/config/env";
+import { LoggerProvider } from "@/application/providers/logger.provider";
+import { Env } from "@/config/env";
 
 import { PrismaConnection } from "../database/prisma/prisma-connection";
 import { Events } from "../events";

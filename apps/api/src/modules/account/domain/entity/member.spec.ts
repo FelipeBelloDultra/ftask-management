@@ -1,4 +1,4 @@
-import { makeMember } from "~/test/factories/make-member";
+import { makeMember } from "@/test/factories/make-member";
 
 import { Member } from "./member";
 

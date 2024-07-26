@@ -1,7 +1,7 @@
 import { ProjectHasMember as PrismaProjectMember } from "@prisma/client";
 
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { ProjectMember } from "~/project/domain/entity/project-member";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { ProjectMember } from "@/modules/project/domain/entity/project-member";
 
 export class ProjectMemberMapper {
   public static toDomain(prismaMember: PrismaProjectMember): ProjectMember {

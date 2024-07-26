@@ -1,11 +1,11 @@
 import { container, Lifecycle } from "tsyringe";
 
-import { AccountRepository } from "~/modules/account/application/repositories/account.repository";
-import { MemberRepository } from "~/modules/account/application/repositories/member.repository";
-import { NotificationRepository } from "~/modules/notification/application/repositories/notification.repository";
-import { ProjectMemberRepository } from "~/modules/project/application/repositories/project-member.repository";
-import { ProjectRepository } from "~/modules/project/application/repositories/project.repository";
-import { TaskRepository } from "~/modules/project/application/repositories/task.repository";
+import { AccountRepository } from "@/modules/account/application/repositories/account.repository";
+import { MemberRepository } from "@/modules/account/application/repositories/member.repository";
+import { NotificationRepository } from "@/modules/notification/application/repositories/notification.repository";
+import { ProjectMemberRepository } from "@/modules/project/application/repositories/project-member.repository";
+import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
+import { TaskRepository } from "@/modules/project/application/repositories/task.repository";
 
 import { PrismaConnection } from "./prisma-connection";
 import { PrismaAccountRepository } from "./repositories/prisma-account.repository";

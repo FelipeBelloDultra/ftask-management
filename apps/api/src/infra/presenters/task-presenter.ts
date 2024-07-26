@@ -1,4 +1,4 @@
-import { Task } from "~/modules/project/domain/entity/task";
+import { Task } from "@/modules/project/domain/entity/task";
 
 export class TaskPresenter {
   public static toHTTP(task: Task) {

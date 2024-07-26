@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { Controller } from "~/infra/http/controller";
+import { Controller } from "@/infra/http/controller";
 
 import { AddProjectMemberController } from "./add-project-member.controller";
 import { CreateProjectController } from "./create-project.controller";

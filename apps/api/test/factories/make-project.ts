@@ -1,10 +1,10 @@
 import { faker } from "@faker-js/faker";
 import { inject, injectable } from "tsyringe";
 
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { ProjectMapper } from "~/infra/database/prisma/mappers/project-mapper";
-import { PrismaConnection } from "~/infra/database/prisma/prisma-connection";
-import { Project, ProjectProps } from "~/project/domain/entity/project";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { ProjectMapper } from "@/infra/database/prisma/mappers/project-mapper";
+import { PrismaConnection } from "@/infra/database/prisma/prisma-connection";
+import { Project, ProjectProps } from "@/modules/project/domain/entity/project";
 
 export function makeProject(override: Partial<ProjectProps> = {}, id?: UniqueEntityID): Project {
   const project = Project.create(

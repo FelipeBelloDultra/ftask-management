@@ -1,4 +1,4 @@
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 
 describe("Unique entity ID", () => {
   it("should create a unique entity", () => {

@@ -1,6 +1,6 @@
 import { container, Lifecycle } from "tsyringe";
 
-import { JwtProvider } from "~/application/providers/jwt.provider";
+import { JwtProvider } from "@/application/providers/jwt.provider";
 
 import { JsonWebTokenJwt } from "./jsonwebtoken-jwt";
 

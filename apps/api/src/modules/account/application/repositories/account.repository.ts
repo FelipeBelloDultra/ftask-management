@@ -1,5 +1,5 @@
-import { Account } from "~/account/domain/entity/account";
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { Account } from "@/modules/account/domain/entity/account";
 
 export interface AccountRepository {
   findById(accountId: UniqueEntityID): Promise<Account | null>;

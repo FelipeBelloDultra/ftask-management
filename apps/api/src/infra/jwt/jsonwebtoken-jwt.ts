@@ -1,7 +1,7 @@
 import { sign, verify } from "jsonwebtoken";
 
-import { JwtProvider } from "~/application/providers/jwt.provider";
-import { Env } from "~/config/env";
+import { JwtProvider } from "@/application/providers/jwt.provider";
+import { Env } from "@/config/env";
 
 export class JsonWebTokenJwt implements JwtProvider {
   public async encrypt(value: Record<string, unknown>, expiresIn?: string | undefined): Promise<string> {

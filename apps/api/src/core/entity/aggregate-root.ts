@@ -1,4 +1,4 @@
-import { DomainEvents } from "~/core/events/domain-events";
+import { DomainEvents } from "@/core/events/domain-events";
 
 import { DomainEvent } from "../events/domain-event";
 

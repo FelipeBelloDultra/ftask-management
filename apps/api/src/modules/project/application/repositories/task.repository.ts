@@ -1,4 +1,4 @@
-import { Task } from "~/project/domain/entity/task";
+import { Task } from "@/modules/project/domain/entity/task";
 
 export interface TaskRepository {
   create(task: Task): Promise<void>;

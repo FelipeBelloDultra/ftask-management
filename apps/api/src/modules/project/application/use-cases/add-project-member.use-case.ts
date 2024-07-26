@@ -1,13 +1,13 @@
 import { inject, injectable } from "tsyringe";
 
-import { AccountRepository } from "~/account/application/repositories/account.repository";
-import { MemberRepository } from "~/account/application/repositories/member.repository";
-import { Member } from "~/account/domain/entity/member";
-import { Either, left, right } from "~/core/either";
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { ProjectMemberRepository } from "~/project/application/repositories/project-member.repository";
-import { ProjectRepository } from "~/project/application/repositories/project.repository";
-import { ProjectMember } from "~/project/domain/entity/project-member";
+import { Either, left, right } from "@/core/either";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { AccountRepository } from "@/modules/account/application/repositories/account.repository";
+import { MemberRepository } from "@/modules/account/application/repositories/member.repository";
+import { Member } from "@/modules/account/domain/entity/member";
+import { ProjectMemberRepository } from "@/modules/project/application/repositories/project-member.repository";
+import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
+import { ProjectMember } from "@/modules/project/domain/entity/project-member";
 
 import { MemberNotFoundError } from "./errors/member-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";

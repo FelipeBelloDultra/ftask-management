@@ -1,12 +1,12 @@
 import { inject, injectable } from "tsyringe";
 
-import { Either, left, right } from "~/core/either";
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { ProjectMemberRepository } from "~/project/application/repositories/project-member.repository";
-import { ProjectRepository } from "~/project/application/repositories/project.repository";
-import { TaskRepository } from "~/project/application/repositories/task.repository";
-import { Task } from "~/project/domain/entity/task";
-import { DueDate } from "~/project/domain/entity/value-objects/due-date";
+import { Either, left, right } from "@/core/either";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { ProjectMemberRepository } from "@/modules/project/application/repositories/project-member.repository";
+import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
+import { TaskRepository } from "@/modules/project/application/repositories/task.repository";
+import { Task } from "@/modules/project/domain/entity/task";
+import { DueDate } from "@/modules/project/domain/entity/value-objects/due-date";
 
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "./errors/project-member-not-found.error";

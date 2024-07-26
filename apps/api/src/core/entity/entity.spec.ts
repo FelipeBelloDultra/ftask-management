@@ -1,5 +1,5 @@
-import { Entity } from "~/core/entity/entity";
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import { Entity } from "@/core/entity/entity";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 
 class SomeClass extends Entity {
   public static create(id?: UniqueEntityID) {

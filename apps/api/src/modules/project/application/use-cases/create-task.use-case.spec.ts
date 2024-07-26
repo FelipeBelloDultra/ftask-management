@@ -1,10 +1,10 @@
-import { makeAccount } from "~/test/factories/make-account";
-import { makeMember } from "~/test/factories/make-member";
-import { makeProject } from "~/test/factories/make-project";
-import { makeProjectMember } from "~/test/factories/make-project-member";
-import { FakeProjectMemberRepository } from "~/test/repositories/fake-project-member.repository";
-import { FakeProjectRepository } from "~/test/repositories/fake-project.repository";
-import { FakeTaskRepository } from "~/test/repositories/fake-task.repository";
+import { makeAccount } from "@/test/factories/make-account";
+import { makeMember } from "@/test/factories/make-member";
+import { makeProject } from "@/test/factories/make-project";
+import { makeProjectMember } from "@/test/factories/make-project-member";
+import { FakeProjectMemberRepository } from "@/test/repositories/fake-project-member.repository";
+import { FakeProjectRepository } from "@/test/repositories/fake-project.repository";
+import { FakeTaskRepository } from "@/test/repositories/fake-task.repository";
 
 import { CreateTaskUseCase } from "./create-task.use-case";
 import { NotAllowedError } from "./errors/not-allowed.error";

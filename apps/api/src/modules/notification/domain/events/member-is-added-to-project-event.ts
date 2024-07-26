@@ -1,6 +1,6 @@
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { DomainEvent } from "~/core/events/domain-event";
-import { ProjectMember } from "~/modules/project/domain/entity/project-member";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { DomainEvent } from "@/core/events/domain-event";
+import { ProjectMember } from "@/modules/project/domain/entity/project-member";
 
 export class MemberIsAddedToProjectEvent implements DomainEvent {
   public ocurredAt: Date;

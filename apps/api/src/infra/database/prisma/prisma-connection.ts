@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { inject, injectable } from "tsyringe";
 
-import { LoggerProvider } from "~/application/providers/logger.provider";
-import { Env } from "~/config/env";
+import { LoggerProvider } from "@/application/providers/logger.provider";
+import { Env } from "@/config/env";
 
 @injectable()
 export class PrismaConnection extends PrismaClient {

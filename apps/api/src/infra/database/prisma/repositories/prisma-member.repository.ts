@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { MemberRepository } from "~/modules/account/application/repositories/member.repository";
-import { Member } from "~/modules/account/domain/entity/member";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { MemberRepository } from "@/modules/account/application/repositories/member.repository";
+import { Member } from "@/modules/account/domain/entity/member";
 
 import { MemberMapper } from "../mappers/member-mapper";
 import { PrismaConnection } from "../prisma-connection";

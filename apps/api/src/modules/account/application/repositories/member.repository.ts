@@ -1,5 +1,5 @@
-import { Member } from "~/account/domain/entity/member";
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { Member } from "@/modules/account/domain/entity/member";
 
 export interface MemberRepository {
   create(member: Member): Promise<void>;

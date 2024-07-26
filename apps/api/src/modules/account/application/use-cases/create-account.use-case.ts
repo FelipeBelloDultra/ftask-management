@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 
-import { AccountRepository } from "~/account/application/repositories/account.repository";
-import { Account } from "~/account/domain/entity/account";
-import { Password } from "~/account/domain/entity/value-objects/password";
-import { Either, left, right } from "~/core/either";
+import { Either, left, right } from "@/core/either";
+import { AccountRepository } from "@/modules/account/application/repositories/account.repository";
+import { Account } from "@/modules/account/domain/entity/account";
+import { Password } from "@/modules/account/domain/entity/value-objects/password";
 
 import { AccountAlreadyExistsError } from "./errors/account-already-exists.error";
 

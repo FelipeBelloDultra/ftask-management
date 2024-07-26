@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 
-import { Either, right } from "~/core/either";
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
-import { Notification } from "~/modules/notification/domain/entity/notification";
+import { Either, right } from "@/core/either";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { Notification } from "@/modules/notification/domain/entity/notification";
 
 import { NotificationRepository } from "../repositories/notification.repository";
 

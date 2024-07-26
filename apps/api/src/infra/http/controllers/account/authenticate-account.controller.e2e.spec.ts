@@ -1,9 +1,9 @@
 import supertest from "supertest";
 import { container } from "tsyringe";
 
-import { App } from "~/infra/http/app";
-import { Password } from "~/modules/account/domain/entity/value-objects/password";
-import { AccountFactory } from "~/test/factories/make-account";
+import { App } from "@/infra/http/app";
+import { Password } from "@/modules/account/domain/entity/value-objects/password";
+import { AccountFactory } from "@/test/factories/make-account";
 
 describe("[E2E] - Authenticate account - [POST /account/session]", () => {
   let app: App;

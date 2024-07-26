@@ -1,4 +1,4 @@
-import { ProjectMember } from "~/project/domain/entity/project-member";
+import { ProjectMember } from "@/modules/project/domain/entity/project-member";
 
 export class ProjectMemberPresenter {
   public static toHTTP(projectMember: ProjectMember) {

@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 
-import { AccountRepository } from "~/account/application/repositories/account.repository";
-import { JwtProvider } from "~/application/providers/jwt.provider";
-import { Either, left, right } from "~/core/either";
+import { JwtProvider } from "@/application/providers/jwt.provider";
+import { Either, left, right } from "@/core/either";
+import { AccountRepository } from "@/modules/account/application/repositories/account.repository";
 
 import { InvalidCombinationError } from "./errors/invalid-combination.error";
 

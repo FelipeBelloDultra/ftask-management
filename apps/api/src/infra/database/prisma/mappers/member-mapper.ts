@@ -1,7 +1,7 @@
 import { Member as PrismaMember } from "@prisma/client";
 
-import { Member } from "~/account/domain/entity/member";
-import { UniqueEntityID } from "~/core/entity/unique-entity-id";
+import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { Member } from "@/modules/account/domain/entity/member";
 
 export class MemberMapper {
   public static toDomain(prismaMember: PrismaMember): Member {

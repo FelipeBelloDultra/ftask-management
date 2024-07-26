@@ -1,6 +1,6 @@
 import { vi } from "vitest";
 
-import { DomainEvents } from "~/core/events/domain-events";
+import { DomainEvents } from "@/core/events/domain-events";
 
 import { AggregateRoot } from "../entity/aggregate-root";
 import { UniqueEntityID } from "../entity/unique-entity-id";

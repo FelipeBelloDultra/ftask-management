@@ -1,4 +1,4 @@
-import { makeTask } from "~/test/factories/make-task";
+import { makeTask } from "@/test/factories/make-task";
 
 import { Task } from "./task";
 import { DueDate } from "./value-objects/due-date";
