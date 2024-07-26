@@ -16,6 +16,7 @@ import { LoggerProvider } from "~/application/providers/logger.provider";
 import { Env } from "~/config/env";
 
 import { PrismaConnection } from "../database/prisma/prisma-connection";
+import { Events } from "../events";
 
 import { HttpException } from "./http-exception";
 import { Routes } from "./routes";
@@ -76,6 +77,7 @@ export class App {
   }
 
   public async startServices() {
+    new Events();
     await this.connectPrisma();
     this.registerMiddlewares();
   }
