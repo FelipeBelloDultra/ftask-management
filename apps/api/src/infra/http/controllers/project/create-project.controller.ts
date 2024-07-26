@@ -45,7 +45,9 @@ export class CreateProjectController extends Controller {
     });
 
     if (result.isRight()) {
-      return res.status(201).json(ProjectPresenter.toHTTP(result.value.project));
+      return res.status(201).json({
+        data: ProjectPresenter.toHTTP(result.value.project),
+      });
     }
 
     switch (result.value.constructor) {

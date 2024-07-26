@@ -32,7 +32,9 @@ export class CreateAccountController extends Controller {
     });
 
     if (result.isRight()) {
-      return res.status(201).json(AccountPresenter.toHTTP(result.value.account));
+      return res.status(201).json({
+        data: AccountPresenter.toHTTP(result.value.account),
+      });
     }
 
     if (result.value instanceof AccountAlreadyExistsError) {

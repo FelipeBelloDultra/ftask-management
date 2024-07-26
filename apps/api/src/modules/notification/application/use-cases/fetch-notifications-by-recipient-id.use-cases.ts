@@ -16,7 +16,7 @@ type OnSuccess = { notifications: Notification[] };
 type Output = Either<OnError, OnSuccess>;
 
 @injectable()
-export class ListNotificationsByRecipientIdUseCase {
+export class FetchNotificationsByRecipientIdUseCase {
   public constructor(
     @inject("NotificationRepository")
     private readonly notificationRepository: NotificationRepository,

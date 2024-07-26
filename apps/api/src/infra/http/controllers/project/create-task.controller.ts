@@ -49,7 +49,9 @@ export class CreateTaskController extends Controller {
     });
 
     if (result.isRight()) {
-      return res.status(201).json(TaskPresenter.toHTTP(result.value.task));
+      return res.status(201).json({
+        data: TaskPresenter.toHTTP(result.value.task),
+      });
     }
 
     switch (result.value.constructor) {

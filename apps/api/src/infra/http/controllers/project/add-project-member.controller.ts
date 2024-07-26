@@ -43,7 +43,9 @@ export class AddProjectMemberController extends Controller {
     });
 
     if (result.isRight()) {
-      return res.status(201).json(ProjectMemberPresenter.toHTTP(result.value.projectMember));
+      return res.status(201).json({
+        data: ProjectMemberPresenter.toHTTP(result.value.projectMember),
+      });
     }
 
     switch (result.value.constructor) {
