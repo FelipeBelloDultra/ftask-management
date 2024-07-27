@@ -1,4 +1,5 @@
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { DomainEvents } from "@/core/events/domain-events";
 import { ProjectMemberRepository } from "@/modules/project/application/repositories/project-member.repository";
 import { ProjectMember } from "@/modules/project/domain/entity/project-member";
 
@@ -18,5 +19,7 @@ export class FakeProjectMemberRepository implements ProjectMemberRepository {
 
   public async create(projectMember: ProjectMember): Promise<void> {
     this.projectMembers.push(projectMember);
+
+    DomainEvents.dispatchEventsForAggregate(projectMember.id);
   }
 }
