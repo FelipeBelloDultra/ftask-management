@@ -1,14 +1,6 @@
 {
     "name": "ftask-management",
     "private": true,
-    "scripts": {
-        "build": "turbo build",
-        "dev": "turbo dev",
-        "lint": "turbo lint"
-    },
-    "devDependencies": {
-        "turbo": "2.0.5"
-    },
     "engines": {
         "node": ">=18"
     },

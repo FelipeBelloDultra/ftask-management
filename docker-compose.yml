@@ -10,6 +10,8 @@ services:
             - postgresql_data:/bitnami/postgresql
         networks:
             - ftask-management_net
+        depends_on:
+            - redis_cache
 
     redis_cache:
         image: bitnami/redis:7.0.15
