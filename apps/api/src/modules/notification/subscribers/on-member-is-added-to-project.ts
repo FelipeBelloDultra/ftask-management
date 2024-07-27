@@ -4,9 +4,9 @@ import { DomainEvents } from "@/core/events/domain-events";
 import { EventHandler } from "@/core/events/event-handler";
 import { MemberRepository } from "@/modules/account/application/repositories/member.repository";
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
+import { MemberIsAddedToProjectEvent } from "@/modules/project/domain/events/member-is-added-to-project-event";
 
 import { SendNotificationUseCase } from "../application/use-cases/send-notification.use-case";
-import { MemberIsAddedToProjectEvent } from "../domain/events/member-is-added-to-project-event";
 
 @injectable()
 export class OnMemberIsAddedToProject implements EventHandler {
