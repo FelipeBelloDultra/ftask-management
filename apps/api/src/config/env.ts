@@ -34,7 +34,7 @@ export class Env {
   public static get<Key extends keyof Schema>(key: Key): Schema[Key] {
     const value = this.schema[key];
 
-    if (!value) {
+    if (value === undefined || value === null || value === "") {
       throw new Error(` Failed to get ${key} from schema`);
     }
 
