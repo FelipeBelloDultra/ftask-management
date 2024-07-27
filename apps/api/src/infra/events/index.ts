@@ -4,6 +4,6 @@ import { OnMemberIsAddedToProject } from "@/modules/notification/subscribers/on-
 
 export class Events {
   public constructor() {
-    container.resolve(OnMemberIsAddedToProject).startSubscriber();
+    container.resolve(OnMemberIsAddedToProject);
   }
 }

@@ -11,9 +11,7 @@ export class OnMemberIsAddedToProject implements EventHandler {
   public constructor(
     @inject("SendNotificationUseCase")
     private readonly sendNotificationUseCase: SendNotificationUseCase,
-  ) {}
-
-  public startSubscriber() {
+  ) {
     this.setupSubscriptions();
   }
 
