@@ -1,38 +1,34 @@
+import { ValueObject } from "@/core/entity/value-object";
+
 export enum ProjectStatusValues {
   Active = "active",
   Deleted = "deleted",
   Archived = "archived",
 }
 
-export class ProjectStatus {
-  private _value: ProjectStatusValues;
-
+export class ProjectStatus extends ValueObject<ProjectStatusValues> {
   public get value() {
-    return this._value;
-  }
-
-  private constructor(value: ProjectStatusValues) {
-    this._value = value;
+    return this.props;
   }
 
   public canActivate() {
-    return this._value === ProjectStatusValues.Archived;
+    return this.props === ProjectStatusValues.Archived;
   }
 
   public canArchive() {
-    return this._value === ProjectStatusValues.Active;
+    return this.props === ProjectStatusValues.Active;
   }
 
   public setDeleted() {
-    this._value = ProjectStatusValues.Deleted;
+    this.props = ProjectStatusValues.Deleted;
   }
 
   public setArchived() {
-    this._value = ProjectStatusValues.Archived;
+    this.props = ProjectStatusValues.Archived;
   }
 
   public setActive() {
-    this._value = ProjectStatusValues.Active;
+    this.props = ProjectStatusValues.Active;
   }
 
   public static create(status?: ProjectStatusValues) {

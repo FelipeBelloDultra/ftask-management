@@ -1,12 +1,8 @@
-export class Slug {
-  private _value: string;
+import { ValueObject } from "@/core/entity/value-object";
 
+export class Slug extends ValueObject<string> {
   public get value() {
-    return this._value;
-  }
-
-  private constructor(value: string) {
-    this._value = value;
+    return this.props;
   }
 
   public static create(value: string) {

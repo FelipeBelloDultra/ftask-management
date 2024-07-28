@@ -1,22 +1,23 @@
 import * as bcrypt from "bcryptjs";
 
-export class Password {
+import { ValueObject } from "@/core/entity/value-object";
+
+export class Password extends ValueObject<string> {
   private readonly PASSWORD_SALT_ROUNDS = 8;
-  private _value: string;
   private isHashed: boolean;
 
   private constructor(value: string, isHashed: boolean) {
+    super(value);
     this.isHashed = isHashed;
-    this._value = value;
   }
 
   private async hash() {
-    return await bcrypt.hash(this._value, this.PASSWORD_SALT_ROUNDS);
+    return await bcrypt.hash(this.props, this.PASSWORD_SALT_ROUNDS);
   }
 
   public async getHashed() {
     if (this.isHashed) {
-      return this._value;
+      return this.props;
     }
 
     return await this.hash();
@@ -24,10 +25,10 @@ export class Password {
 
   public async comparePassword(plainPassword: string) {
     if (this.isHashed) {
-      return await bcrypt.compare(plainPassword, this._value);
+      return await bcrypt.compare(plainPassword, this.props);
     }
 
-    return this._value === plainPassword;
+    return this.props === plainPassword;
   }
 
   public static create(value: string, isHashed = false) {

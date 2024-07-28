@@ -1,17 +1,13 @@
-export class DueDate {
-  private _value: Date;
+import { ValueObject } from "@/core/entity/value-object";
 
+export class DueDate extends ValueObject<Date> {
   public get value() {
-    return this._value;
-  }
-
-  private constructor(value: Date) {
-    this._value = value;
+    return this.props;
   }
 
   public isExpired() {
     const date = new Date();
-    return this._value.getTime() < date.getTime();
+    return this.props.getTime() < date.getTime();
   }
 
   public static create(value: Date) {
