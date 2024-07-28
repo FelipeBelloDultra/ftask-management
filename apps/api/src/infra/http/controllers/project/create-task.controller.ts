@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
-import { container } from "tsyringe";
 import { z } from "zod";
 
 import { Controller, ControllerMethods } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
-import { EnsureAuthenticatedMiddleware } from "@/infra/http/middlewares/ensure-authenticated.middleware";
+import { makeEnsureAuthenticated } from "@/infra/http/middlewares/factories/make-ensure-authenticated";
 import { TaskPresenter } from "@/infra/presenters/task-presenter";
 import { NotAllowedError } from "@/modules/project/application/use-cases/errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "@/modules/project/application/use-cases/errors/project-member-not-found.error";
@@ -28,7 +27,7 @@ export class CreateTaskController extends Controller {
     super({
       method: ControllerMethods.POST,
       path: "/projects/:projectId/task",
-      middlewares: [container.resolve(EnsureAuthenticatedMiddleware)],
+      middlewares: [makeEnsureAuthenticated()],
     });
   }
 

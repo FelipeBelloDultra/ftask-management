@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
-import { container } from "tsyringe";
 import { z } from "zod";
 
 import { Controller, ControllerMethods } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
-import { EnsureAuthenticatedMiddleware } from "@/infra/http/middlewares/ensure-authenticated.middleware";
+import { makeEnsureAuthenticated } from "@/infra/http/middlewares/factories/make-ensure-authenticated";
 import { ProjectMemberDetailsPresenter } from "@/infra/presenters/project-member-details-presenter";
 import { MemberNotFoundError } from "@/modules/project/application/use-cases/errors/member-not-found.error";
 import { NotAllowedError } from "@/modules/project/application/use-cases/errors/not-allowed.error";
@@ -25,7 +24,7 @@ export class AddProjectMemberController extends Controller {
     super({
       method: ControllerMethods.POST,
       path: "/projects/:projectId/member",
-      middlewares: [container.resolve(EnsureAuthenticatedMiddleware)],
+      middlewares: [makeEnsureAuthenticated()],
     });
   }
 

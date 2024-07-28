@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
-import { container } from "tsyringe";
 import { z } from "zod";
 
 import { Controller, ControllerMethods } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
-import { EnsureAuthenticatedMiddleware } from "@/infra/http/middlewares/ensure-authenticated.middleware";
+import { makeEnsureAuthenticated } from "@/infra/http/middlewares/factories/make-ensure-authenticated";
 import { ProjectPresenter } from "@/infra/presenters/project-presenter";
 import { AccountNotFoundError } from "@/modules/project/application/use-cases/errors/account-not-found.error";
 import { DuplicatedProjectSlugError } from "@/modules/project/application/use-cases/errors/duplicated-project-slug.error";
@@ -27,7 +26,7 @@ export class CreateProjectController extends Controller {
     super({
       method: ControllerMethods.POST,
       path: "/projects",
-      middlewares: [container.resolve(EnsureAuthenticatedMiddleware)],
+      middlewares: [makeEnsureAuthenticated()],
     });
   }
 

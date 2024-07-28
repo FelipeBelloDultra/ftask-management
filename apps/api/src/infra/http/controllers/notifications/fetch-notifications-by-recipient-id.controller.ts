@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
-import { container } from "tsyringe";
 
 import { Controller, ControllerMethods } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
-import { EnsureAuthenticatedMiddleware } from "@/infra/http/middlewares/ensure-authenticated.middleware";
+import { makeEnsureAuthenticated } from "@/infra/http/middlewares/factories/make-ensure-authenticated";
 import { NotificationPresenter } from "@/infra/presenters/notification-presenter";
 import { makeFetchNotificationsByRecipientId } from "@/modules/notification/application/use-cases/factories/make-fetch-notifications-by-recipient-id";
 import { AccountNotFoundError } from "@/modules/project/application/use-cases/errors/account-not-found.error";
@@ -13,7 +12,7 @@ export class FetchNotificationsByRecipientIdController extends Controller {
     super({
       path: "/notifications",
       method: ControllerMethods.GET,
-      middlewares: [container.resolve(EnsureAuthenticatedMiddleware)],
+      middlewares: [makeEnsureAuthenticated()],
     });
   }
 
