@@ -23,7 +23,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
       this.prismaConnection.notifications.create({
         data: NotificationMapper.toPersistence(notification),
       }),
-      this.cache.delete(`account:${notification.values.recipientId.toValue()}:notifications`),
+      this.cache.delete(`account:${notification.recipientId.toValue()}:notifications`),
     ]);
   }
 
@@ -35,7 +35,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
         },
         data: NotificationMapper.toPersistence(notification),
       }),
-      this.cache.delete(`account:${notification.values.recipientId.toValue()}:notifications`),
+      this.cache.delete(`account:${notification.recipientId.toValue()}:notifications`),
     ]);
   }
 

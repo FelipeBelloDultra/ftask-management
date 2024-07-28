@@ -22,7 +22,7 @@ describe("[E2E] - Authenticate account - [POST /account/session]", () => {
     });
 
     const sut = await supertest(app.expressInstance).post("/api/account/session").send({
-      email: prismaAccount.values.email,
+      email: prismaAccount.email,
       password: PASSWORD,
     });
 

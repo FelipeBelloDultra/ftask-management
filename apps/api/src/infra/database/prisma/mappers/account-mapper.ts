@@ -18,10 +18,10 @@ export class AccountMapper {
 
   public static async toPersistence(account: Account): Promise<PrismaAccount> {
     return {
-      email: account.values.email,
+      email: account.email,
       id: account.id.toValue(),
-      name: account.values.name,
-      password: await account.values.password.getHashed(),
+      name: account.name,
+      password: await account.password.getHashed(),
     };
   }
 }

@@ -35,16 +35,16 @@ export class TaskMapper {
   public static toPersistence(task: Task): PrismaTask {
     return {
       id: task.id.toValue(),
-      assigneeId: task.values.assigneeId.toValue(),
-      projectId: task.values.projectId.toValue(),
-      title: task.values.title,
-      description: task.values.description,
-      due_date: task.values.dueDate.value,
-      slug: task.values.slug.value,
-      status: task.values.status.value,
-      createdAt: task.values.createdAt,
-      updatedAt: task.values.updatedAt,
-      deletedAt: task.values.deletedAt,
+      assigneeId: task.assigneeId.toValue(),
+      projectId: task.projectId.toValue(),
+      title: task.title,
+      description: task.description,
+      due_date: task.dueDate.value,
+      slug: task.slug.value,
+      status: task.status.value,
+      createdAt: task.createdAt,
+      updatedAt: task.updatedAt,
+      deletedAt: task.deletedAt,
     };
   }
 }

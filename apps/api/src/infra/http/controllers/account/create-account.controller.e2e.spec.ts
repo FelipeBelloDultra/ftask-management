@@ -23,8 +23,8 @@ describe("[E2E] - Create account - [POST /account]", () => {
     });
 
     const sut = await supertest(app.expressInstance).post("/api/account").send({
-      name: account.values.name,
-      email: account.values.email,
+      name: account.name,
+      email: account.email,
       password: PASSWORD,
     });
 

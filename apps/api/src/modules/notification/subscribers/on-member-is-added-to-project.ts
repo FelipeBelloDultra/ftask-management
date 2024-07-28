@@ -22,8 +22,8 @@ export class OnMemberIsAddedToProject implements EventHandler {
   private async sendNotificationToAccount({ projectMemberDetails }: MemberIsAddedToProjectEvent) {
     await this.sendNotificationUseCase.execute({
       title: "New Project Member",
-      content: `Hello! You was added to the project ${projectMemberDetails.project.values.name} as member`,
-      recipientId: projectMemberDetails.member.values.accountId.toValue(),
+      content: `Hello! You was added to the project ${projectMemberDetails.project.name} as member`,
+      recipientId: projectMemberDetails.member.accountId.toValue(),
     });
   }
 }

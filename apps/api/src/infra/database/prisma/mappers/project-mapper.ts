@@ -33,15 +33,15 @@ export class ProjectMapper {
   public static toPersistence(project: Project): PrismaProject {
     return {
       id: project.id.toValue(),
-      name: project.values.name,
-      slug: project.values.slug.value,
-      description: project.values.description,
-      ownerId: project.values.ownerId.toValue(),
-      due_date: project.values.dueDate ? project.values.dueDate.value : null,
-      status: project.values.status.value,
-      createdAt: project.values.createdAt,
-      updatedAt: project.values.updatedAt,
-      deletedAt: project.values.deletedAt,
+      name: project.name,
+      slug: project.slug.value,
+      description: project.description,
+      ownerId: project.ownerId.toValue(),
+      due_date: project.dueDate ? project.dueDate.value : null,
+      status: project.status.value,
+      createdAt: project.createdAt,
+      updatedAt: project.updatedAt,
+      deletedAt: project.deletedAt,
     };
   }
 }

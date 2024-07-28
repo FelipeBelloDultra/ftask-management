@@ -12,11 +12,11 @@ export interface ProjectMemberDetailsProps {
 
 export class ProjectMemberDetails extends AggregateRoot<ProjectMemberDetailsProps> {
   public get project() {
-    return this.values.project;
+    return this.props.project;
   }
 
   public get member() {
-    return this.values.member;
+    return this.props.member;
   }
 
   public static create(props: ProjectMemberDetailsProps, id: UniqueEntityID) {

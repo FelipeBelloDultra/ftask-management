@@ -16,7 +16,7 @@ export class MemberMapper {
   public static toPersistence(member: Member): PrismaMember {
     return {
       id: member.id.toValue(),
-      accountId: member.values.accountId.toValue(),
+      accountId: member.accountId.toValue(),
     };
   }
 }

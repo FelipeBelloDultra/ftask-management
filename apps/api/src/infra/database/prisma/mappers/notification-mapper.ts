@@ -21,11 +21,11 @@ export class NotificationMapper {
   public static toPersistence(notification: Notification): PrismaNotification {
     return {
       id: notification.id.toValue(),
-      recipientId: notification.values.recipientId.toValue(),
-      content: notification.values.content,
-      title: notification.values.title,
-      readAt: notification.values.readAt,
-      createdAt: notification.values.createdAt,
+      recipientId: notification.recipientId.toValue(),
+      content: notification.content,
+      title: notification.title,
+      readAt: notification.readAt,
+      createdAt: notification.createdAt,
     };
   }
 }

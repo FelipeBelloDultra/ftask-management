@@ -32,7 +32,7 @@ describe("[E2E] - Add project - [POST /projects]", () => {
       .post("/api/projects")
       .set("Authorization", `Bearer ${accessToken}`)
       .send({
-        name: project.values.name,
+        name: project.name,
       });
 
     expect(sut.status).toBe(201);
@@ -41,7 +41,7 @@ describe("[E2E] - Add project - [POST /projects]", () => {
       data: expect.objectContaining({
         id: expect.any(String),
         owner_id: ownerAccount.id.toValue(),
-        name: project.values.name,
+        name: project.name,
       }),
     });
   });

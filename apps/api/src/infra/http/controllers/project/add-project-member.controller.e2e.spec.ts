@@ -41,7 +41,7 @@ describe("[E2E] - Add project member - [POST /projects/:projectId/member]", () =
       .post(`/api/projects/${project.id.toValue()}/member`)
       .set("Authorization", `Bearer ${accessToken}`)
       .send({
-        member_email: memberAccount.values.email,
+        member_email: memberAccount.email,
       });
 
     expect(sut.status).toBe(201);

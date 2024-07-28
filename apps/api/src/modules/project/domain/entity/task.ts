@@ -25,7 +25,7 @@ export class Task extends Entity<TaskProps> {
   }
 
   public get projectId() {
-    return this.props.assigneeId;
+    return this.props.projectId;
   }
 
   public get slug() {

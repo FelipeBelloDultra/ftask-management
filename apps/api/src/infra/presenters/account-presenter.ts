@@ -4,8 +4,8 @@ export class AccountPresenter {
   public static toHTTP(account: Account) {
     return {
       id: account.id.toValue(),
-      email: account.values.email,
-      name: account.values.name,
+      email: account.email,
+      name: account.name,
     };
   }
 }

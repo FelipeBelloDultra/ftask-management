@@ -27,8 +27,10 @@ function validateSchema() {
 export class Env {
   private static readonly schema = validateSchema();
 
-  public static isProduction() {
-    return this.get("NODE_ENV") === "production";
+  public static environmentIs(envs: Array<"production" | "development" | "test">) {
+    const nodeEnv = this.get("NODE_ENV");
+
+    return envs.includes(nodeEnv);
   }
 
   public static get<Key extends keyof Schema>(key: Key): Schema[Key] {

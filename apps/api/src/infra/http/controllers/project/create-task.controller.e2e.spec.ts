@@ -36,14 +36,18 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
     const dueDate = new Date(date.setMonth(date.getMonth() + 1));
 
     const task = makeTask({ dueDate: DueDate.create(dueDate) });
-    const ownerAccount = await accountFactory.makePrismaAccount();
-    const memberAccount = await accountFactory.makePrismaAccount();
-    const project = await projectFactory.makePrismaProject({
-      ownerId: ownerAccount.id,
-    });
-    const member = await memberFactory.makePrismaMember({
-      accountId: memberAccount.id,
-    });
+    const [ownerAccount, memberAccount] = await Promise.all([
+      accountFactory.makePrismaAccount(),
+      accountFactory.makePrismaAccount(),
+    ]);
+    const [project, member] = await Promise.all([
+      projectFactory.makePrismaProject({
+        ownerId: ownerAccount.id,
+      }),
+      memberFactory.makePrismaMember({
+        accountId: memberAccount.id,
+      }),
+    ]);
     await projectMemberFactory.makePrismaProjectMember({
       memberId: member.id,
       projectId: project.id,
@@ -57,10 +61,10 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
       .post(`/api/projects/${project.id.toValue()}/task`)
       .set("Authorization", `Bearer ${accessToken}`)
       .send({
-        title: task.values.title,
-        description: task.values.description,
+        title: task.title,
+        description: task.description,
         assignee_id: member.id.toValue(),
-        due_date: task.values.dueDate.value,
+        due_date: task.dueDate.value,
       });
 
     expect(sut.status).toBe(201);
@@ -70,9 +74,9 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
         id: expect.any(String),
         project_id: project.id.toValue(),
         assignee_id: member.id.toValue(),
-        slug: task.values.slug.value,
-        title: task.values.title,
-        due_date: task.values.dueDate.value.toISOString(),
+        slug: task.slug.value,
+        title: task.title,
+        due_date: task.dueDate.value.toISOString(),
       }),
     });
   });

@@ -11,7 +11,7 @@ export class PrismaConnection extends PrismaClient {
     private readonly logger: LoggerProvider,
   ) {
     super({
-      log: Env.isProduction() ? ["error"] : ["error", "query", "error"],
+      log: Env.environmentIs(["production", "test"]) ? ["error"] : ["query", "error"],
     });
   }
 
