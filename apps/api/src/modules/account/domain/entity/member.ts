@@ -6,6 +6,10 @@ export interface MemberProps {
 }
 
 export class Member extends Entity<MemberProps> {
+  public get accountId() {
+    return this.props.accountId;
+  }
+
   public static create(props: MemberProps, id?: UniqueEntityID) {
     return new Member(props, id);
   }

@@ -19,6 +19,42 @@ export interface ProjectProps {
 }
 
 export class Project extends Entity<ProjectProps> {
+  public get name() {
+    return this.props.name;
+  }
+
+  public get slug() {
+    return this.props.slug;
+  }
+
+  public get description() {
+    return this.props.description;
+  }
+
+  public get ownerId() {
+    return this.props.ownerId;
+  }
+
+  public get dueDate() {
+    return this.props.dueDate;
+  }
+
+  public get status() {
+    return this.props.status;
+  }
+
+  public get deletedAt() {
+    return this.props.deletedAt;
+  }
+
+  public get updatedAt() {
+    return this.props.updatedAt;
+  }
+
+  public get createdAt() {
+    return this.props.createdAt;
+  }
+
   private edited() {
     this.props.updatedAt = new Date();
   }

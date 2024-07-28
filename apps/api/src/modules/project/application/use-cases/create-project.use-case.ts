@@ -44,7 +44,7 @@ export class CreateProjectUseCase {
       ownerId: accountId,
     });
 
-    const projectBySlug = await this.projectRepository.findBySlug(project.values.slug);
+    const projectBySlug = await this.projectRepository.findBySlug(project.slug);
     if (projectBySlug) {
       return left(new DuplicatedProjectSlugError());
     }

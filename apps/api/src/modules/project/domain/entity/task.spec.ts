@@ -9,6 +9,16 @@ describe("Task", () => {
     const sut = makeTask();
 
     expect(sut).toBeInstanceOf(Task);
+    expect(sut.assigneeId).toBeDefined();
+    expect(sut.projectId).toBeDefined();
+    expect(sut.slug).toBeDefined();
+    expect(sut.status).toBeDefined();
+    expect(sut.title).toBeDefined();
+    expect(sut.description).toBeDefined();
+    expect(sut.dueDate).toBeDefined();
+    expect(sut.createdAt).toBeDefined();
+    expect(sut.updatedAt).toBeDefined();
+    expect(sut.deletedAt).toBeDefined();
   });
 
   it("should be able to complete a task", () => {
@@ -16,7 +26,7 @@ describe("Task", () => {
 
     sut.complete();
     sut.complete();
-    expect(sut.values.status.value).toBe(TaskStatusValues.Done);
+    expect(sut.status.value).toBe(TaskStatusValues.Done);
   });
 
   it("should be able to wait a task", () => {
@@ -26,7 +36,7 @@ describe("Task", () => {
 
     sut.wait();
     sut.wait();
-    expect(sut.values.status.value).toBe(TaskStatusValues.Waiting);
+    expect(sut.status.value).toBe(TaskStatusValues.Waiting);
   });
 
   it("should be able to start a task", () => {
@@ -34,7 +44,7 @@ describe("Task", () => {
 
     sut.start();
     sut.start();
-    expect(sut.values.status.value).toBe(TaskStatusValues.InProgress);
+    expect(sut.status.value).toBe(TaskStatusValues.InProgress);
   });
 
   it("should be able to start a task", () => {
@@ -42,8 +52,8 @@ describe("Task", () => {
 
     sut.delete();
     sut.delete();
-    expect(sut.values.status.value).toBe(TaskStatusValues.Deleted);
-    expect(sut.values.deletedAt).toBeInstanceOf(Date);
+    expect(sut.status.value).toBe(TaskStatusValues.Deleted);
+    expect(sut.deletedAt).toBeInstanceOf(Date);
   });
 
   it("should be able to check if a task is expired", () => {

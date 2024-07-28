@@ -32,7 +32,7 @@ export class AuthenticateAccountUseCase {
       return left(new InvalidCombinationError());
     }
 
-    const passwordMatch = await account.values.password.comparePassword(input.password);
+    const passwordMatch = await account.password.comparePassword(input.password);
     if (!passwordMatch) {
       return left(new InvalidCombinationError());
     }

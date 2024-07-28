@@ -13,15 +13,19 @@ describe("Notification", () => {
     const sut = makeNotification({ readAt: new Date() });
 
     expect(sut).toBeInstanceOf(Notification);
-    expect(sut.values.wasRead).toBeTruthy();
-    expect(sut.values.readAt).toBeInstanceOf(Date);
+    expect(sut.wasRead).toBeTruthy();
+    expect(sut.readAt).toBeInstanceOf(Date);
+    expect(sut.content).toBeDefined();
+    expect(sut.title).toBeDefined();
+    expect(sut.createdAt).toBeDefined();
+    expect(sut.recipientId).toBeDefined();
   });
 
   it("should read a notification", () => {
     const sut = makeNotification();
 
     sut.read();
-    expect(sut.values.wasRead).toBeTruthy();
-    expect(sut.values.readAt).toBeInstanceOf(Date);
+    expect(sut.wasRead).toBeTruthy();
+    expect(sut.readAt).toBeInstanceOf(Date);
   });
 });

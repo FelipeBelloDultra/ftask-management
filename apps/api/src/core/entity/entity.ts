@@ -13,9 +13,9 @@ export abstract class Entity<Props = unknown> {
     this._id = id ?? UniqueEntityID.create();
   }
 
-  public get values() {
-    return this.props;
-  }
+  // public get values() {
+  //   return this.props;
+  // }
 
   public equals(entity: Entity<unknown>) {
     if (entity === this) {

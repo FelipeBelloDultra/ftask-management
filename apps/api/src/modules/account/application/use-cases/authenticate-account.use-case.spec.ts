@@ -25,7 +25,7 @@ describe("AuthenticateAccountUseCase", () => {
     await fakeAccountRepository.create(account);
 
     const input = {
-      email: account.values.email,
+      email: account.email,
       password: "account-password",
     };
 

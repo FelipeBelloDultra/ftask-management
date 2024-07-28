@@ -42,7 +42,7 @@ export class CreateTaskUseCase {
     }
 
     const ownerAccountId = UniqueEntityID.create(input.ownerAccountId);
-    if (!project.values.ownerId.equals(ownerAccountId)) {
+    if (!project.ownerId.equals(ownerAccountId)) {
       return left(new NotAllowedError());
     }
 

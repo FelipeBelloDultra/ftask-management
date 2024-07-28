@@ -12,7 +12,7 @@ export class FakeAccountRepository implements AccountRepository {
   }
 
   public async findByEmail(email: string): Promise<Account | null> {
-    const account = this.accounts.find((account) => account.values.email === email);
+    const account = this.accounts.find((account) => account.email === email);
 
     return account || null;
   }

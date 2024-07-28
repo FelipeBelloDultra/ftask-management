@@ -28,7 +28,7 @@ export class FakeNotificationRepository implements NotificationRepository {
   }
 
   public async findManyByRecipientId(recipientId: UniqueEntityID): Promise<Array<Notification>> {
-    const notifications = this.notifications.filter((n) => n.values.recipientId.equals(recipientId));
+    const notifications = this.notifications.filter((n) => n.recipientId.equals(recipientId));
 
     return notifications;
   }

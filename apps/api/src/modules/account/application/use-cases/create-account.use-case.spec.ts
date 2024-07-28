@@ -18,15 +18,15 @@ describe("CreateAccountUseCase", () => {
     const account = makeAccount();
 
     const input = {
-      name: account.values.name,
-      email: account.values.email,
+      name: account.name,
+      email: account.email,
       password: "password",
     };
     const result = await sut.execute(input);
 
     expect(result.isRight()).toBeTruthy();
     expect(fakeAccountRepository.accounts.length).toBe(1);
-    await expect(fakeAccountRepository.accounts[0].values.password.getHashed()).resolves.not.toBe(PASSWORD);
+    await expect(fakeAccountRepository.accounts[0].password.getHashed()).resolves.not.toBe(PASSWORD);
   });
 
   it("should not be able to create a new account with an existing email", async () => {
@@ -35,7 +35,7 @@ describe("CreateAccountUseCase", () => {
 
     const input = {
       name: "account-name",
-      email: account.values.email,
+      email: account.email,
       password: "account-password",
     };
 

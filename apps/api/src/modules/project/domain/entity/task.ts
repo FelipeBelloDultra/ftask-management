@@ -20,36 +20,76 @@ export interface TaskProps {
 }
 
 export class Task extends Entity<TaskProps> {
+  public get assigneeId() {
+    return this.props.assigneeId;
+  }
+
+  public get projectId() {
+    return this.props.assigneeId;
+  }
+
+  public get slug() {
+    return this.props.slug;
+  }
+
+  public get status() {
+    return this.props.status;
+  }
+
+  public get title() {
+    return this.props.title;
+  }
+
+  public get description() {
+    return this.props.description;
+  }
+
+  public get dueDate() {
+    return this.props.dueDate;
+  }
+
+  public get createdAt() {
+    return this.props.createdAt;
+  }
+
+  public get updatedAt() {
+    return this.props.updatedAt;
+  }
+
+  public get deletedAt() {
+    return this.props.deletedAt;
+  }
+
   private edited() {
     this.props.updatedAt = new Date();
   }
 
   public complete() {
-    if (!this.values.status.canSetDone()) return;
+    if (!this.props.status.canSetDone()) return;
 
-    this.values.status.setDone();
+    this.props.status.setDone();
     this.edited();
   }
 
   public wait() {
-    if (!this.values.status.canSetWaiting()) return;
+    if (!this.props.status.canSetWaiting()) return;
 
-    this.values.status.setWaiting();
+    this.props.status.setWaiting();
     this.edited();
   }
 
   public start() {
-    if (!this.values.status.canSetInProgress()) return;
+    if (!this.props.status.canSetInProgress()) return;
 
-    this.values.status.setInProgress();
+    this.props.status.setInProgress();
     this.edited();
   }
 
   public delete() {
-    if (!this.values.status.canSetDeleted()) return;
+    if (!this.props.status.canSetDeleted()) return;
 
-    this.values.status.setDeleted();
-    this.values.deletedAt = new Date();
+    this.props.status.setDeleted();
+    this.props.deletedAt = new Date();
     this.edited();
   }
 

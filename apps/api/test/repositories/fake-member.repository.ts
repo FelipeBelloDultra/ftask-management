@@ -16,7 +16,7 @@ export class FakeMemberRepository implements MemberRepository {
   }
 
   public async findByAccountId(accountId: UniqueEntityID): Promise<Member | null> {
-    const member = this.members.find((member) => member.values.accountId.equals(accountId));
+    const member = this.members.find((member) => member.accountId.equals(accountId));
 
     return member || null;
   }

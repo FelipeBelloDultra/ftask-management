@@ -47,7 +47,7 @@ describe("AddProjectMemberUseCase", () => {
     ]);
 
     const input = {
-      memberAccountEmail: account.values.email,
+      memberAccountEmail: account.email,
       ownerAccountId: ownerAccount.id.toValue(),
       projectId: project.id.toValue(),
     };
@@ -78,7 +78,7 @@ describe("AddProjectMemberUseCase", () => {
     await Promise.all([fakeProjectRepository.create(project), fakeAccountRepository.create(account)]);
 
     const input = {
-      memberAccountEmail: account.values.email,
+      memberAccountEmail: account.email,
       ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
     };
@@ -126,7 +126,7 @@ describe("AddProjectMemberUseCase", () => {
     ]);
 
     const input = {
-      memberAccountEmail: account.values.email,
+      memberAccountEmail: account.email,
       ownerAccountId: ownerAccount.id.toValue(),
       projectId: project.id.toValue(),
     };
@@ -154,7 +154,7 @@ describe("AddProjectMemberUseCase", () => {
     ]);
 
     const input = {
-      memberAccountEmail: account.values.email,
+      memberAccountEmail: account.email,
       ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
     };
@@ -178,7 +178,7 @@ describe("AddProjectMemberUseCase", () => {
     ]);
 
     const input = {
-      memberAccountEmail: account.values.email,
+      memberAccountEmail: account.email,
       ownerAccountId: ownerAccount.id.toValue(),
       projectId: project.id.toValue(),
     };

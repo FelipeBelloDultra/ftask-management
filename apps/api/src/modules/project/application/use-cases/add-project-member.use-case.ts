@@ -51,7 +51,7 @@ export class AddProjectMemberUseCase {
     }
 
     const ownerAccountId = UniqueEntityID.create(input.ownerAccountId);
-    if (!project.values.ownerId.equals(ownerAccountId)) {
+    if (!project.ownerId.equals(ownerAccountId)) {
       return left(new NotAllowedError());
     }
 
@@ -63,7 +63,7 @@ export class AddProjectMemberUseCase {
     let member: Member | null = null;
     member = await this.memberRepository.findByAccountId(account.id);
 
-    if (member && member.values.accountId.equals(ownerAccountId)) {
+    if (member && member.accountId.equals(ownerAccountId)) {
       return left(new OwnerCannotBeAddedAsMemberError());
     }
 

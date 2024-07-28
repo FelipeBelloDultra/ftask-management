@@ -13,7 +13,7 @@ export class FakeProjectRepository implements ProjectRepository {
   }
 
   public async findBySlug(slug: Slug): Promise<Project | null> {
-    const project = this.projects.find((project) => project.values.slug.value === slug.value);
+    const project = this.projects.find((project) => project.slug.value === slug.value);
 
     return project || null;
   }
