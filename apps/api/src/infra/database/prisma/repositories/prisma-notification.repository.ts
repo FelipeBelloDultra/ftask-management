@@ -1,6 +1,7 @@
 import { Notifications as PrismaNotification } from "@prisma/client";
 import { inject, injectable } from "tsyringe";
 
+import { PaginationRepository } from "@/application/repositories/pagination.repository";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { CacheRepository } from "@/infra/cache/cache.repository";
 import { NotificationRepository } from "@/modules/notification/application/repositories/notification.repository";
@@ -23,7 +24,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
       this.prismaConnection.notifications.create({
         data: NotificationMapper.toPersistence(notification),
       }),
-      this.cache.delete(`account:${notification.recipientId.toValue()}:notifications`),
+      this.cache.delete(`account:${notification.recipientId.toValue()}:notifications:*`),
     ]);
   }
 
@@ -35,7 +36,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
         },
         data: NotificationMapper.toPersistence(notification),
       }),
-      this.cache.delete(`account:${notification.recipientId.toValue()}:notifications`),
+      this.cache.delete(`account:${notification.recipientId.toValue()}:notifications:*`),
     ]);
   }
 
@@ -51,24 +52,48 @@ export class PrismaNotificationRepository implements NotificationRepository {
     return NotificationMapper.toDomain(notification);
   }
 
-  public async findManyByRecipientId(recipientId: UniqueEntityID): Promise<Array<Notification>> {
-    const CACHE_KEY = `account:${recipientId.toValue()}:notifications`;
+  public async findManyByRecipientId(
+    recipientId: UniqueEntityID,
+    pagination: PaginationRepository,
+  ): Promise<{
+    notifications: Array<Notification>;
+    total: number;
+  }> {
+    const CACHE_KEY = `account:${recipientId.toValue()}:notifications:limit-${pagination.limit}:page-${pagination.page}`;
     const cacheHit = await this.cache.get(CACHE_KEY);
 
     if (cacheHit) {
       const notifications = JSON.parse(cacheHit) as Array<PrismaNotification>;
 
-      return notifications.map(NotificationMapper.toDomain);
+      return {
+        notifications: notifications.map(NotificationMapper.toDomain),
+        total: notifications.length,
+      };
     }
 
-    const notifications = await this.prismaConnection.notifications.findMany({
-      where: {
-        recipientId: recipientId.toValue(),
-      },
-    });
+    const SKIP = (pagination.page - 1) * pagination.limit;
+    const TAKE = pagination.page * pagination.limit;
+    const [notifications, notificationsCount] = await Promise.all([
+      this.prismaConnection.notifications.findMany({
+        take: TAKE,
+        skip: SKIP,
+        where: {
+          recipientId: recipientId.toValue(),
+        },
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
+      }),
+      this.prismaConnection.notifications.count(),
+    ]);
 
     await this.cache.set(CACHE_KEY, JSON.stringify(notifications));
 
-    return notifications.map(NotificationMapper.toDomain);
+    return {
+      notifications: notifications.map(NotificationMapper.toDomain),
+      total: notificationsCount,
+    };
   }
 }

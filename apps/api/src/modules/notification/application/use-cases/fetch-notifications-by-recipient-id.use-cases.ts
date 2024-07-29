@@ -10,9 +10,11 @@ import { NotificationRepository } from "../repositories/notification.repository"
 
 type Input = {
   recipientId: string;
+  limit: number;
+  page: number;
 };
 type OnError = AccountNotFoundError;
-type OnSuccess = { notifications: Notification[] };
+type OnSuccess = { notifications: Notification[]; total: number };
 type Output = Either<OnError, OnSuccess>;
 
 @injectable()
@@ -31,10 +33,14 @@ export class FetchNotificationsByRecipientIdUseCase {
       return left(new AccountNotFoundError());
     }
 
-    const notifications = await this.notificationRepository.findManyByRecipientId(accountId);
+    const { notifications, total } = await this.notificationRepository.findManyByRecipientId(accountId, {
+      limit: input.limit,
+      page: input.page,
+    });
 
     return right({
       notifications,
+      total,
     });
   }
 }
