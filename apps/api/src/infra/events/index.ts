@@ -1,9 +1,7 @@
-import { container } from "tsyringe";
-
-import { OnMemberIsAddedToProject } from "@/modules/notification/subscribers/on-member-is-added-to-project";
+import { makeOnMemberIsAddedToProject } from "@/modules/notification/subscribers/factories/make-on-member-is-added-to-project";
 
 export class Events {
   public constructor() {
-    container.resolve(OnMemberIsAddedToProject);
+    makeOnMemberIsAddedToProject();
   }
 }

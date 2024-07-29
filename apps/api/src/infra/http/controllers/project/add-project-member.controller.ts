@@ -4,7 +4,7 @@ import { z } from "zod";
 import { Controller, ControllerMethods } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
 import { makeEnsureAuthenticated } from "@/infra/http/middlewares/factories/make-ensure-authenticated";
-import { ProjectMemberPresenter } from "@/infra/presenters/project-member-presenter";
+import { MemberWithProjectPresenter } from "@/infra/presenters/member-with-project-presenter";
 import { MemberNotFoundError } from "@/modules/project/application/use-cases/errors/member-not-found.error";
 import { NotAllowedError } from "@/modules/project/application/use-cases/errors/not-allowed.error";
 import { OwnerCannotBeAddedAsMemberError } from "@/modules/project/application/use-cases/errors/owner-cannot-be-added-as-member.error";
@@ -43,7 +43,7 @@ export class AddProjectMemberController extends Controller {
 
     if (result.isRight()) {
       return res.status(201).json({
-        data: ProjectMemberPresenter.toHTTP(result.value.projectMember),
+        data: MemberWithProjectPresenter.toHTTP(result.value.memberWithProject),
       });
     }
 

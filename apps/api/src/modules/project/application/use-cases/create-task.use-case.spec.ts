@@ -1,7 +1,7 @@
 import { makeAccount } from "@/test/factories/make-account";
 import { makeMember } from "@/test/factories/make-member";
 import { makeProject } from "@/test/factories/make-project";
-import { makeProjectMember } from "@/test/factories/make-project-member";
+import { makeMemberWithProject } from "@/test/factories/make-project-member";
 import { FakeProjectMemberRepository } from "@/test/repositories/fake-project-member.repository";
 import { FakeProjectRepository } from "@/test/repositories/fake-project.repository";
 import { FakeTaskRepository } from "@/test/repositories/fake-task.repository";
@@ -33,9 +33,9 @@ describe("CreateTaskUseCase", () => {
     const member = makeMember({
       accountId: account.id,
     });
-    const projectMember = makeProjectMember({
-      memberId: member.id,
-      projectId: project.id,
+    const projectMember = makeMemberWithProject({
+      member,
+      project,
     });
 
     await Promise.all([fakeProjectRepository.create(project), fakeProjectMemberRepository.create(projectMember)]);
@@ -99,10 +99,11 @@ describe("CreateTaskUseCase", () => {
     const project = makeProject({
       ownerId: account.id,
     });
+    const ownerMember = makeMember({ accountId: account.id });
     const member = makeMember();
-    const projectMember = makeProjectMember({
-      memberId: account.id,
-      projectId: project.id,
+    const projectMember = makeMemberWithProject({
+      member: ownerMember,
+      project,
     });
 
     await Promise.all([fakeProjectMemberRepository.create(projectMember), fakeProjectRepository.create(project)]);

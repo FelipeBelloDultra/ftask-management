@@ -55,7 +55,7 @@ export class CreateTaskUseCase {
     }
 
     const task = Task.create({
-      assigneeId: projectMember.memberId,
+      assigneeId: projectMember.member.id,
       description: input.description,
       dueDate: DueDate.create(input.dueDate),
       projectId: project.id,

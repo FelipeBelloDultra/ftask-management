@@ -7,7 +7,7 @@ import { MemberRepository } from "@/modules/account/application/repositories/mem
 import { Member } from "@/modules/account/domain/entity/member";
 import { ProjectMemberRepository } from "@/modules/project/application/repositories/project-member.repository";
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
-import { ProjectMember } from "@/modules/project/domain/entity/project-member";
+import { MemberWithProject } from "@/modules/project/domain/entity/member-with-project";
 
 import { MemberNotFoundError } from "./errors/member-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";
@@ -26,7 +26,7 @@ type OnError =
   | ProjectMemberAlreadyExistsError
   | ProjectNotFoundError
   | OwnerCannotBeAddedAsMemberError;
-type OnSuccess = { projectMember: ProjectMember };
+type OnSuccess = { memberWithProject: MemberWithProject };
 type Output = Either<OnError, OnSuccess>;
 
 @injectable()
@@ -82,13 +82,13 @@ export class AddProjectMemberUseCase {
       return left(new ProjectMemberAlreadyExistsError());
     }
 
-    const projectMember = ProjectMember.create({
-      memberId: member.id,
-      projectId: project.id,
+    const memberWithProject = MemberWithProject.create({
+      member,
+      project,
     });
 
-    await this.projectMemberRepository.create(projectMember);
+    await this.projectMemberRepository.create(memberWithProject);
 
-    return right({ projectMember });
+    return right({ memberWithProject });
   }
 }

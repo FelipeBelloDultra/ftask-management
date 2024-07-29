@@ -1,14 +1,16 @@
 import { inject, injectable } from "tsyringe";
 
-import { UniqueEntityID } from "@/core/entity/unique-entity-id";
-import { ProjectMemberMapper } from "@/infra/database/prisma/mappers/project-member-mapper";
+import { MemberWithProjectMapper } from "@/infra/database/prisma/mappers/member-with-project-mapper";
 import { PrismaConnection } from "@/infra/database/prisma/prisma-connection";
-import { ProjectMember, ProjectMemberProps } from "@/modules/project/domain/entity/project-member";
+import { MemberWithProject, MemberWithProjectProps } from "@/modules/project/domain/entity/member-with-project";
 
-export function makeProjectMember(override: Partial<ProjectMemberProps> = {}): ProjectMember {
-  const projectMember = ProjectMember.create({
-    memberId: UniqueEntityID.create(),
-    projectId: UniqueEntityID.create(),
+import { makeMember } from "./make-member";
+import { makeProject } from "./make-project";
+
+export function makeMemberWithProject(override: Partial<MemberWithProjectProps> = {}): MemberWithProject {
+  const projectMember = MemberWithProject.create({
+    member: makeMember(),
+    project: makeProject(),
     ...override,
   });
 
@@ -16,17 +18,17 @@ export function makeProjectMember(override: Partial<ProjectMemberProps> = {}): P
 }
 
 @injectable()
-export class ProjectMemberFactory {
+export class MemberWithProjectFactory {
   public constructor(
     @inject("PrismaConnection")
     private readonly prismaConnection: PrismaConnection,
   ) {}
 
-  public async makePrismaProjectMember(override: Partial<ProjectMemberProps> = {}) {
-    const projectMember = makeProjectMember(override);
+  public async makePrismaMemberWithProject(override: Partial<MemberWithProjectProps> = {}) {
+    const projectMember = makeMemberWithProject(override);
 
     await this.prismaConnection.projectHasMember.create({
-      data: ProjectMemberMapper.toPersistence(projectMember),
+      data: MemberWithProjectMapper.toPersistence(projectMember),
     });
 
     return projectMember;

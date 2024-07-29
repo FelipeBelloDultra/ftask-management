@@ -56,7 +56,7 @@ describe("AddProjectMemberUseCase", () => {
 
     expect(result.isRight()).toBeTruthy();
     expect(fakeMemberRepository.members.length).toBe(1);
-    expect(fakeProjectMemberRepository.projectMembers.length).toBe(1);
+    expect(fakeProjectMemberRepository.memberWithProjects.length).toBe(1);
   });
 
   it("should not be able to add project member if project does not exists", async () => {
@@ -135,7 +135,7 @@ describe("AddProjectMemberUseCase", () => {
 
     expect(result.isRight()).toBeTruthy();
     expect(fakeMemberRepository.members.length).toBe(1);
-    expect(fakeProjectMemberRepository.projectMembers.length).toBe(1);
+    expect(fakeProjectMemberRepository.memberWithProjects.length).toBe(1);
   });
 
   it("should not be able to create a member if member is owner from this project", async () => {

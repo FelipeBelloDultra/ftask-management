@@ -1,17 +1,17 @@
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { DomainEvent } from "@/core/events/domain-event";
-import { ProjectMember } from "@/modules/project/domain/entity/project-member";
+import { MemberWithProject } from "@/modules/project/domain/entity/member-with-project";
 
 export class MemberIsAddedToProjectEvent implements DomainEvent {
   public ocurredAt: Date;
-  public projectMember: ProjectMember;
+  public memberWithProject: MemberWithProject;
 
-  public constructor(projectMember: ProjectMember) {
-    this.projectMember = projectMember;
+  public constructor(memberWithProject: MemberWithProject) {
+    this.memberWithProject = memberWithProject;
     this.ocurredAt = new Date();
   }
 
   public getAggregateId(): UniqueEntityID {
-    return this.projectMember.id;
+    return this.memberWithProject.id;
   }
 }

@@ -8,7 +8,7 @@ import { DueDate } from "@/modules/project/domain/entity/value-objects/due-date"
 import { AccountFactory } from "@/test/factories/make-account";
 import { MemberFactory } from "@/test/factories/make-member";
 import { ProjectFactory } from "@/test/factories/make-project";
-import { ProjectMemberFactory } from "@/test/factories/make-project-member";
+import { MemberWithProjectFactory } from "@/test/factories/make-project-member";
 import { makeTask } from "@/test/factories/make-task";
 
 describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
@@ -16,7 +16,7 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
   let accountFactory: AccountFactory;
   let memberFactory: MemberFactory;
   let projectFactory: ProjectFactory;
-  let projectMemberFactory: ProjectMemberFactory;
+  let projectMemberFactory: MemberWithProjectFactory;
   let jwtProvider: JwtProvider;
   let prismaConnection: PrismaConnection;
 
@@ -25,7 +25,7 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
     accountFactory = container.resolve(AccountFactory);
     memberFactory = container.resolve(MemberFactory);
     projectFactory = container.resolve(ProjectFactory);
-    projectMemberFactory = container.resolve(ProjectMemberFactory);
+    projectMemberFactory = container.resolve(MemberWithProjectFactory);
     jwtProvider = container.resolve("JwtProvider");
     prismaConnection = container.resolve(PrismaConnection);
     await app.startServices();
@@ -48,9 +48,9 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
         accountId: memberAccount.id,
       }),
     ]);
-    await projectMemberFactory.makePrismaProjectMember({
-      memberId: member.id,
-      projectId: project.id,
+    await projectMemberFactory.makePrismaMemberWithProject({
+      member,
+      project,
     });
 
     const accessToken = await jwtProvider.encrypt({
