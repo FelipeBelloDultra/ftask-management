@@ -1,12 +1,13 @@
-import { Entity } from "@/core/entity/entity";
+import { AggregateRoot } from "@/core/entity/aggregate-root";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { MemberIsAddedToProjectEvent } from "@/modules/project/domain/events/member-is-added-to-project-event";
 
 export interface ProjectMemberProps {
   projectId: UniqueEntityID;
   memberId: UniqueEntityID;
 }
 
-export class ProjectMember extends Entity<ProjectMemberProps> {
+export class ProjectMember extends AggregateRoot<ProjectMemberProps> {
   public get projectId() {
     return this.props.projectId;
   }
@@ -16,6 +17,13 @@ export class ProjectMember extends Entity<ProjectMemberProps> {
   }
 
   public static create(props: ProjectMemberProps, id?: UniqueEntityID) {
-    return new ProjectMember(props, id);
+    const projectMember = new ProjectMember(props, id);
+    const isNewProjectMember = !id;
+
+    if (isNewProjectMember) {
+      projectMember.addDomainEvent(new MemberIsAddedToProjectEvent(projectMember));
+    }
+
+    return projectMember;
   }
 }

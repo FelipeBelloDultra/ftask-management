@@ -8,7 +8,6 @@ import { Member } from "@/modules/account/domain/entity/member";
 import { ProjectMemberRepository } from "@/modules/project/application/repositories/project-member.repository";
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
 import { ProjectMember } from "@/modules/project/domain/entity/project-member";
-import { ProjectMemberDetails } from "@/modules/project/domain/entity/project-member-details";
 
 import { MemberNotFoundError } from "./errors/member-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";
@@ -27,7 +26,7 @@ type OnError =
   | ProjectMemberAlreadyExistsError
   | ProjectNotFoundError
   | OwnerCannotBeAddedAsMemberError;
-type OnSuccess = { projectMemberDetails: ProjectMemberDetails };
+type OnSuccess = { projectMember: ProjectMember };
 type Output = Either<OnError, OnSuccess>;
 
 @injectable()
@@ -87,16 +86,9 @@ export class AddProjectMemberUseCase {
       memberId: member.id,
       projectId: project.id,
     });
-    const projectMemberDetails = ProjectMemberDetails.create(
-      {
-        member,
-        project,
-      },
-      projectMember.id,
-    );
 
     await this.projectMemberRepository.create(projectMember);
 
-    return right({ projectMemberDetails });
+    return right({ projectMember });
   }
 }
