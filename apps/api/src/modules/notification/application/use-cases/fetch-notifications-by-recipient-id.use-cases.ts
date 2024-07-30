@@ -1,10 +1,9 @@
 import { inject, injectable } from "tsyringe";
 
-import { Either, left, right } from "@/core/either";
+import { Either, right } from "@/core/either";
+import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
-import { AccountRepository } from "@/modules/account/application/repositories/account.repository";
 import { Notification } from "@/modules/notification/domain/entity/notification";
-import { AccountNotFoundError } from "@/modules/project/application/use-cases/errors/account-not-found.error";
 
 import { NotificationRepository } from "../repositories/notification.repository";
 
@@ -13,7 +12,7 @@ type Input = {
   limit: number;
   page: number;
 };
-type OnError = AccountNotFoundError;
+type OnError = never;
 type OnSuccess = { notifications: Notification[]; total: number };
 type Output = Either<OnError, OnSuccess>;
 
@@ -22,21 +21,18 @@ export class FetchNotificationsByRecipientIdUseCase {
   public constructor(
     @inject("NotificationRepository")
     private readonly notificationRepository: NotificationRepository,
-    @inject("AccountRepository")
-    private readonly accountRepository: AccountRepository,
   ) {}
 
   public async execute(input: Input): Promise<Output> {
     const accountId = UniqueEntityID.create(input.recipientId);
-    const account = await this.accountRepository.findById(accountId);
-    if (!account) {
-      return left(new AccountNotFoundError());
-    }
 
-    const { notifications, total } = await this.notificationRepository.findManyByRecipientId(accountId, {
-      limit: input.limit,
-      page: input.page,
-    });
+    const { notifications, total } = await this.notificationRepository.fetchManyByRecipientId(
+      accountId,
+      Pagination.create({
+        limit: input.limit,
+        page: input.page,
+      }),
+    );
 
     return right({
       notifications,

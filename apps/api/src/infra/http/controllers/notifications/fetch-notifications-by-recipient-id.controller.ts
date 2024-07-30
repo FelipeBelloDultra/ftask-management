@@ -2,11 +2,9 @@ import { Request, Response } from "express";
 import { z } from "zod";
 
 import { Controller, ControllerMethods } from "@/infra/http/controller";
-import { HttpException } from "@/infra/http/http-exception";
 import { makeEnsureAuthenticated } from "@/infra/http/middlewares/factories/make-ensure-authenticated";
 import { NotificationPresenter } from "@/infra/presenters/notification-presenter";
 import { makeFetchNotificationsByRecipientId } from "@/modules/notification/application/use-cases/factories/make-fetch-notifications-by-recipient-id";
-import { AccountNotFoundError } from "@/modules/project/application/use-cases/errors/account-not-found.error";
 
 const paramSchema = z.object({
   page: z.string().optional().default("1").transform(Number).pipe(z.number().min(1)),
@@ -43,14 +41,6 @@ export class FetchNotificationsByRecipientIdController extends Controller {
       });
     }
 
-    switch (result.value.constructor) {
-      case AccountNotFoundError:
-        throw new HttpException({
-          message: "Account not found",
-          statusCode: 404,
-        });
-      default:
-        throw new Error();
-    }
+    throw new Error();
   }
 }

@@ -19,7 +19,7 @@ export interface ControllerConstructor {
 
 export abstract class Controller {
   public readonly router = Router();
-  public readonly middlewares?: Array<Middleware>;
+  private readonly middlewares?: Array<Middleware>;
   private readonly path: string;
   private readonly method: ControllerMethods;
 

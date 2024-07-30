@@ -1,4 +1,4 @@
-import { PaginationRepository } from "@/application/repositories/pagination.repository";
+import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { NotificationRepository } from "@/modules/notification/application/repositories/notification.repository";
 import { Notification } from "@/modules/notification/domain/entity/notification";
@@ -28,20 +28,17 @@ export class FakeNotificationRepository implements NotificationRepository {
     return notification;
   }
 
-  public async findManyByRecipientId(
+  public async fetchManyByRecipientId(
     recipientId: UniqueEntityID,
-    { limit, page }: PaginationRepository,
+    pagination: Pagination,
   ): Promise<{
     notifications: Array<Notification>;
     total: number;
   }> {
     const notifications = this.notifications.filter((n) => n.recipientId.equals(recipientId));
 
-    const SKIP = (page - 1) * limit;
-    const TAKE = page * limit;
-
     return {
-      notifications: notifications.slice(SKIP, TAKE),
+      notifications: notifications.slice(pagination.skip, pagination.take),
       total: notifications.length,
     };
   }

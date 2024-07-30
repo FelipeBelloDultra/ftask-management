@@ -1,7 +1,7 @@
 import { Notifications as PrismaNotification } from "@prisma/client";
 import { inject, injectable } from "tsyringe";
 
-import { PaginationRepository } from "@/application/repositories/pagination.repository";
+import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { CacheRepository } from "@/infra/cache/cache.repository";
 import { NotificationRepository } from "@/modules/notification/application/repositories/notification.repository";
@@ -52,9 +52,9 @@ export class PrismaNotificationRepository implements NotificationRepository {
     return NotificationMapper.toDomain(notification);
   }
 
-  public async findManyByRecipientId(
+  public async fetchManyByRecipientId(
     recipientId: UniqueEntityID,
-    pagination: PaginationRepository,
+    pagination: Pagination,
   ): Promise<{
     notifications: Array<Notification>;
     total: number;
@@ -71,12 +71,10 @@ export class PrismaNotificationRepository implements NotificationRepository {
       };
     }
 
-    const SKIP = (pagination.page - 1) * pagination.limit;
-    const TAKE = pagination.page * pagination.limit;
     const [notifications, notificationsCount] = await Promise.all([
       this.prismaConnection.notifications.findMany({
-        take: TAKE,
-        skip: SKIP,
+        take: pagination.take,
+        skip: pagination.skip,
         where: {
           recipientId: recipientId.toValue(),
         },
