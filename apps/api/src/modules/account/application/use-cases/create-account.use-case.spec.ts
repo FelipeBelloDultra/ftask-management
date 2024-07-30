@@ -1,16 +1,16 @@
 import { makeAccount } from "@/test/factories/make-account";
-import { FakeAccountRepository } from "@/test/repositories/fake-account.repository";
+import { InMemoryAccountRepository } from "@/test/repositories/in-memory-account.repository";
 
 import { CreateAccountUseCase } from "./create-account.use-case";
 import { AccountAlreadyExistsError } from "./errors/account-already-exists.error";
 
 describe("CreateAccountUseCase", () => {
   let sut: CreateAccountUseCase;
-  let fakeAccountRepository: FakeAccountRepository;
+  let inMemoryAccountRepository: InMemoryAccountRepository;
 
   beforeEach(() => {
-    fakeAccountRepository = new FakeAccountRepository();
-    sut = new CreateAccountUseCase(fakeAccountRepository);
+    inMemoryAccountRepository = new InMemoryAccountRepository();
+    sut = new CreateAccountUseCase(inMemoryAccountRepository);
   });
 
   it("should be able to create a new account", async () => {
@@ -25,13 +25,13 @@ describe("CreateAccountUseCase", () => {
     const result = await sut.execute(input);
 
     expect(result.isRight()).toBeTruthy();
-    expect(fakeAccountRepository.accounts.length).toBe(1);
-    await expect(fakeAccountRepository.accounts[0].password.getHashed()).resolves.not.toBe(PASSWORD);
+    expect(inMemoryAccountRepository.accounts.length).toBe(1);
+    await expect(inMemoryAccountRepository.accounts[0].password.getHashed()).resolves.not.toBe(PASSWORD);
   });
 
   it("should not be able to create a new account with an existing email", async () => {
     const account = makeAccount();
-    await fakeAccountRepository.create(account);
+    await inMemoryAccountRepository.create(account);
 
     const input = {
       name: "account-name",
@@ -43,6 +43,6 @@ describe("CreateAccountUseCase", () => {
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(AccountAlreadyExistsError);
-    expect(fakeAccountRepository.accounts.length).toBe(1);
+    expect(inMemoryAccountRepository.accounts.length).toBe(1);
   });
 });

@@ -1,14 +1,14 @@
-import { FakeNotificationRepository } from "@/test/repositories/fake-notification.repository";
+import { InMemoryNotificationRepository } from "@/test/repositories/in-memory-notification.repository";
 
 import { SendNotificationUseCase } from "./send-notification.use-case";
 
 describe("SendNotificationUseCase", () => {
-  let fakeNotificationRepository: FakeNotificationRepository;
+  let inMemoryNotificationRepository: InMemoryNotificationRepository;
   let sut: SendNotificationUseCase;
 
   beforeEach(() => {
-    fakeNotificationRepository = new FakeNotificationRepository();
-    sut = new SendNotificationUseCase(fakeNotificationRepository);
+    inMemoryNotificationRepository = new InMemoryNotificationRepository();
+    sut = new SendNotificationUseCase(inMemoryNotificationRepository);
   });
 
   it("should be able to send notifications", async () => {
@@ -19,6 +19,6 @@ describe("SendNotificationUseCase", () => {
     });
 
     expect(result.isRight()).toBeTruthy();
-    expect(fakeNotificationRepository.notifications.length).toBe(1);
+    expect(inMemoryNotificationRepository.notifications.length).toBe(1);
   });
 });

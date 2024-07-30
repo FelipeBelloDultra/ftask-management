@@ -2,17 +2,17 @@ import { Right } from "@/core/either";
 import { Notification } from "@/modules/notification/domain/entity/notification";
 import { makeAccount } from "@/test/factories/make-account";
 import { makeNotification } from "@/test/factories/make-notification";
-import { FakeNotificationRepository } from "@/test/repositories/fake-notification.repository";
+import { InMemoryNotificationRepository } from "@/test/repositories/in-memory-notification.repository";
 
 import { FetchNotificationsByRecipientIdUseCase } from "./fetch-notifications-by-recipient-id.use-cases";
 
 describe("FetchNotificationsByRecipientId", () => {
   let sut: FetchNotificationsByRecipientIdUseCase;
-  let fakeNotificationRepository: FakeNotificationRepository;
+  let inMemoryNotificationRepository: InMemoryNotificationRepository;
 
   beforeEach(() => {
-    fakeNotificationRepository = new FakeNotificationRepository();
-    sut = new FetchNotificationsByRecipientIdUseCase(fakeNotificationRepository);
+    inMemoryNotificationRepository = new InMemoryNotificationRepository();
+    sut = new FetchNotificationsByRecipientIdUseCase(inMemoryNotificationRepository);
   });
 
   it("should fetch notifications by recipient id", async () => {
@@ -24,7 +24,7 @@ describe("FetchNotificationsByRecipientId", () => {
       }),
     );
 
-    await Promise.all(notifications.map((n) => fakeNotificationRepository.create(n)));
+    await Promise.all(notifications.map((n) => inMemoryNotificationRepository.create(n)));
 
     const result = (await sut.execute({ recipientId: account.id.toValue(), limit: 10, page: 1 })) as Right<
       never,

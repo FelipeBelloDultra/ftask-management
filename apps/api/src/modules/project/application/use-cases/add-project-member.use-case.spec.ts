@@ -1,10 +1,10 @@
 import { makeAccount } from "@/test/factories/make-account";
 import { makeMember } from "@/test/factories/make-member";
 import { makeProject } from "@/test/factories/make-project";
-import { FakeAccountRepository } from "@/test/repositories/fake-account.repository";
-import { FakeMemberRepository } from "@/test/repositories/fake-member.repository";
-import { FakeProjectMemberRepository } from "@/test/repositories/fake-project-member.repository";
-import { FakeProjectRepository } from "@/test/repositories/fake-project.repository";
+import { InMemoryAccountRepository } from "@/test/repositories/in-memory-account.repository";
+import { InMemoryMemberRepository } from "@/test/repositories/in-memory-member.repository";
+import { InMemoryProjectMemberRepository } from "@/test/repositories/in-memory-project-member.repository";
+import { InMemoryProjectRepository } from "@/test/repositories/in-memory-project.repository";
 
 import { AddProjectMemberUseCase } from "./add-project-member.use-case";
 import { MemberNotFoundError } from "./errors/member-not-found.error";
@@ -15,22 +15,22 @@ import { ProjectNotFoundError } from "./errors/project-not-found.error";
 
 describe("AddProjectMemberUseCase", () => {
   let sut: AddProjectMemberUseCase;
-  let fakeProjectRepository: FakeProjectRepository;
-  let fakeAccountRepository: FakeAccountRepository;
-  let fakeMemberRepository: FakeMemberRepository;
-  let fakeProjectMemberRepository: FakeProjectMemberRepository;
+  let inMemoryProjectRepository: InMemoryProjectRepository;
+  let inMemoryAccountRepository: InMemoryAccountRepository;
+  let inMemoryMemberRepository: InMemoryMemberRepository;
+  let inMemoryProjectMemberRepository: InMemoryProjectMemberRepository;
 
   beforeEach(() => {
-    fakeProjectRepository = new FakeProjectRepository();
-    fakeAccountRepository = new FakeAccountRepository();
-    fakeMemberRepository = new FakeMemberRepository();
-    fakeProjectMemberRepository = new FakeProjectMemberRepository();
+    inMemoryProjectRepository = new InMemoryProjectRepository();
+    inMemoryAccountRepository = new InMemoryAccountRepository();
+    inMemoryMemberRepository = new InMemoryMemberRepository();
+    inMemoryProjectMemberRepository = new InMemoryProjectMemberRepository();
 
     sut = new AddProjectMemberUseCase(
-      fakeMemberRepository,
-      fakeProjectRepository,
-      fakeAccountRepository,
-      fakeProjectMemberRepository,
+      inMemoryMemberRepository,
+      inMemoryProjectRepository,
+      inMemoryAccountRepository,
+      inMemoryProjectMemberRepository,
     );
   });
 
@@ -41,9 +41,9 @@ describe("AddProjectMemberUseCase", () => {
       ownerId: ownerAccount.id,
     });
     await Promise.all([
-      fakeProjectRepository.create(project),
-      fakeAccountRepository.create(account),
-      fakeAccountRepository.create(ownerAccount),
+      inMemoryProjectRepository.create(project),
+      inMemoryAccountRepository.create(account),
+      inMemoryAccountRepository.create(ownerAccount),
     ]);
 
     const input = {
@@ -55,8 +55,8 @@ describe("AddProjectMemberUseCase", () => {
     const result = await sut.execute(input);
 
     expect(result.isRight()).toBeTruthy();
-    expect(fakeMemberRepository.members.length).toBe(1);
-    expect(fakeProjectMemberRepository.memberWithProjects.length).toBe(1);
+    expect(inMemoryMemberRepository.members.length).toBe(1);
+    expect(inMemoryProjectMemberRepository.memberWithProjects.length).toBe(1);
   });
 
   it("should not be able to add project member if project does not exists", async () => {
@@ -75,7 +75,7 @@ describe("AddProjectMemberUseCase", () => {
   it("should not be able to create a project member if owner ins't owner from this project", async () => {
     const account = makeAccount();
     const project = makeProject();
-    await Promise.all([fakeProjectRepository.create(project), fakeAccountRepository.create(account)]);
+    await Promise.all([inMemoryProjectRepository.create(project), inMemoryAccountRepository.create(account)]);
 
     const input = {
       memberAccountEmail: account.email,
@@ -94,7 +94,7 @@ describe("AddProjectMemberUseCase", () => {
     const project = makeProject({
       ownerId: account.id,
     });
-    await Promise.all([fakeProjectRepository.create(project), fakeAccountRepository.create(account)]);
+    await Promise.all([inMemoryProjectRepository.create(project), inMemoryAccountRepository.create(account)]);
 
     const input = {
       memberAccountEmail: "invalid-member-account-email",
@@ -119,10 +119,10 @@ describe("AddProjectMemberUseCase", () => {
     });
 
     await Promise.all([
-      fakeAccountRepository.create(ownerAccount),
-      fakeMemberRepository.create(member),
-      fakeAccountRepository.create(account),
-      fakeProjectRepository.create(project),
+      inMemoryAccountRepository.create(ownerAccount),
+      inMemoryMemberRepository.create(member),
+      inMemoryAccountRepository.create(account),
+      inMemoryProjectRepository.create(project),
     ]);
 
     const input = {
@@ -134,8 +134,8 @@ describe("AddProjectMemberUseCase", () => {
     const result = await sut.execute(input);
 
     expect(result.isRight()).toBeTruthy();
-    expect(fakeMemberRepository.members.length).toBe(1);
-    expect(fakeProjectMemberRepository.memberWithProjects.length).toBe(1);
+    expect(inMemoryMemberRepository.members.length).toBe(1);
+    expect(inMemoryProjectMemberRepository.memberWithProjects.length).toBe(1);
   });
 
   it("should not be able to create a member if member is owner from this project", async () => {
@@ -148,9 +148,9 @@ describe("AddProjectMemberUseCase", () => {
     });
 
     await Promise.all([
-      fakeAccountRepository.create(account),
-      fakeProjectRepository.create(project),
-      fakeMemberRepository.create(member),
+      inMemoryAccountRepository.create(account),
+      inMemoryProjectRepository.create(project),
+      inMemoryMemberRepository.create(member),
     ]);
 
     const input = {
@@ -172,9 +172,9 @@ describe("AddProjectMemberUseCase", () => {
       ownerId: ownerAccount.id,
     });
     await Promise.all([
-      fakeProjectRepository.create(project),
-      fakeAccountRepository.create(account),
-      fakeAccountRepository.create(ownerAccount),
+      inMemoryProjectRepository.create(project),
+      inMemoryAccountRepository.create(account),
+      inMemoryAccountRepository.create(ownerAccount),
     ]);
 
     const input = {

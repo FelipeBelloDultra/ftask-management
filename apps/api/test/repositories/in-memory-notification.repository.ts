@@ -3,7 +3,7 @@ import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { NotificationRepository } from "@/modules/notification/application/repositories/notification.repository";
 import { Notification } from "@/modules/notification/domain/entity/notification";
 
-export class FakeNotificationRepository implements NotificationRepository {
+export class InMemoryNotificationRepository implements NotificationRepository {
   public readonly notifications: Notification[] = [];
 
   public async create(notification: Notification): Promise<void> {

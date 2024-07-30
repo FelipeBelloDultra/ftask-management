@@ -1,7 +1,7 @@
 import { makeAccount } from "@/test/factories/make-account";
 import { makeProject } from "@/test/factories/make-project";
-import { FakeAccountRepository } from "@/test/repositories/fake-account.repository";
-import { FakeProjectRepository } from "@/test/repositories/fake-project.repository";
+import { InMemoryAccountRepository } from "@/test/repositories/in-memory-account.repository";
+import { InMemoryProjectRepository } from "@/test/repositories/in-memory-project.repository";
 
 import { CreateProjectUseCase } from "./create-project.use-case";
 import { AccountNotFoundError } from "./errors/account-not-found.error";
@@ -9,20 +9,20 @@ import { DuplicatedProjectSlugError } from "./errors/duplicated-project-slug.err
 
 describe("CreateProjectUseCase", () => {
   let sut: CreateProjectUseCase;
-  let fakeProjectRepository: FakeProjectRepository;
-  let fakeAccountRepository: FakeAccountRepository;
+  let inMemoryProjectRepository: InMemoryProjectRepository;
+  let inMemoryAccountRepository: InMemoryAccountRepository;
 
   beforeEach(() => {
-    fakeProjectRepository = new FakeProjectRepository();
-    fakeAccountRepository = new FakeAccountRepository();
+    inMemoryProjectRepository = new InMemoryProjectRepository();
+    inMemoryAccountRepository = new InMemoryAccountRepository();
 
-    sut = new CreateProjectUseCase(fakeProjectRepository, fakeAccountRepository);
+    sut = new CreateProjectUseCase(inMemoryProjectRepository, inMemoryAccountRepository);
   });
 
   it("should create new project and create owner for this one", async () => {
     const account = makeAccount();
 
-    await fakeAccountRepository.create(account);
+    await inMemoryAccountRepository.create(account);
 
     const input = {
       ownerAccountId: account.id.toValue(),
@@ -34,12 +34,12 @@ describe("CreateProjectUseCase", () => {
     const result = await sut.execute(input);
 
     expect(result.isRight()).toBeTruthy();
-    expect(fakeProjectRepository.projects.length).toBe(1);
+    expect(inMemoryProjectRepository.projects.length).toBe(1);
   });
 
   it("should create new project and use older owner", async () => {
     const account = makeAccount();
-    await fakeAccountRepository.create(account);
+    await inMemoryAccountRepository.create(account);
 
     const input = {
       ownerAccountId: account.id.toValue(),
@@ -51,7 +51,7 @@ describe("CreateProjectUseCase", () => {
     const result = await sut.execute(input);
 
     expect(result.isRight()).toBeTruthy();
-    expect(fakeProjectRepository.projects.length).toBe(1);
+    expect(inMemoryProjectRepository.projects.length).toBe(1);
   });
 
   it("should not be able to create project with duplicated slug", async () => {
@@ -60,8 +60,8 @@ describe("CreateProjectUseCase", () => {
       name: "Project name",
     });
 
-    await fakeAccountRepository.create(account);
-    await fakeProjectRepository.create(project);
+    await inMemoryAccountRepository.create(account);
+    await inMemoryProjectRepository.create(project);
 
     const input = {
       ownerAccountId: account.id.toValue(),

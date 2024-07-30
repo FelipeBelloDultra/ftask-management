@@ -1,21 +1,21 @@
 import { AccountNotFoundError } from "@/modules/project/application/use-cases/errors/account-not-found.error";
 import { makeAccount } from "@/test/factories/make-account";
-import { FakeAccountRepository } from "@/test/repositories/fake-account.repository";
+import { InMemoryAccountRepository } from "@/test/repositories/in-memory-account.repository";
 
 import { ShowAuthenticatedAccountUseCase } from "./show-authenticated-account.use-case";
 
 describe("ShowAuthenticatedAccount", () => {
   let sut: ShowAuthenticatedAccountUseCase;
-  let fakeAccountRepository: FakeAccountRepository;
+  let inMemoryAccountRepository: InMemoryAccountRepository;
 
   beforeEach(() => {
-    fakeAccountRepository = new FakeAccountRepository();
-    sut = new ShowAuthenticatedAccountUseCase(fakeAccountRepository);
+    inMemoryAccountRepository = new InMemoryAccountRepository();
+    sut = new ShowAuthenticatedAccountUseCase(inMemoryAccountRepository);
   });
 
   it("should show the authenticated account", async () => {
     const account = makeAccount();
-    await fakeAccountRepository.create(account);
+    await inMemoryAccountRepository.create(account);
 
     const result = await sut.execute({ accountId: account.id.toValue() });
 

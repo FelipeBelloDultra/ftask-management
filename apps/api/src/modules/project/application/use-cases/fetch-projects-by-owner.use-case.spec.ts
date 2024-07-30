@@ -2,17 +2,17 @@ import { Right } from "@/core/either";
 import { Project } from "@/modules/project/domain/entity/project";
 import { makeAccount } from "@/test/factories/make-account";
 import { makeProject } from "@/test/factories/make-project";
-import { FakeProjectRepository } from "@/test/repositories/fake-project.repository";
+import { InMemoryProjectRepository } from "@/test/repositories/in-memory-project.repository";
 
 import { FetchProjectsByOwnerUseCase } from "./fetch-projects-by-owner.use-case";
 
 describe("FetchProjectsByOwnerUseCase", () => {
   let sut: FetchProjectsByOwnerUseCase;
-  let fakeProjectRepository: FakeProjectRepository;
+  let inMemoryProjectRepository: InMemoryProjectRepository;
 
   beforeEach(() => {
-    fakeProjectRepository = new FakeProjectRepository();
-    sut = new FetchProjectsByOwnerUseCase(fakeProjectRepository);
+    inMemoryProjectRepository = new InMemoryProjectRepository();
+    sut = new FetchProjectsByOwnerUseCase(inMemoryProjectRepository);
   });
 
   it("should fetch projects by owner id", async () => {
@@ -24,7 +24,7 @@ describe("FetchProjectsByOwnerUseCase", () => {
       }),
     );
 
-    await Promise.all(projects.map((n) => fakeProjectRepository.create(n)));
+    await Promise.all(projects.map((n) => inMemoryProjectRepository.create(n)));
 
     const result = (await sut.execute({ ownerId: account.id.toValue(), limit: 10, page: 1 })) as Right<
       never,

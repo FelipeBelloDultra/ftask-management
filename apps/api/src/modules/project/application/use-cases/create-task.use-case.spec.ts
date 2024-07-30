@@ -2,9 +2,9 @@ import { makeAccount } from "@/test/factories/make-account";
 import { makeMember } from "@/test/factories/make-member";
 import { makeProject } from "@/test/factories/make-project";
 import { makeMemberWithProject } from "@/test/factories/make-project-member";
-import { FakeProjectMemberRepository } from "@/test/repositories/fake-project-member.repository";
-import { FakeProjectRepository } from "@/test/repositories/fake-project.repository";
-import { FakeTaskRepository } from "@/test/repositories/fake-task.repository";
+import { InMemoryProjectMemberRepository } from "@/test/repositories/in-memory-project-member.repository";
+import { InMemoryProjectRepository } from "@/test/repositories/in-memory-project.repository";
+import { InMemoryTaskRepository } from "@/test/repositories/in-memory-task.repository";
 
 import { CreateTaskUseCase } from "./create-task.use-case";
 import { NotAllowedError } from "./errors/not-allowed.error";
@@ -13,16 +13,16 @@ import { ProjectNotFoundError } from "./errors/project-not-found.error";
 
 describe("CreateTaskUseCase", () => {
   let sut: CreateTaskUseCase;
-  let fakeProjectRepository: FakeProjectRepository;
-  let fakeProjectMemberRepository: FakeProjectMemberRepository;
-  let fakeTaskRepository: FakeTaskRepository;
+  let inMemoryProjectRepository: InMemoryProjectRepository;
+  let inMemoryProjectMemberRepository: InMemoryProjectMemberRepository;
+  let inMemoryTaskRepository: InMemoryTaskRepository;
 
   beforeEach(() => {
-    fakeTaskRepository = new FakeTaskRepository();
-    fakeProjectRepository = new FakeProjectRepository();
-    fakeProjectMemberRepository = new FakeProjectMemberRepository();
+    inMemoryTaskRepository = new InMemoryTaskRepository();
+    inMemoryProjectRepository = new InMemoryProjectRepository();
+    inMemoryProjectMemberRepository = new InMemoryProjectMemberRepository();
 
-    sut = new CreateTaskUseCase(fakeTaskRepository, fakeProjectRepository, fakeProjectMemberRepository);
+    sut = new CreateTaskUseCase(inMemoryTaskRepository, inMemoryProjectRepository, inMemoryProjectMemberRepository);
   });
 
   it("should be able to create a new task", async () => {
@@ -38,7 +38,10 @@ describe("CreateTaskUseCase", () => {
       project,
     });
 
-    await Promise.all([fakeProjectRepository.create(project), fakeProjectMemberRepository.create(projectMember)]);
+    await Promise.all([
+      inMemoryProjectRepository.create(project),
+      inMemoryProjectMemberRepository.create(projectMember),
+    ]);
 
     const input = {
       ownerAccountId: account.id.toValue(),
@@ -52,7 +55,7 @@ describe("CreateTaskUseCase", () => {
     const result = await sut.execute(input);
 
     expect(result.isRight()).toBeTruthy();
-    expect(fakeTaskRepository.tasks.length).toBe(1);
+    expect(inMemoryTaskRepository.tasks.length).toBe(1);
   });
 
   it("should not be able to create a new task with no project", async () => {
@@ -77,7 +80,7 @@ describe("CreateTaskUseCase", () => {
     const account = makeAccount();
     const project = makeProject();
 
-    await Promise.all([fakeProjectRepository.create(project)]);
+    await Promise.all([inMemoryProjectRepository.create(project)]);
 
     const input = {
       ownerAccountId: account.id.toValue(),
@@ -106,7 +109,10 @@ describe("CreateTaskUseCase", () => {
       project,
     });
 
-    await Promise.all([fakeProjectMemberRepository.create(projectMember), fakeProjectRepository.create(project)]);
+    await Promise.all([
+      inMemoryProjectMemberRepository.create(projectMember),
+      inMemoryProjectRepository.create(project),
+    ]);
 
     const input = {
       ownerAccountId: account.id.toValue(),

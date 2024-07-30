@@ -2,7 +2,7 @@ import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { MemberRepository } from "@/modules/account/application/repositories/member.repository";
 import { Member } from "@/modules/account/domain/entity/member";
 
-export class FakeMemberRepository implements MemberRepository {
+export class InMemoryMemberRepository implements MemberRepository {
   public readonly members: Member[] = [];
 
   public async create(member: Member): Promise<void> {

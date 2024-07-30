@@ -1,5 +1,5 @@
 import "dotenv/config";
-import "../container";
+import "./container";
 
 import { execSync } from "node:child_process";
 import { randomUUID } from "node:crypto";

@@ -1,28 +1,28 @@
 import { Password } from "@/modules/account/domain/entity/value-objects/password";
 import { makeAccount } from "@/test/factories/make-account";
 import { FakeJwtProvider } from "@/test/providers/fake-jwt.provider";
-import { FakeAccountRepository } from "@/test/repositories/fake-account.repository";
+import { InMemoryAccountRepository } from "@/test/repositories/in-memory-account.repository";
 
 import { AuthenticateAccountUseCase } from "./authenticate-account.use-case";
 import { InvalidCombinationError } from "./errors/invalid-combination.error";
 
 describe("AuthenticateAccountUseCase", () => {
   let sut: AuthenticateAccountUseCase;
-  let fakeAccountRepository: FakeAccountRepository;
+  let inMemoryAccountRepository: InMemoryAccountRepository;
   let fakeJwtProvider: FakeJwtProvider;
 
   beforeEach(() => {
-    fakeAccountRepository = new FakeAccountRepository();
+    inMemoryAccountRepository = new InMemoryAccountRepository();
     fakeJwtProvider = new FakeJwtProvider();
 
-    sut = new AuthenticateAccountUseCase(fakeAccountRepository, fakeJwtProvider);
+    sut = new AuthenticateAccountUseCase(inMemoryAccountRepository, fakeJwtProvider);
   });
 
   it("should be able to authenticate an account", async () => {
     const account = makeAccount({
       password: Password.create("account-password"),
     });
-    await fakeAccountRepository.create(account);
+    await inMemoryAccountRepository.create(account);
 
     const input = {
       email: account.email,
@@ -56,7 +56,7 @@ describe("AuthenticateAccountUseCase", () => {
     const account = makeAccount({
       email: "account-email",
     });
-    await fakeAccountRepository.create(account);
+    await inMemoryAccountRepository.create(account);
 
     const input = {
       email: "account-email",

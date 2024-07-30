@@ -3,7 +3,7 @@ import { DomainEvents } from "@/core/events/domain-events";
 import { ProjectMemberRepository } from "@/modules/project/application/repositories/project-member.repository";
 import { MemberWithProject } from "@/modules/project/domain/entity/member-with-project";
 
-export class FakeProjectMemberRepository implements ProjectMemberRepository {
+export class InMemoryProjectMemberRepository implements ProjectMemberRepository {
   public readonly memberWithProjects: MemberWithProject[] = [];
 
   public async findByMemberAndProjectId(

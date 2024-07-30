@@ -4,7 +4,7 @@ import { ProjectRepository } from "@/modules/project/application/repositories/pr
 import { Project } from "@/modules/project/domain/entity/project";
 import { Slug } from "@/modules/project/domain/entity/value-objects/slug";
 
-export class FakeProjectRepository implements ProjectRepository {
+export class InMemoryProjectRepository implements ProjectRepository {
   public readonly projects: Project[] = [];
 
   public async findById(projectId: UniqueEntityID): Promise<Project | null> {
