@@ -24,7 +24,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
       this.prismaConnection.notifications.create({
         data: NotificationMapper.toPersistence(notification),
       }),
-      this.cache.delete(`account:${notification.recipientId.toValue()}:notifications:*`),
+      this.cache.delete(`account-${notification.recipientId.toValue()}:notifications:*`),
     ]);
   }
 
@@ -36,7 +36,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
         },
         data: NotificationMapper.toPersistence(notification),
       }),
-      this.cache.delete(`account:${notification.recipientId.toValue()}:notifications:*`),
+      this.cache.delete(`account-${notification.recipientId.toValue()}:notifications:*`),
     ]);
   }
 
@@ -59,7 +59,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
     notifications: Array<Notification>;
     total: number;
   }> {
-    const CACHE_KEY = `account:${recipientId.toValue()}:notifications:limit-${pagination.limit}:page-${pagination.page}`;
+    const CACHE_KEY = `account-${recipientId.toValue()}:notifications:limit-${pagination.limit}:page-${pagination.page}`;
     const cacheHit = await this.cache.get(CACHE_KEY);
 
     if (cacheHit) {
@@ -84,7 +84,11 @@ export class PrismaNotificationRepository implements NotificationRepository {
           },
         ],
       }),
-      this.prismaConnection.notifications.count(),
+      this.prismaConnection.notifications.count({
+        where: {
+          recipientId: recipientId.toValue(),
+        },
+      }),
     ]);
 
     await this.cache.set(CACHE_KEY, JSON.stringify(notifications));

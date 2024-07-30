@@ -1,6 +1,9 @@
+import { Project as PrismaProject } from "@prisma/client";
 import { inject, injectable } from "tsyringe";
 
+import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { CacheRepository } from "@/infra/cache/cache.repository";
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
 import { Project } from "@/modules/project/domain/entity/project";
 import { Slug } from "@/modules/project/domain/entity/value-objects/slug";
@@ -13,6 +16,8 @@ export class PrismaProjectRepository implements ProjectRepository {
   public constructor(
     @inject("PrismaConnection")
     private readonly prismaConnection: PrismaConnection,
+    @inject("CacheRepository")
+    private readonly cache: CacheRepository,
   ) {}
 
   public async findById(projectId: UniqueEntityID): Promise<Project | null> {
@@ -40,8 +45,58 @@ export class PrismaProjectRepository implements ProjectRepository {
   }
 
   public async create(project: Project): Promise<void> {
-    await this.prismaConnection.project.create({
-      data: ProjectMapper.toPersistence(project),
-    });
+    await Promise.all([
+      this.prismaConnection.project.create({
+        data: ProjectMapper.toPersistence(project),
+      }),
+      this.cache.delete(`account-${project.ownerId.toValue()}:projects:*`),
+    ]);
+  }
+
+  public async fetchManyByOwnerId(
+    ownerId: UniqueEntityID,
+    pagination: Pagination,
+  ): Promise<{
+    projects: Array<Project>;
+    total: number;
+  }> {
+    const CACHE_KEY = `account-${ownerId.toValue()}:projects:limit-${pagination.limit}:page-${pagination.page}`;
+    const cacheHit = await this.cache.get(CACHE_KEY);
+
+    if (cacheHit) {
+      const projects = JSON.parse(cacheHit) as Array<PrismaProject>;
+
+      return {
+        projects: projects.map(ProjectMapper.toDomain),
+        total: projects.length,
+      };
+    }
+
+    const [projects, total] = await Promise.all([
+      this.prismaConnection.project.findMany({
+        take: pagination.take,
+        skip: pagination.skip,
+        where: {
+          ownerId: ownerId.toValue(),
+        },
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
+      }),
+      this.prismaConnection.project.count({
+        where: {
+          ownerId: ownerId.toValue(),
+        },
+      }),
+    ]);
+
+    await this.cache.set(CACHE_KEY, JSON.stringify(projects));
+
+    return {
+      projects: projects.map(ProjectMapper.toDomain),
+      total,
+    };
   }
 }

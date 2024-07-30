@@ -1,3 +1,4 @@
+import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
 import { Project } from "@/modules/project/domain/entity/project";
@@ -20,5 +21,20 @@ export class FakeProjectRepository implements ProjectRepository {
 
   public async create(project: Project): Promise<void> {
     this.projects.push(project);
+  }
+
+  public async fetchManyByOwnerId(
+    ownerId: UniqueEntityID,
+    pagination: Pagination,
+  ): Promise<{
+    projects: Array<Project>;
+    total: number;
+  }> {
+    const projects = this.projects.filter((n) => n.ownerId.equals(ownerId));
+
+    return {
+      projects: projects.slice(pagination.skip, pagination.take),
+      total: projects.length,
+    };
   }
 }
