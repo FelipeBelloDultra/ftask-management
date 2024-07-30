@@ -19,7 +19,16 @@ export class Pagination extends ValueObject<PaginationProps> {
   }
 
   public get take() {
-    return this.props.page * this.props.limit;
+    return this.props.limit;
+  }
+
+  public calculate(totalItems: number) {
+    return {
+      totalPages: Math.ceil(totalItems / this.props.limit),
+      currentPage: this.props.page,
+      hasNextPage: this.props.page * this.props.limit < totalItems,
+      hasPreviousPage: this.props.page > 1,
+    };
   }
 
   public static create(props: PaginationProps): Pagination {

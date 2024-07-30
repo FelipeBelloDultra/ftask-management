@@ -13,7 +13,7 @@ type Input = {
   page: number;
 };
 type OnError = never;
-type OnSuccess = { notifications: Notification[]; total: number };
+type OnSuccess = { notifications: Notification[]; pagination: Pagination; total: number };
 type Output = Either<OnError, OnSuccess>;
 
 @injectable()
@@ -26,17 +26,16 @@ export class FetchNotificationsByRecipientIdUseCase {
   public async execute(input: Input): Promise<Output> {
     const accountId = UniqueEntityID.create(input.recipientId);
 
-    const { notifications, total } = await this.notificationRepository.fetchManyByRecipientId(
-      accountId,
-      Pagination.create({
-        limit: input.limit,
-        page: input.page,
-      }),
-    );
+    const pagination = Pagination.create({
+      limit: input.limit,
+      page: input.page,
+    });
+    const { notifications, total } = await this.notificationRepository.fetchManyByRecipientId(accountId, pagination);
 
     return right({
       notifications,
       total,
+      pagination,
     });
   }
 }
