@@ -21,6 +21,7 @@ export class AccountMapper {
       email: account.email,
       id: account.id.toValue(),
       name: account.name,
+      pictureUrl: null,
       password: await account.password.getHashed(),
     };
   }

@@ -17,7 +17,7 @@ export class ProjectMapper {
     return Project.create(
       {
         description: prismaProject.description,
-        dueDate: prismaProject.due_date ? DueDate.create(prismaProject.due_date) : null,
+        dueDate: prismaProject.dueDate ? DueDate.create(prismaProject.dueDate) : null,
         status: ProjectStatus.create(status[prismaProject.status]),
         name: prismaProject.name,
         ownerId: UniqueEntityID.create(prismaProject.ownerId),
@@ -33,11 +33,12 @@ export class ProjectMapper {
   public static toPersistence(project: Project): PrismaProject {
     return {
       id: project.id.toValue(),
+      iconUrl: "",
       name: project.name,
       slug: project.slug.value,
       description: project.description,
       ownerId: project.ownerId.toValue(),
-      due_date: project.dueDate ? project.dueDate.value : null,
+      dueDate: project.dueDate ? project.dueDate.value : null,
       status: project.status.value,
       createdAt: project.createdAt,
       updatedAt: project.updatedAt,

@@ -1,4 +1,4 @@
-import { Notifications as PrismaNotification } from "@prisma/client";
+import { Notification as PrismaNotification } from "@prisma/client";
 
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { Notification } from "@/modules/notification/domain/entity/notification";

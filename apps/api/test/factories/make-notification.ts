@@ -30,7 +30,7 @@ export class NotificationFactory {
   public async makePrismaNotification(override: Partial<NotificationProps> = {}, id?: UniqueEntityID) {
     const notification = makeNotification(override, id);
 
-    await this.prismaConnection.notifications.create({
+    await this.prismaConnection.notification.create({
       data: NotificationMapper.toPersistence(notification),
     });
 

@@ -1,4 +1,4 @@
-import { Notifications as PrismaNotification } from "@prisma/client";
+import { Notification as PrismaNotification } from "@prisma/client";
 import { inject, injectable } from "tsyringe";
 
 import { Pagination } from "@/core/entity/pagination";
@@ -21,7 +21,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
 
   public async create(notification: Notification): Promise<void> {
     await Promise.all([
-      this.prismaConnection.notifications.create({
+      this.prismaConnection.notification.create({
         data: NotificationMapper.toPersistence(notification),
       }),
       this.cache.delete(`account-${notification.recipientId.toValue()}:notifications:*`),
@@ -30,7 +30,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
 
   public async save(notification: Notification): Promise<void> {
     await Promise.all([
-      this.prismaConnection.notifications.update({
+      this.prismaConnection.notification.update({
         where: {
           id: notification.id.toValue(),
         },
@@ -41,7 +41,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
   }
 
   public async findById(id: UniqueEntityID): Promise<Notification | null> {
-    const notification = await this.prismaConnection.notifications.findUnique({
+    const notification = await this.prismaConnection.notification.findUnique({
       where: {
         id: id.toValue(),
       },
@@ -72,7 +72,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
     }
 
     const [notifications, notificationsCount] = await Promise.all([
-      this.prismaConnection.notifications.findMany({
+      this.prismaConnection.notification.findMany({
         take: pagination.take,
         skip: pagination.skip,
         where: {
@@ -84,7 +84,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
           },
         ],
       }),
-      this.prismaConnection.notifications.count({
+      this.prismaConnection.notification.count({
         where: {
           recipientId: recipientId.toValue(),
         },
