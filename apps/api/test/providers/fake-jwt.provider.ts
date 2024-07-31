@@ -9,6 +9,10 @@ export class FakeJwtProvider implements JwtProvider {
   }
 
   public async decrypt<Payload extends object>(token: string): Promise<Payload> {
+    if (token === "throwError") {
+      throw new Error();
+    }
+
     return Promise.resolve({ token } as Payload);
   }
 }

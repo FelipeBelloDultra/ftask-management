@@ -4,6 +4,7 @@ import "../container";
 
 import { Server } from "node:http";
 
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
@@ -78,6 +79,7 @@ export class App {
     this.expressInstance.use(cors());
     this.expressInstance.use(morgan("short"));
     this.expressInstance.use(helmet());
+    this.expressInstance.use(cookieParser());
     this.registerRoutes();
     this.setGlobalErrorHandler();
   }

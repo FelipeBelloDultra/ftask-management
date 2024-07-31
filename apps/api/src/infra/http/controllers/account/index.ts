@@ -4,17 +4,20 @@ import { Controller } from "@/infra/http/controller";
 
 import { AuthenticateAccountController } from "./authenticate-account.controller";
 import { CreateAccountController } from "./create-account.controller";
+import { RefreshTokenController } from "./refresh-token.controller";
 import { ShowAuthenticatedAccountController } from "./show-authenticated-account.controller";
 
 const createAccountController = new CreateAccountController();
 const authenticateAccountController = new AuthenticateAccountController();
 const showAuthenticatedAccountController = new ShowAuthenticatedAccountController();
+const refreshTokenController = new RefreshTokenController();
 
 export class AccountRoutes {
   private readonly controllers: Array<Controller> = [
     createAccountController,
     authenticateAccountController,
     showAuthenticatedAccountController,
+    refreshTokenController,
   ];
   public readonly router = Router();
 
