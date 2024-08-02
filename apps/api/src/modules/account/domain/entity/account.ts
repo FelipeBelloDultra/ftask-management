@@ -1,5 +1,6 @@
 import { Entity } from "@/core/entity/entity";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { Optional } from "@/core/types/optional";
 
 import { Password } from "./value-objects/password";
 
@@ -7,6 +8,7 @@ export interface AccountProps {
   name: string;
   email: string;
   password: Password;
+  pictureUrl: string | null;
 }
 
 export class Account extends Entity<AccountProps> {
@@ -22,7 +24,17 @@ export class Account extends Entity<AccountProps> {
     return this.props.password;
   }
 
-  public static create(props: AccountProps, id?: UniqueEntityID) {
-    return new Account(props, id);
+  public get pictureUrl() {
+    return this.props.pictureUrl;
+  }
+
+  public static create(props: Optional<AccountProps, "pictureUrl">, id?: UniqueEntityID) {
+    return new Account(
+      {
+        ...props,
+        pictureUrl: props.pictureUrl ?? null,
+      },
+      id,
+    );
   }
 }

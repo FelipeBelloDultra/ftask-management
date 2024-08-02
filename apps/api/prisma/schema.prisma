@@ -48,7 +48,7 @@ model ProjectHasMember {
 model Project {
   id          String        @id @default(uuid())
   slug        String        @unique
-  iconUrl     String        @map("icon_url")
+  iconUrl     String?       @map("icon_url")
   name        String
   description String?
   status      ProjectStatus @default(active)

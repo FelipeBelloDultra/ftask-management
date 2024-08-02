@@ -11,6 +11,7 @@ export class AccountMapper {
         email: prismaAccount.email,
         name: prismaAccount.name,
         password: Password.create(prismaAccount.password, true),
+        pictureUrl: prismaAccount.pictureUrl,
       },
       UniqueEntityID.create(prismaAccount.id),
     );
@@ -21,7 +22,7 @@ export class AccountMapper {
       email: account.email,
       id: account.id.toValue(),
       name: account.name,
-      pictureUrl: null,
+      pictureUrl: account.pictureUrl,
       password: await account.password.getHashed(),
     };
   }

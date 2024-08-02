@@ -12,6 +12,7 @@ export function makeAccount(override: Partial<AccountProps> = {}, id?: UniqueEnt
     {
       email: faker.internet.email(),
       name: faker.person.fullName(),
+      pictureUrl: null,
       password: Password.create(faker.internet.password()),
       ...override,
     },

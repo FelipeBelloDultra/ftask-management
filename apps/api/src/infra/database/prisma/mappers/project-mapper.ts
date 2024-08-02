@@ -25,6 +25,7 @@ export class ProjectMapper {
         createdAt: prismaProject.createdAt,
         updatedAt: prismaProject.updatedAt,
         deletedAt: prismaProject.deletedAt,
+        iconUrl: prismaProject.iconUrl,
       },
       UniqueEntityID.create(prismaProject.id),
     );
@@ -33,7 +34,7 @@ export class ProjectMapper {
   public static toPersistence(project: Project): PrismaProject {
     return {
       id: project.id.toValue(),
-      iconUrl: "",
+      iconUrl: project.iconUrl,
       name: project.name,
       slug: project.slug.value,
       description: project.description,

@@ -16,6 +16,7 @@ export interface ProjectProps {
   deletedAt: Date | null;
   updatedAt: Date;
   createdAt: Date;
+  iconUrl: string | null;
 }
 
 export class Project extends Entity<ProjectProps> {
@@ -55,6 +56,10 @@ export class Project extends Entity<ProjectProps> {
     return this.props.createdAt;
   }
 
+  public get iconUrl() {
+    return this.props.iconUrl;
+  }
+
   private edited() {
     this.props.updatedAt = new Date();
   }
@@ -88,7 +93,7 @@ export class Project extends Entity<ProjectProps> {
   }
 
   public static create(
-    props: Optional<ProjectProps, "createdAt" | "updatedAt" | "status" | "slug" | "deletedAt">,
+    props: Optional<ProjectProps, "createdAt" | "updatedAt" | "status" | "slug" | "deletedAt" | "iconUrl">,
     id?: UniqueEntityID,
   ): Project {
     return new Project(
@@ -97,6 +102,7 @@ export class Project extends Entity<ProjectProps> {
         deletedAt: props.deletedAt ?? null,
         updatedAt: props.updatedAt ?? new Date(),
         createdAt: props.updatedAt ?? new Date(),
+        iconUrl: props.iconUrl ?? null,
         status: props.status ?? ProjectStatus.create(),
         slug: props.slug ?? Slug.createFromText(props.name),
       },
