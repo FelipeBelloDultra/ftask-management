@@ -33,6 +33,14 @@ function validateSchema() {
 export class Env {
   private static readonly schema = validateSchema();
 
+  public static getFullStoragePath(value: string) {
+    if (Env.storageDriverIs(["aws"])) {
+      return `${Env.get("AWS_ENDPOINT")}/${Env.get("AWS_BUCKET")}/${value}`;
+    }
+
+    return value;
+  }
+
   public static storageDriverIs(storages: Array<"local" | "aws">) {
     const storageDriver = this.get("STORAGE_DRIVER");
 

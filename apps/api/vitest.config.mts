@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 

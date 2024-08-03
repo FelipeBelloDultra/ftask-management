@@ -11,10 +11,6 @@ export class PictureUrl extends ValueObject<string> {
   }
 
   public getFullUrl() {
-    if (Env.storageDriverIs(["aws"])) {
-      return `${Env.get("AWS_ENDPOINT")}/${Env.get("AWS_BUCKET")}/${this.props}`;
-    }
-
-    return this.props;
+    return Env.getFullStoragePath(this.props);
   }
 }

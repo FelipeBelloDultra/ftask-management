@@ -21,7 +21,7 @@ router.get(
 );
 router.patch(
   "/account/upload/picture",
-  // ensureAuthenticatedMiddleware.handle(),
+  ensureAuthenticatedMiddleware.handle(),
   uploadSingleFileMiddleware.handle("picture"),
   new UploadAccountPictureController().handler,
 );

@@ -15,6 +15,7 @@ describe("Project", () => {
     expect(sut.description).toBeDefined();
     expect(sut.dueDate).toBeDefined();
     expect(sut.createdAt).toBeDefined();
+    expect(sut.iconUrl).toBeNull();
   });
 
   it("should update time on archive/delete a project", () => {
