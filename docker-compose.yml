@@ -24,10 +24,28 @@ services:
         networks:
             - ftask-management_net
 
+    localstack:
+        image: localstack/localstack:3.6.0
+        ports:
+            - 4566-4583:4566-4583
+        environment:
+            - EDGE_PORT=4566
+            - DEBUG=1
+            - AWS_ACCESS_KEY_ID=test
+            - AWS_SECRET_ACCESS_KEY=test
+            - AWS_DEFAULT_REGION=us-east-1
+        volumes:
+            - localstack_volume:/var/lib/localstack
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - ftask-management_net
+
 volumes:
     postgresql_data:
         driver: local
     redis_cache:
+        driver: local
+    localstack_volume:
         driver: local
 
 networks:
