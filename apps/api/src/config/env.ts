@@ -14,6 +14,7 @@ const SCHEMA = z.object({
   AWS_SECRET_ACCESS_KEY: z.string(),
   AWS_DEFAULT_REGION: z.string(),
   AWS_BUCKET: z.string(),
+  AWS_ENDPOINT: z.string(),
 });
 
 type Schema = z.infer<typeof SCHEMA>;
