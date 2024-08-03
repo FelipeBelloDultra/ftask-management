@@ -9,6 +9,7 @@ import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
+import { MulterError } from "multer";
 import { container } from "tsyringe";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
@@ -61,6 +62,14 @@ export class App {
           status_code: err.statusCode,
           message: err.message,
           errors: err.errors,
+        });
+      }
+
+      if (err instanceof MulterError) {
+        return response.status(400).json({
+          status_code: 400,
+          message: err.message,
+          errors: [],
         });
       }
 

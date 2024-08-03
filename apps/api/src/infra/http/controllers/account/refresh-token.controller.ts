@@ -2,10 +2,9 @@ import { Request, Response } from "express";
 import { z } from "zod";
 
 import { Controller } from "@/infra/http/controller";
+import { HttpException } from "@/infra/http/http-exception";
 import { InvalidRefreshToken } from "@/modules/account/application/use-cases/errors/invalid-refresh-token.error";
 import { makeRefreshToken } from "@/modules/account/application/use-cases/factories/make-refresh-token";
-
-import { HttpException } from "../../http-exception";
 
 const schemaCookie = z.object({
   refresh_token: z.string(),

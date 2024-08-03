@@ -1,21 +1,15 @@
 import { Router } from "express";
 
 import { ensureAuthenticatedMiddleware } from "@/infra/http/middlewares/factories/make-ensure-authenticated";
+import { uploadSingleFileMiddleware } from "@/infra/http/middlewares/factories/make-upload-single-file";
 
 import { AuthenticateAccountController } from "./authenticate-account.controller";
 import { CreateAccountController } from "./create-account.controller";
 import { RefreshTokenController } from "./refresh-token.controller";
 import { ShowAuthenticatedAccountController } from "./show-authenticated-account.controller";
-import { UploadAccountIconController } from "./upload-account-icon.controller";
+import { UploadAccountPictureController } from "./upload-account-picture.controller";
 
 const router = Router();
-
-// multer({
-//   storage: multer.memoryStorage(),
-//   limits: {
-//     fileSize: 2 * 1024 * 1024, // limit file size to 2MB
-//   },
-// }).single("file"),
 
 router.post("/account/session", new AuthenticateAccountController().handler);
 router.post("/account", new CreateAccountController().handler);
@@ -25,6 +19,11 @@ router.get(
   ensureAuthenticatedMiddleware.handle(),
   new ShowAuthenticatedAccountController().handler,
 );
-router.patch("/account/upload/icon", new UploadAccountIconController().handler);
+router.patch(
+  "/account/upload/picture",
+  ensureAuthenticatedMiddleware.handle(),
+  uploadSingleFileMiddleware.handle("picture"),
+  new UploadAccountPictureController().handler,
+);
 
 export { router };

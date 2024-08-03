@@ -28,6 +28,10 @@ export class Account extends Entity<AccountProps> {
     return this.props.pictureUrl;
   }
 
+  public set pictureUrl(value: string | null) {
+    this.props.pictureUrl = value;
+  }
+
   public static create(props: Optional<AccountProps, "pictureUrl">, id?: UniqueEntityID) {
     return new Account(
       {
