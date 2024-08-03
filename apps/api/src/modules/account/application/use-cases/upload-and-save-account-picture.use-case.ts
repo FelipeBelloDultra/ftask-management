@@ -6,6 +6,7 @@ import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { Account } from "@/modules/account/domain/entity/account";
 import { AccountNotFoundError } from "@/modules/project/application/use-cases/errors/account-not-found.error";
 
+import { PictureUrl } from "../../domain/entity/value-objects/picture-url";
 import { AccountRepository } from "../repositories/account.repository";
 
 import { InvalidAccountPictureTypeError } from "./errors/invalid-account-picture-type.error";
@@ -47,7 +48,7 @@ export class UploadAndSaveAccountPictureUseCase {
       fileType: input.fileType,
     });
 
-    account.pictureUrl = url;
+    account.pictureUrl = PictureUrl.create(url);
 
     await this.accountRepository.save(account);
 

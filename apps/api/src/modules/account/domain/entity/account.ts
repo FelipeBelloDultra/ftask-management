@@ -3,12 +3,13 @@ import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { Optional } from "@/core/types/optional";
 
 import { Password } from "./value-objects/password";
+import { PictureUrl } from "./value-objects/picture-url";
 
 export interface AccountProps {
   name: string;
   email: string;
   password: Password;
-  pictureUrl: string | null;
+  pictureUrl: PictureUrl | null;
 }
 
 export class Account extends Entity<AccountProps> {
@@ -28,7 +29,7 @@ export class Account extends Entity<AccountProps> {
     return this.props.pictureUrl;
   }
 
-  public set pictureUrl(value: string | null) {
+  public set pictureUrl(value: PictureUrl | null) {
     this.props.pictureUrl = value;
   }
 

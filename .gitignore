@@ -36,5 +36,5 @@ yarn-error.log*
 
 requirements.md
 
-apps/api/storage/logs/*
-!apps/api/storage/logs/.gitkeep
+apps/api/storage/**/*
+!apps/api/storage/**/.gitkeep

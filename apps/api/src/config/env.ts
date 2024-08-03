@@ -33,6 +33,12 @@ function validateSchema() {
 export class Env {
   private static readonly schema = validateSchema();
 
+  public static storageDriverIs(storages: Array<"local" | "aws">) {
+    const storageDriver = this.get("STORAGE_DRIVER");
+
+    return storages.includes(storageDriver);
+  }
+
   public static environmentIs(envs: Array<"production" | "development" | "test">) {
     const nodeEnv = this.get("NODE_ENV");
 
