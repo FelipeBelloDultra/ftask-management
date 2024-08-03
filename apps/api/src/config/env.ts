@@ -10,6 +10,10 @@ const SCHEMA = z.object({
   REDIS_PORT: z.coerce.number().default(6379),
   REDIS_DB: z.coerce.number().default(0),
   REDIS_PASSWORD: z.string(),
+  AWS_ACCESS_KEY_ID: z.string(),
+  AWS_SECRET_ACCESS_KEY: z.string(),
+  AWS_DEFAULT_REGION: z.string(),
+  AWS_BUCKET: z.string(),
 });
 
 type Schema = z.infer<typeof SCHEMA>;
