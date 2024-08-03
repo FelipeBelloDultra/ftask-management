@@ -13,7 +13,7 @@ export class EnsureAuthenticatedMiddleware implements Middleware {
     private readonly jwtProvider: JwtProvider,
   ) {}
 
-  public handler() {
+  public handle() {
     return async (req: Request, res: Response, next: NextFunction) => {
       const authHeader = req.headers.authorization;
       if (!authHeader) {

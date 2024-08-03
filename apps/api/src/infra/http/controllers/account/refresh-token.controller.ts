@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 
-import { Controller, ControllerMethods } from "@/infra/http/controller";
+import { Controller } from "@/infra/http/controller";
 import { InvalidRefreshToken } from "@/modules/account/application/use-cases/errors/invalid-refresh-token.error";
 import { makeRefreshToken } from "@/modules/account/application/use-cases/factories/make-refresh-token";
 
@@ -11,14 +11,7 @@ const schemaCookie = z.object({
   refresh_token: z.string(),
 });
 
-export class RefreshTokenController extends Controller {
-  public constructor() {
-    super({
-      method: ControllerMethods.PATCH,
-      path: "/account/session/refresh-token",
-    });
-  }
-
+export class RefreshTokenController implements Controller {
   public async handler(req: Request, res: Response): Promise<Response> {
     const parsedCookies = schemaCookie.safeParse(req.cookies);
 

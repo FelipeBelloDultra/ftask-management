@@ -100,7 +100,7 @@ export class App {
       await this.startServices();
 
       const server = this.expressInstance.listen(Env.get("HTTP_SERVER_PORT"));
-      // this.addGracefulShutdownHandlers(server);
+      this.addGracefulShutdownHandlers(server);
     } catch (error) {
       this.logger.error(error as unknown as object);
       this.stopServices();

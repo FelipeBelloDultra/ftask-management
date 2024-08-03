@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 
-import { Controller, ControllerMethods } from "@/infra/http/controller";
+import { Controller } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
 import { AccountPresenter } from "@/infra/presenters/account-presenter";
 import { AccountAlreadyExistsError } from "@/modules/account/application/use-cases/errors/account-already-exists.error";
@@ -13,14 +13,7 @@ const schema = z.object({
   password: z.string().min(6).max(255),
 });
 
-export class CreateAccountController extends Controller {
-  public constructor() {
-    super({
-      path: "/account",
-      method: ControllerMethods.POST,
-    });
-  }
-
+export class CreateAccountController implements Controller {
   public async handler(req: Request, res: Response) {
     const { email, name, password } = schema.parse(req.body);
 

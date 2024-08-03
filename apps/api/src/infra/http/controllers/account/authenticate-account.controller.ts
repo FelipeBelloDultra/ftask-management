@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 
-import { Controller, ControllerMethods } from "@/infra/http/controller";
+import { Controller } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
 import { InvalidCombinationError } from "@/modules/account/application/use-cases/errors/invalid-combination.error";
 import { makeAuthenticateAccount } from "@/modules/account/application/use-cases/factories/make-authenticate-account";
@@ -11,14 +11,7 @@ const schema = z.object({
   password: z.string().min(6).max(255),
 });
 
-export class AuthenticateAccountController extends Controller {
-  public constructor() {
-    super({
-      method: ControllerMethods.POST,
-      path: "/account/session",
-    });
-  }
-
+export class AuthenticateAccountController implements Controller {
   public async handler(req: Request, res: Response) {
     const { email, password } = schema.parse(req.body);
 

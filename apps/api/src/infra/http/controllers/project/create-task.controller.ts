@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 
-import { Controller, ControllerMethods } from "@/infra/http/controller";
+import { Controller } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
-import { makeEnsureAuthenticated } from "@/infra/http/middlewares/factories/make-ensure-authenticated";
 import { TaskPresenter } from "@/infra/presenters/task-presenter";
 import { NotAllowedError } from "@/modules/project/application/use-cases/errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "@/modules/project/application/use-cases/errors/project-member-not-found.error";
@@ -22,15 +21,7 @@ const routeParamSchema = z.object({
   projectId: z.string().uuid(),
 });
 
-export class CreateTaskController extends Controller {
-  public constructor() {
-    super({
-      method: ControllerMethods.POST,
-      path: "/projects/:projectId/task",
-      middlewares: [makeEnsureAuthenticated()],
-    });
-  }
-
+export class CreateTaskController implements Controller {
   public async handler(req: Request, res: Response): Promise<Response> {
     const { description, due_date, title, assignee_id } = schema.parse(req.body);
     const { projectId } = routeParamSchema.parse(req.params);

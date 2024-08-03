@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 
-import { Controller, ControllerMethods } from "@/infra/http/controller";
+import { Controller } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
-import { makeEnsureAuthenticated } from "@/infra/http/middlewares/factories/make-ensure-authenticated";
 import { MemberWithProjectPresenter } from "@/infra/presenters/member-with-project-presenter";
 import { MemberNotFoundError } from "@/modules/project/application/use-cases/errors/member-not-found.error";
 import { NotAllowedError } from "@/modules/project/application/use-cases/errors/not-allowed.error";
@@ -19,15 +18,7 @@ const routeParamSchema = z.object({
   projectId: z.string().uuid(),
 });
 
-export class AddProjectMemberController extends Controller {
-  public constructor() {
-    super({
-      method: ControllerMethods.POST,
-      path: "/projects/:projectId/member",
-      middlewares: [makeEnsureAuthenticated()],
-    });
-  }
-
+export class AddProjectMemberController implements Controller {
   public async handler(req: Request, res: Response): Promise<Response> {
     const { member_email } = schema.parse(req.body);
     const { projectId } = routeParamSchema.parse(req.params);
