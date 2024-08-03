@@ -11,6 +11,7 @@ export class S3Storage implements UploaderProvider {
   public constructor() {
     this.client = new S3Client({
       region: Env.get("AWS_DEFAULT_REGION"),
+      forcePathStyle: true,
       endpoint: Env.get("AWS_ENDPOINT"),
       credentials: {
         accessKeyId: Env.get("AWS_ACCESS_KEY_ID"),
