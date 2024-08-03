@@ -43,4 +43,13 @@ export class PrismaAccountRepository implements AccountRepository {
       data: await AccountMapper.toPersistence(account),
     });
   }
+
+  public async save(account: Account): Promise<void> {
+    await this.prismaConnection.account.update({
+      where: {
+        id: account.id.toValue(),
+      },
+      data: await AccountMapper.toPersistence(account),
+    });
+  }
 }

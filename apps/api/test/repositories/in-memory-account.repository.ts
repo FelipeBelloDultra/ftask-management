@@ -20,4 +20,12 @@ export class InMemoryAccountRepository implements AccountRepository {
   public async create(account: Account): Promise<void> {
     this.accounts.push(account);
   }
+
+  public async save(account: Account): Promise<void> {
+    const accountsIndex = this.accounts.findIndex((n) => n.id.equals(account.id));
+
+    if (accountsIndex !== -1) {
+      this.accounts[accountsIndex] = account;
+    }
+  }
 }

@@ -5,4 +5,5 @@ export interface AccountRepository {
   findById(accountId: UniqueEntityID): Promise<Account | null>;
   findByEmail(email: string): Promise<Account | null>;
   create(account: Account): Promise<void>;
+  save(accountL: Account): Promise<void>;
 }
