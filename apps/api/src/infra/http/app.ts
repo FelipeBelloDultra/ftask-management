@@ -117,6 +117,9 @@ export class App {
   }
 
   private addGracefulShutdownHandlers(server: Server) {
+    return;
+
+    // TODO: Fix this graceful shutdown strategy
     ["uncaughtException", "unhandledRejection", "SIGTERM", "SIGINT"].forEach((event) => {
       process.on(event, async () => {
         const time = new Date().getTime();
