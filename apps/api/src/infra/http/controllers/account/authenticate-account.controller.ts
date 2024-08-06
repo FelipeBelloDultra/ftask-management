@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { Controller } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
+import { AccountPresenter } from "@/infra/presenters/account-presenter";
 import { InvalidCombinationError } from "@/modules/account/application/use-cases/errors/invalid-combination.error";
 import { makeAuthenticateAccount } from "@/modules/account/application/use-cases/factories/make-authenticate-account";
 
@@ -22,7 +23,7 @@ export class AuthenticateAccountController implements Controller {
     });
 
     if (result.isRight()) {
-      const { accessToken, refreshToken } = result.value;
+      const { accessToken, refreshToken, account } = result.value;
 
       return res
         .cookie("refresh_token", refreshToken, {
@@ -35,6 +36,7 @@ export class AuthenticateAccountController implements Controller {
         .json({
           data: {
             token: accessToken,
+            user: AccountPresenter.toHTTP(account),
           },
         });
     }

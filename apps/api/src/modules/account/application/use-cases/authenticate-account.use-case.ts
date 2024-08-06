@@ -3,6 +3,7 @@ import { inject, injectable } from "tsyringe";
 import { JwtProvider } from "@/application/providers/jwt.provider";
 import { Either, left, right } from "@/core/either";
 import { AccountRepository } from "@/modules/account/application/repositories/account.repository";
+import { Account } from "@/modules/account/domain/entity/account";
 
 import { InvalidCombinationError } from "./errors/invalid-combination.error";
 
@@ -14,6 +15,7 @@ type OnError = InvalidCombinationError;
 type OnSuccess = {
   accessToken: string;
   refreshToken: string;
+  account: Account;
 };
 type Output = Either<OnError, OnSuccess>;
 
@@ -49,6 +51,7 @@ export class AuthenticateAccountUseCase {
     return right({
       accessToken,
       refreshToken,
+      account,
     });
   }
 }

@@ -1,6 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -24,8 +26,16 @@ export function SignInForm() {
     resolver: zodResolver(signInSchema),
   });
 
-  function submitForm(data: SignInFormSchema) {
-    console.log(data);
+  const router = useRouter();
+
+  async function submitForm(data: SignInFormSchema) {
+    await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
+
+    router.replace("/dash");
   }
 
   return (

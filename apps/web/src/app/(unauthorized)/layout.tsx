@@ -1,12 +1,21 @@
 import { Terminal as TerminalIcon } from "lucide-react";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
 
 import { AuthActionButton } from "@/components/auth-action-button";
+import { nextAuthOptions } from "@/config/next-auth";
 
-export default function AuthLayout({
+export default async function UnauthorizedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(nextAuthOptions);
+
+  if (session) {
+    redirect("/dash");
+  }
+
   return (
     <section className="flex min-h-screen">
       <aside className="flex flex-col justify-between w-1/2 p-8 bg-zinc-900 text-white">
