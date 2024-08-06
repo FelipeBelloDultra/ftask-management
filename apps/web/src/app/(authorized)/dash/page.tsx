@@ -3,7 +3,6 @@ import { setTimeout } from "node:timers/promises";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 
-import { LogoutButton } from "@/components/logout-button";
 import { nextAuthOptions } from "@/config/next-auth";
 
 export default async function DashPage() {
@@ -18,8 +17,6 @@ export default async function DashPage() {
     <>
       <div>Main dashboard page</div>
       <nav className="flex items-center space-x-4">{session.user.name}</nav>
-
-      <LogoutButton />
     </>
   );
 }
