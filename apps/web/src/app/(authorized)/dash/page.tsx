@@ -1,27 +1,25 @@
-"use client";
+import { setTimeout } from "node:timers/promises";
 
-import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
 
-import { Button } from "@/components/ui/button";
+import { LogoutButton } from "@/components/logout-button";
+import { nextAuthOptions } from "@/config/next-auth";
 
-export default function DashPage() {
-  const router = useRouter();
+export default async function DashPage() {
+  const session = await getServerSession(nextAuthOptions);
+  await setTimeout(3000);
 
-  async function logoutUser() {
-    await signOut({
-      redirect: false,
-    });
-    router.replace("/sign-in");
+  if (!session) {
+    redirect("/sign-in");
   }
 
   return (
     <>
       <div>Main dashboard page</div>
+      <nav className="flex items-center space-x-4">{session.user.name}</nav>
 
-      <Button onClick={logoutUser} variant="outline">
-        Logout
-      </Button>
+      <LogoutButton />
     </>
   );
 }

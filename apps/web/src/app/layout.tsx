@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 
+import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import { SessionProvider } from "@/providers/session-provider";
 
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn("dark min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         <SessionProvider>{children}</SessionProvider>
+        <Toaster />
       </body>
     </html>
   );
