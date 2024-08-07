@@ -1,6 +1,9 @@
 import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
-import { NotificationRepository } from "@/modules/notification/application/repositories/notification.repository";
+import {
+  CountByRecipientIdFilters,
+  NotificationRepository,
+} from "@/modules/notification/application/repositories/notification.repository";
 import { Notification } from "@/modules/notification/domain/entity/notification";
 
 export class InMemoryNotificationRepository implements NotificationRepository {
@@ -40,6 +43,21 @@ export class InMemoryNotificationRepository implements NotificationRepository {
     return {
       notifications: notifications.slice(pagination.skip, pagination.take),
       total: notifications.length,
+    };
+  }
+
+  public async countByRecipientId(
+    recipientId: UniqueEntityID,
+    filters: CountByRecipientIdFilters,
+  ): Promise<{ total: number }> {
+    const notificationCount = this.notifications.filter((notification) => {
+      return (
+        notification.recipientId.equals(recipientId) && (filters.read ? !!notification.readAt : !notification.readAt)
+      );
+    }).length;
+
+    return {
+      total: notificationCount,
     };
   }
 }

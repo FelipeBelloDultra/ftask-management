@@ -4,7 +4,10 @@ import { inject, injectable } from "tsyringe";
 import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { CacheRepository } from "@/infra/cache/cache.repository";
-import { NotificationRepository } from "@/modules/notification/application/repositories/notification.repository";
+import {
+  CountByRecipientIdFilters,
+  NotificationRepository,
+} from "@/modules/notification/application/repositories/notification.repository";
 import { Notification } from "@/modules/notification/domain/entity/notification";
 
 import { NotificationMapper } from "../mappers/notification-mapper";
@@ -95,6 +98,36 @@ export class PrismaNotificationRepository implements NotificationRepository {
 
     return {
       notifications: notifications.map(NotificationMapper.toDomain),
+      total: notificationsCount,
+    };
+  }
+  public async countByRecipientId(
+    recipientId: UniqueEntityID,
+    filters: CountByRecipientIdFilters,
+  ): Promise<{
+    total: number;
+  }> {
+    const CACHE_KEY = `account-${recipientId.toValue()}:notifications:count:read-${filters.read}`;
+    const cacheHit = await this.cache.get(CACHE_KEY);
+
+    if (cacheHit) {
+      const notificationsCount = Number(cacheHit);
+
+      return {
+        total: notificationsCount,
+      };
+    }
+
+    const notificationsCount = await this.prismaConnection.notification.count({
+      where: {
+        recipientId: recipientId.toValue(),
+        readAt: filters.read ? { not: null } : null,
+      },
+    });
+
+    await this.cache.set(CACHE_KEY, JSON.stringify(notificationsCount));
+
+    return {
       total: notificationsCount,
     };
   }
