@@ -11,7 +11,10 @@ export default async function AuthorizedLayout({
 }>) {
   return (
     <span>
-      <Header />
+      <Suspense fallback={<Header.Loading />}>
+        <Header.Root />
+      </Suspense>
+
       <Suspense fallback={<Loading />}>{children}</Suspense>
     </span>
   );

@@ -1,11 +1,12 @@
 "use client";
+
 import { LogOut as LogOutIcon, UserPen as UserPenIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,9 +14,28 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
-export function ProfileHeader() {
+interface HeaderProfileProps {
+  user: {
+    email: string;
+    pictureUrl: string | null;
+    name: string;
+  };
+}
+
+function getInitials(name: string) {
+  const words = name.trim().split(/\s+/);
+
+  const initials = words
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join("");
+
+  return initials;
+}
+
+export function HeaderProfile({ user }: HeaderProfileProps) {
   const router = useRouter();
 
   async function logoutUser() {
@@ -31,13 +51,17 @@ export function ProfileHeader() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full">
           <Avatar>
-            <AvatarImage width={32} height={32} src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
+            {user.pictureUrl ? <AvatarImage width={32} height={32} src={user.pictureUrl} /> : null}
+            <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <p className="truncate">{user.email}</p>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <div className="flex flex-col gap-2">
           <DropdownMenuItem asChild>
