@@ -7,13 +7,17 @@ function getNotificationIcon(hasUnread = false) {
   return hasUnread ? BellDotIcon : BellIcon;
 }
 
-export function HeaderNotifications() {
-  const hasUnreadNotification = true;
+interface HeaderNotificationsProps {
+  total: number;
+}
+
+export function HeaderNotifications({ total = 0 }: HeaderNotificationsProps) {
+  const hasUnreadNotification = total > 0;
   const NotificationIcon = getNotificationIcon(hasUnreadNotification);
 
   return (
     <Button size="icon" asChild variant="outline">
-      <Link href="/dash/notifications" prefetch={false}>
+      <Link href={`/dash/notifications?read=${!hasUnreadNotification}`} prefetch={false}>
         <NotificationIcon size={20} />
       </Link>
     </Button>

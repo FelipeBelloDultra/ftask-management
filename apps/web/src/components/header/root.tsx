@@ -17,7 +17,7 @@ export async function HeaderRoot() {
       <HeaderNavigation />
 
       <section className="flex gap-4 items-center">
-        <HeaderNotifications />
+        <HeaderNotifications total={1} />
 
         <HeaderProfile
           user={{
