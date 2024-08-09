@@ -13,7 +13,7 @@ export async function HeaderRoot() {
   const user = useUserStore.getState().state.user;
 
   return (
-    <header className="flex justify-between items-center container h-20">
+    <header className="flex justify-between items-center h-20 px-4 border-b w-full">
       <HeaderNavigation />
 
       <section className="flex gap-4 items-center">

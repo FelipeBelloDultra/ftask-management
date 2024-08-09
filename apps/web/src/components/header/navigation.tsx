@@ -18,8 +18,8 @@ const mapping = {
   profile: {
     label: "Profile",
   },
-  edit: {
-    label: "Edit",
+  config: {
+    label: "Config",
   },
 } as {
   [key: string]: {

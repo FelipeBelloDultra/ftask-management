@@ -26,18 +26,13 @@ export const nextAuthOptions: NextAuthOptions = {
 
         const { data } = await response.json();
 
-        // TODO: Fix rule to refresh token
-        // const refreshToken = response.headers.get("set-cookie")?.split("=")[1].split(";")[0];
-        // if (!refreshToken) return null;
-        // cookies().set("refresh_token", refreshToken, {
-        //   httpOnly: true,
-        // });
+        const refreshToken = response.headers.get("set-cookie")?.split("=")[1].split(";")[0];
 
-        if (!data || !data.token || !data.user) {
+        if (!data || !data.token || !data.user || !refreshToken) {
           return null;
         }
 
-        return { ...data.user, token: data.token };
+        return { ...data.user, token: data.token, refreshToken };
       },
     }),
   ],

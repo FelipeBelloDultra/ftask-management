@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { Suspense } from "react";
 
 import { Header } from "@/components/header";
+import { Sidebar } from "@/components/sidebar";
 import { nextAuthOptions } from "@/config/next-auth";
 import { useUserStore } from "@/store/user";
 
@@ -30,12 +31,16 @@ export default async function AuthorizedLayout({
   });
 
   return (
-    <span>
-      <Suspense fallback={<Header.Loading />}>
-        <Header.Root />
-      </Suspense>
+    <main className="pl-72 pt-20 relative min-h-screen">
+      <Sidebar.Root />
 
-      {children}
-    </span>
+      <div className="fixed top-0 right-0 left-72 bg-zinc-950">
+        <Suspense fallback={<Header.Loading />}>
+          <Header.Root />
+        </Suspense>
+      </div>
+
+      <section className="h-full overflow-auto">{children}</section>
+    </main>
   );
 }

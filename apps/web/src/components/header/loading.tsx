@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function HeaderLoading() {
   return (
-    <header className="flex justify-between items-center container h-20">
+    <header className="flex justify-between items-center h-20 px-4 border-b w-full">
       <span className="inline-flex items-center h-5 gap-1.5">
         <Skeleton className="h-full w-20" />
         <ChevronRightIcon size={18} className="text-muted-foreground" />
