@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useUserStore } from "@/store/user";
 
 interface HeaderProfileProps {
   user: {
@@ -37,11 +38,13 @@ function getInitials(name: string) {
 
 export function HeaderProfile({ user }: HeaderProfileProps) {
   const router = useRouter();
+  const { actions } = useUserStore();
 
   async function logoutUser() {
     await signOut({
       redirect: false,
     });
+    actions.clearUser();
 
     router.replace("/sign-in");
   }

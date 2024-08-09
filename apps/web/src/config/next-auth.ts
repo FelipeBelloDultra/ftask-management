@@ -36,7 +36,6 @@ export const nextAuthOptions: NextAuthOptions = {
         if (!data || !data.token || !data.user) {
           return null;
         }
-        console.log(data);
 
         return { ...data.user, token: data.token };
       },
