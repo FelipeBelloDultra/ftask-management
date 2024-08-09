@@ -2,11 +2,11 @@ import { setTimeout } from "timers/promises";
 
 import { useUserStore } from "@/store/user";
 
-import { HeaderNavigation } from "./navigation";
-import { HeaderNotifications } from "./notifications";
-import { HeaderProfile } from "./profile";
+import { HeaderNavigation } from "./header-navigation";
+import { HeaderNotificationsButton } from "./header-notifications-button";
+import { HeaderProfileDropdown } from "./header-profile-dropdown";
 
-export async function HeaderRoot() {
+export async function Header() {
   await setTimeout(1500);
 
   const totalNotifications = 1;
@@ -17,9 +17,9 @@ export async function HeaderRoot() {
       <HeaderNavigation />
 
       <section className="flex gap-4 items-center">
-        <HeaderNotifications total={totalNotifications} />
+        <HeaderNotificationsButton total={totalNotifications} />
 
-        <HeaderProfile
+        <HeaderProfileDropdown
           user={{
             email: user.email,
             pictureUrl: user.pictureUrl,

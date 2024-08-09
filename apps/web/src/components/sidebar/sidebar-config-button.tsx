@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export function SidebarConfig() {
+export function SidebarConfigButton() {
   const pathname = usePathname();
   const isActive = pathname.includes("/dash/config");
 

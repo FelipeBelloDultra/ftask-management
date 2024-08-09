@@ -36,7 +36,7 @@ function getInitials(name: string) {
   return initials;
 }
 
-export function HeaderProfile({ user }: HeaderProfileProps) {
+export function HeaderProfileDropdown({ user }: HeaderProfileProps) {
   const router = useRouter();
   const { actions } = useUserStore();
 

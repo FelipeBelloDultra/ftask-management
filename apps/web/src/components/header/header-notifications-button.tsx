@@ -7,11 +7,11 @@ function getNotificationIcon(hasUnread = false) {
   return hasUnread ? BellDotIcon : BellIcon;
 }
 
-interface HeaderNotificationsProps {
+interface HeaderNotificationsButtonProps {
   total: number;
 }
 
-export function HeaderNotifications({ total = 0 }: HeaderNotificationsProps) {
+export function HeaderNotificationsButton({ total = 0 }: HeaderNotificationsButtonProps) {
   const hasUnreadNotification = total > 0;
   const NotificationIcon = getNotificationIcon(hasUnreadNotification);
 

@@ -1,7 +1,7 @@
-import { SidebarConfig } from "./configs";
-import { SidebarHeader } from "./header";
+import { SidebarConfigButton } from "./sidebar-config-button";
+import { SidebarHeader } from "./sidebar-header";
 
-export function SidebarRoot() {
+export function Sidebar() {
   return (
     <aside className="fixed w-72 h-full left-0 bottom-0 border-r flex flex-col bg-zinc-950">
       <SidebarHeader />
@@ -9,7 +9,7 @@ export function SidebarRoot() {
       <main className="px-4">content...</main>
 
       <footer className="mt-auto border-t p-4">
-        <SidebarConfig />
+        <SidebarConfigButton />
       </footer>
     </aside>
   );
