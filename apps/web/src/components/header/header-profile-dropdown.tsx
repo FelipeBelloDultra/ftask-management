@@ -56,7 +56,7 @@ export function HeaderProfileDropdown({ user }: HeaderProfileProps) {
         <DropdownMenuSeparator />
         <div className="flex flex-col gap-2">
           <DropdownMenuItem asChild>
-            <Link href="/dash/settings/profile" className="cursor-pointer text-muted-foreground">
+            <Link prefetch={false} href="/dash/settings/profile" className="cursor-pointer text-muted-foreground">
               <UserPenIcon className="mr-2" size={20} />
               Edit profile
             </Link>

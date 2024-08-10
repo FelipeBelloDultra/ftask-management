@@ -18,7 +18,9 @@ export default function SignInPage() {
       <SignInForm />
 
       <Button asChild variant="link">
-        <Link href="/sign-up">Don't have an account? Create now!</Link>
+        <Link prefetch={false} href="/sign-up">
+          Don't have an account? Create now!
+        </Link>
       </Button>
     </section>
   );

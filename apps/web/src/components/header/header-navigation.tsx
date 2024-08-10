@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 
-// TODO: Fix the mapping rules AND add ellipsis dropdown
 const mapping = {
   dash: {
     label: "Dashboard",
@@ -18,8 +18,8 @@ const mapping = {
   profile: {
     label: "Profile",
   },
-  config: {
-    label: "Config",
+  settings: {
+    label: "Settings",
   },
 } as {
   [key: string]: {
@@ -44,12 +44,14 @@ export function HeaderNavigation() {
           {index > 0 ? <ChevronRightIcon size={18} /> : null}
 
           {isLastSegment ? (
-            <BreadcrumbPage>{segmentLabel}</BreadcrumbPage>
+            <BreadcrumbPage className="px-2">{segmentLabel}</BreadcrumbPage>
           ) : (
             <BreadcrumbLink asChild>
-              <Link href={href} prefetch={false}>
-                {segmentLabel}
-              </Link>
+              <Button asChild variant="link" className="text-muted-foreground px-2 py-0">
+                <Link href={href} prefetch={false}>
+                  {segmentLabel}
+                </Link>
+              </Button>
             </BreadcrumbLink>
           )}
         </BreadcrumbItem>
