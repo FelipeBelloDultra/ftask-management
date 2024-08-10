@@ -2,8 +2,6 @@
 
 import { LogOut as LogOutIcon, UserPen as UserPenIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -15,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useUserStore } from "@/store/user";
+import { useAuth } from "@/hooks/use-auth";
 
 interface HeaderProfileProps {
   user: {
@@ -37,17 +35,7 @@ function getInitials(name: string) {
 }
 
 export function HeaderProfileDropdown({ user }: HeaderProfileProps) {
-  const router = useRouter();
-  const { actions } = useUserStore();
-
-  async function logoutUser() {
-    await signOut({
-      redirect: false,
-    });
-    actions.clearUser();
-
-    router.replace("/sign-in");
-  }
+  const { logoutUser } = useAuth();
 
   return (
     <DropdownMenu>
@@ -68,7 +56,7 @@ export function HeaderProfileDropdown({ user }: HeaderProfileProps) {
         <DropdownMenuSeparator />
         <div className="flex flex-col gap-2">
           <DropdownMenuItem asChild>
-            <Link href="/dash/config/profile" className="cursor-pointer text-muted-foreground">
+            <Link href="/dash/settings/profile" className="cursor-pointer text-muted-foreground">
               <UserPenIcon className="mr-2" size={20} />
               Edit profile
             </Link>

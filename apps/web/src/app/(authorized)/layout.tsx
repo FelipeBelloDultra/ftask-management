@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { Suspense } from "react";
 
 import { Header } from "@/components/header";
+import { PageContent } from "@/components/page-content";
 import { Sidebar } from "@/components/sidebar";
 import { nextAuthOptions } from "@/config/next-auth";
 import { useUserStore } from "@/store/user";
@@ -40,7 +41,7 @@ export default async function AuthorizedLayout({
         </Suspense>
       </div>
 
-      <section className="h-full overflow-auto">{children}</section>
+      <PageContent>{children}</PageContent>
     </main>
   );
 }
