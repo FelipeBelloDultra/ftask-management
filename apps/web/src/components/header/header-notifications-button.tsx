@@ -17,7 +17,7 @@ export function HeaderNotificationsButton({ total = 0 }: HeaderNotificationsButt
 
   return (
     <Button size="icon" asChild variant="outline">
-      <Link href={`/dash/notifications?read=${!hasUnreadNotification}`} prefetch={false}>
+      <Link href="/dash/notifications?read=false" prefetch={false}>
         <NotificationIcon size={20} />
       </Link>
     </Button>
