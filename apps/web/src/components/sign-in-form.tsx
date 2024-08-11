@@ -35,6 +35,10 @@ type SignInFormSchema = z.infer<typeof signInSchema>;
 export function SignInForm() {
   const form = useForm<SignInFormSchema>({
     resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const { toast } = useToast();
