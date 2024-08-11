@@ -8,6 +8,7 @@ const paramSchema = z.object({
   read: z
     .string()
     .toLowerCase()
+    .default("true")
     .transform((x) => x === "true")
     .pipe(z.boolean()),
 });
