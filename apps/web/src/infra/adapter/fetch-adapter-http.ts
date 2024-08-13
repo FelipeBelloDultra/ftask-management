@@ -23,6 +23,7 @@ export class FetchAdapterHttp implements Http {
         "Content-Type": "application/json",
         ...(options?.headers && options.headers),
       },
+      credentials: "include",
     });
   }
 

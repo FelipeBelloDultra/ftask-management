@@ -85,9 +85,14 @@ export class App {
 
   private registerMiddlewares() {
     this.expressInstance.use(express.json());
-    this.expressInstance.use(cors());
-    this.expressInstance.use(morgan("short"));
     this.expressInstance.use(helmet());
+    this.expressInstance.use(morgan("short"));
+    this.expressInstance.use(
+      cors({
+        origin: Env.get("FRONTEND_WEB_URL"),
+        credentials: true,
+      }),
+    );
     this.expressInstance.use(cookieParser());
     this.registerRoutes();
     this.setGlobalErrorHandler();

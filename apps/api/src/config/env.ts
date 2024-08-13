@@ -16,6 +16,7 @@ const SCHEMA = z.object({
   AWS_BUCKET: z.string(),
   AWS_ENDPOINT: z.string(),
   STORAGE_DRIVER: z.union([z.literal("local"), z.literal("aws")]),
+  FRONTEND_WEB_URL: z.string(),
 });
 
 type Schema = z.infer<typeof SCHEMA>;
