@@ -1,21 +1,13 @@
-import { replace } from "react-router-dom";
+import { useContext } from "react";
 
-import { useUserStore } from "@/store/user";
+import { AuthenticationContext } from "@/providers/authentication-provider";
 
 export function useAuth() {
-  // const router = useRouter();
-  const { actions } = useUserStore();
+  const context = useContext(AuthenticationContext);
 
-  async function logoutUser() {
-    // await signOut({
-    //   redirect: false,
-    // });
-    actions.clearUser();
-
-    replace("/sign-in");
+  if (!context) {
+    throw new Error("useAuth must be within AuthenticationContext");
   }
 
-  return {
-    logoutUser,
-  };
+  return context;
 }
