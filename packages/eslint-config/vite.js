@@ -1,24 +1,18 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /** @type {import('eslint').Linter.Config}  */
 module.exports = {
   env: {
     browser: true,
-    es2021: true,
   },
   extends: [
-    "standard",
+    "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
-    "plugin:@next/next/recommended",
+    "plugin:import/recommended",
   ],
   parser: "@typescript-eslint/parser",
-  parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
-    ecmaVersion: "latest",
-    sourceType: "module",
-  },
-  plugins: ["jsx-a11y", "@typescript-eslint"],
+  plugins: ["@typescript-eslint", "eslint-plugin-react-hooks", "eslint-plugin-react-refresh"],
+  root: true,
   rules: {
     "@typescript-eslint/no-unused-vars": [
       "error",
@@ -63,25 +57,29 @@ module.exports = {
       },
     ],
     "import/newline-after-import": "error",
-    "jsx-a11y/alt-text": [
-      "warn",
-      {
-        elements: ["img"],
-        img: ["Image"],
-      },
-    ],
-    "jsx-a11y/aria-props": "warn",
-    "jsx-a11y/aria-proptypes": "warn",
-    "jsx-a11y/aria-unsupported-elements": "warn",
-    "jsx-a11y/role-has-required-aria-props": "warn",
-    "jsx-a11y/role-supports-aria-props": "warn",
+    "@typescript-eslint/explicit-member-accessibility": "warn",
   },
   settings: {
-    react: {
-      version: "detect",
-    },
     "import/parsers": {
-      [require.resolve("@typescript-eslint/parser")]: [".ts", ".tsx", ".d.ts"],
+      "@typescript-eslint/parser": [".ts", ".tsx"],
+    },
+    "import/resolver": {
+      typescript: {},
     },
   },
 };
+// extends: [js.configs.recommended, ...tseslint.configs.recommended],
+//   files: ["**/*.{ts,tsx}"],
+//   ignores: ["dist"],
+//   languageOptions: {
+//     ecmaVersion: 2020,
+//     globals: globals.browser,
+//   },
+//   plugins: {
+//     "react-hooks": reactHooks,
+//     "react-refresh": reactRefresh,
+//   },
+//   rules: {
+//     ...reactHooks.configs.recommended.rules,
+//     "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+//   },

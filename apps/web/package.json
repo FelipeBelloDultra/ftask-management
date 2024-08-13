@@ -52,7 +52,7 @@
       "node_modules"
     ],
     "extends": [
-      "@ftask-management/eslint-config/nextjs.js"
+      "@ftask-management/eslint-config/vite.js"
     ]
   }
 }

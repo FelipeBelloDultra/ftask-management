@@ -5,7 +5,8 @@
   "license": "MIT",
   "files": [
     "node.json",
-    "nextjs.json"
+    "vite.app.json",
+    "vite.node.json"
   ],
   "devDependencies": {
     "@tsconfig/node20": "20.1.4",
