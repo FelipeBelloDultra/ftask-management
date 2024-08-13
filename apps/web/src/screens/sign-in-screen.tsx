@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+import { AnimatedPage } from "@/components/animated-page";
 import { SignInForm } from "@/components/sign-in-form";
 import { Button } from "@/components/ui/button";
 
@@ -10,15 +11,17 @@ import { Button } from "@/components/ui/button";
 
 export function SignInScreen() {
   return (
-    <section className="max-w-md w-full mx-auto">
-      <h2 className="mb-2 text-2xl font-semibold">Continue with your account</h2>
-      <p className="mb-6 text-sm text-muted-foreground">Enter your email and password combination to proceed</p>
+    <AnimatedPage>
+      <section className="max-w-md w-full mx-auto">
+        <h2 className="mb-2 text-2xl font-semibold">Continue with your account</h2>
+        <p className="mb-6 text-sm text-muted-foreground">Enter your email and password combination to proceed</p>
 
-      <SignInForm />
+        <SignInForm />
 
-      <Button asChild variant="link">
-        <Link to="/sign-up">Don't have an account? Create now!</Link>
-      </Button>
-    </section>
+        <Button asChild variant="link">
+          <Link to="/sign-up">Don't have an account? Create now!</Link>
+        </Button>
+      </section>
+    </AnimatedPage>
   );
 }

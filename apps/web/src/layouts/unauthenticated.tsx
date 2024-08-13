@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { TerminalIcon } from "lucide-react";
 import { Outlet } from "react-router-dom";
 
@@ -24,13 +23,7 @@ export function UnauthenticatedLayout() {
       <AuthActionButton />
 
       <main className="flex flex-col justify-center w-1/2 p-8 text-white">
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ ease: "easeInOut", duration: 0.75 }}
-        >
-          <Outlet />
-        </motion.div>
+        <Outlet />
       </main>
     </section>
   );
