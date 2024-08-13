@@ -33,7 +33,7 @@ function getInitials(name: string) {
 }
 
 export function HeaderProfileDropdown({ user }: HeaderProfileProps) {
-  const { logoutUser } = useAuth();
+  const { signOut } = useAuth();
 
   return (
     <DropdownMenu>
@@ -60,7 +60,7 @@ export function HeaderProfileDropdown({ user }: HeaderProfileProps) {
             </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuItem className="cursor-pointer text-muted-foreground" onClick={logoutUser}>
+          <DropdownMenuItem className="cursor-pointer text-muted-foreground" onClick={signOut}>
             <LogOutIcon className="mr-2" size={20} />
             Logout
           </DropdownMenuItem>

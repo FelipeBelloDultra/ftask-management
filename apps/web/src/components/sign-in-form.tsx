@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { authenticateUserService } from "@/services/authenticate-user-service";
+import { useAuth } from "@/hooks/use-auth";
 
 const signInSchema = z.object({
   email: z
@@ -30,6 +30,8 @@ const signInSchema = z.object({
 type SignInFormSchema = z.infer<typeof signInSchema>;
 
 export function SignInForm() {
+  const { signIn } = useAuth();
+  const { toast } = useToast();
   const form = useForm<SignInFormSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -38,16 +40,9 @@ export function SignInForm() {
     },
   });
 
-  const { toast } = useToast();
-  // const router = useRouter();
-
   async function submitForm(data: SignInFormSchema) {
     try {
-      const { token } = await authenticateUserService({
-        email: data.email,
-        password: data.password,
-      });
-      console.log(token);
+      await signIn(data);
 
       toast({
         title: "Login successfully",
@@ -56,8 +51,6 @@ export function SignInForm() {
         duration: 3000,
       });
     } catch (error) {
-      console.log({ error });
-
       toast({
         title: "Failed to login",
         description: "Please, confirm your email and password combination",

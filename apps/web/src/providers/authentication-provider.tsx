@@ -1,10 +1,17 @@
-import { createContext, ReactNode } from "react";
-import { replace } from "react-router-dom";
+import { createContext, ReactNode, useCallback, useState } from "react";
 
+import { authenticateUserService } from "@/services/authenticate-user-service";
 import { useUserStore } from "@/store/user";
 
+interface SignInData {
+  email: string;
+  password: string;
+}
+
 interface AuthenticationContextProps {
-  logoutUser(): Promise<void>;
+  signOut(): void;
+  signIn(data: SignInData): Promise<void>;
+  signedIn: boolean;
 }
 
 interface AuthenticationProviderProps {
@@ -14,21 +21,28 @@ interface AuthenticationProviderProps {
 export const AuthenticationContext = createContext({} as AuthenticationContextProps);
 
 export function AuthenticationProvider({ children }: AuthenticationProviderProps) {
+  const [signedIn, setSignedIn] = useState(() => !!localStorage.getItem("@_at"));
   const { actions } = useUserStore();
 
-  async function logoutUser() {
-    // await signOut({
-    //   redirect: false,
-    // });
+  const signOut = useCallback(() => {
     actions.clearUser();
+    setSignedIn(false);
+  }, []);
 
-    replace("/sign-in");
-  }
+  const signIn = useCallback(async (data: SignInData) => {
+    const { token } = await authenticateUserService(data);
+
+    localStorage.setItem("@_at", token);
+
+    setSignedIn(true);
+  }, []);
 
   return (
     <AuthenticationContext.Provider
       value={{
-        logoutUser,
+        signedIn,
+        signOut,
+        signIn,
       }}
     >
       {children}
