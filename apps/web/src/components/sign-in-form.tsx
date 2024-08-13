@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { authenticateUserService } from "@/services/authenticate-user-service";
 
 const signInSchema = z.object({
   email: z
@@ -41,30 +42,29 @@ export function SignInForm() {
   // const router = useRouter();
 
   async function submitForm(data: SignInFormSchema) {
-    // const result = await signIn("credentials", {
-    //   redirect: false,
-    //   email: data.email,
-    //   password: data.password,
-    // });
-    console.log(data);
+    try {
+      const { token } = await authenticateUserService({
+        email: data.email,
+        password: data.password,
+      });
+      console.log(token);
 
-    // if (result && result.ok) {
-    // router.replace("/dash");
-    toast({
-      title: "Login successfully",
-      description: "You have successfully logged in.",
-      variant: "default",
-      duration: 3000,
-    });
-    // return;
-    // }
+      toast({
+        title: "Login successfully",
+        description: "You have successfully logged in.",
+        variant: "default",
+        duration: 3000,
+      });
+    } catch (error) {
+      console.log({ error });
 
-    toast({
-      title: "Failed to login",
-      description: "Please, confirm your email and password combination",
-      variant: "destructive",
-      duration: 3000,
-    });
+      toast({
+        title: "Failed to login",
+        description: "Please, confirm your email and password combination",
+        variant: "destructive",
+        duration: 3000,
+      });
+    }
   }
 
   return (
