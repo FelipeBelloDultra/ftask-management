@@ -1,9 +1,6 @@
-"use client";
-
 import { ChevronRight as ChevronRightIcon } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useMemo } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
@@ -28,7 +25,7 @@ const mapping = {
 };
 
 export function HeaderNavigation() {
-  const pathname = usePathname();
+  const { pathname } = useLocation();
 
   const breadcrumbs = useMemo(() => {
     const segments = pathname.split("/").filter(Boolean);
@@ -48,9 +45,7 @@ export function HeaderNavigation() {
           ) : (
             <BreadcrumbLink asChild>
               <Button asChild variant="link" className="text-muted-foreground px-2 py-0">
-                <Link href={href} prefetch={false}>
-                  {segmentLabel}
-                </Link>
+                <Link to={href}>{segmentLabel}</Link>
               </Button>
             </BreadcrumbLink>
           )}

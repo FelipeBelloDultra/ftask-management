@@ -1,21 +1,10 @@
-import { Terminal as TerminalIcon } from "lucide-react";
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
+import { motion } from "framer-motion";
+import { TerminalIcon } from "lucide-react";
+import { Outlet } from "react-router-dom";
 
 import { AuthActionButton } from "@/components/auth-action-button";
-import { nextAuthOptions } from "@/config/next-auth";
 
-export default async function UnauthorizedLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const session = await getServerSession(nextAuthOptions);
-
-  if (session) {
-    redirect("/dash");
-  }
-
+export function UnauthenticatedLayout() {
   return (
     <section className="flex min-h-screen">
       <aside className="flex flex-col justify-between w-1/2 p-8 bg-zinc-900 text-white">
@@ -34,7 +23,15 @@ export default async function UnauthorizedLayout({
 
       <AuthActionButton />
 
-      <main className="flex flex-col justify-center w-1/2 p-8 text-white">{children}</main>
+      <main className="flex flex-col justify-center w-1/2 p-8 text-white">
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ ease: "easeInOut", duration: 0.75 }}
+        >
+          <Outlet />
+        </motion.div>
+      </main>
     </section>
   );
 }

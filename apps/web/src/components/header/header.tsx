@@ -4,17 +4,21 @@ import { HeaderNavigation } from "./header-navigation";
 import { HeaderNotificationsButton } from "./header-notifications-button";
 import { HeaderProfileDropdown } from "./header-profile-dropdown";
 
-export async function Header() {
+export function Header() {
   const user = useUserStore.getState().state.user;
 
-  const response = await fetch("http://localhost:3333/api/notifications/count?read=false", {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-    },
-    cache: "no-cache",
-  });
-  const { data } = (await response.json()) as { data: { total: number } };
+  // const response = await fetch("http://localhost:3333/api/notifications/count?read=false", {
+  //   method: "GET",
+  //   headers: {
+  //     Authorization: `Bearer ${user.token}`,
+  //   },
+  //   cache: "no-cache",
+  // });
+  // const { data } = (await response.json()) as { data: { total: number } };
+
+  const data = {
+    total: 10,
+  };
 
   return (
     <header className="flex justify-between items-center h-20 px-4 border-b w-full">

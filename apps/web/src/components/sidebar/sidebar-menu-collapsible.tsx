@@ -1,5 +1,5 @@
 import { LucideIcon } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
@@ -50,9 +50,7 @@ export function SidebarMenuCollapsible({
                 className={cn("w-full justify-start text-xs", submenu.isSubmenuActive && "underline font-bold")}
                 asChild
               >
-                <Link prefetch={false} href={submenu.href}>
-                  {submenu.label}
-                </Link>
+                <Link to={submenu.href}>{submenu.label}</Link>
               </Button>
             ))}
           </div>

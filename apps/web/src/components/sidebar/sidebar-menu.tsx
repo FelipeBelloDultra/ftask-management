@@ -1,7 +1,5 @@
-"use client";
-
-import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import { getSidebarMenuList } from "@/constants/menu-options";
 
@@ -9,7 +7,7 @@ import { SidebarMenuCollapsible } from "./sidebar-menu-collapsible";
 import { SidebarMenuItem } from "./sidebar-menu-item";
 
 export function SidebarMenu() {
-  const pathname = usePathname();
+  const { pathname } = useLocation();
   const menus = getSidebarMenuList(pathname);
   const [openedSubmenuKey, setOpenedSubmenuKey] = useState<null | string>(null);
 

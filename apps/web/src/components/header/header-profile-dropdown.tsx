@@ -1,7 +1,5 @@
-"use client";
-
 import { LogOut as LogOutIcon, UserPen as UserPenIcon } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -56,7 +54,7 @@ export function HeaderProfileDropdown({ user }: HeaderProfileProps) {
         <DropdownMenuSeparator />
         <div className="flex flex-col gap-2">
           <DropdownMenuItem asChild>
-            <Link prefetch={false} href="/dash/settings/profile" className="cursor-pointer text-muted-foreground">
+            <Link to="/dash/settings/profile" className="cursor-pointer text-muted-foreground">
               <UserPenIcon className="mr-2" size={20} />
               Edit profile
             </Link>

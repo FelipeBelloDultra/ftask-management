@@ -1,9 +1,5 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 as Loader2Icon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -42,25 +38,26 @@ export function SignInForm() {
   });
 
   const { toast } = useToast();
-  const router = useRouter();
+  // const router = useRouter();
 
   async function submitForm(data: SignInFormSchema) {
-    const result = await signIn("credentials", {
-      redirect: false,
-      email: data.email,
-      password: data.password,
-    });
+    // const result = await signIn("credentials", {
+    //   redirect: false,
+    //   email: data.email,
+    //   password: data.password,
+    // });
+    console.log(data);
 
-    if (result && result.ok) {
-      router.replace("/dash");
-      toast({
-        title: "Login successfully",
-        description: "You have successfully logged in.",
-        variant: "default",
-        duration: 3000,
-      });
-      return;
-    }
+    // if (result && result.ok) {
+    // router.replace("/dash");
+    toast({
+      title: "Login successfully",
+      description: "You have successfully logged in.",
+      variant: "default",
+      duration: 3000,
+    });
+    // return;
+    // }
 
     toast({
       title: "Failed to login",

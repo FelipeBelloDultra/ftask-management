@@ -1,19 +1,13 @@
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
 import { Suspense } from "react";
+import { Outlet, redirect } from "react-router-dom";
 
 import { Header } from "@/components/header";
 import { PageContent } from "@/components/page-content";
 import { Sidebar } from "@/components/sidebar";
-import { nextAuthOptions } from "@/config/next-auth";
 import { useUserStore } from "@/store/user";
 
-export default async function AuthorizedLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const session = await getServerSession(nextAuthOptions);
+export function AuthenticatedLayout() {
+  const session = true;
 
   if (!session) {
     redirect("/sign-in");
@@ -22,15 +16,14 @@ export default async function AuthorizedLayout({
   useUserStore.setState({
     state: {
       user: {
-        email: session.user.email,
-        id: session.user.id,
-        name: session.user.name,
-        pictureUrl: session.user.picture_url,
-        token: session.user.token,
+        email: "session.user.email",
+        id: "session.user.id",
+        name: "session.user.name",
+        pictureUrl: "session.user.picture_url",
+        token: "session.user.token",
       },
     },
   });
-
   return (
     <main className="pl-72 pt-20 relative min-h-screen">
       <Sidebar.Root />
@@ -41,7 +34,10 @@ export default async function AuthorizedLayout({
         </Suspense>
       </div>
 
-      <PageContent>{children}</PageContent>
+      <PageContent>
+        {" "}
+        <Outlet />
+      </PageContent>
     </main>
   );
 }

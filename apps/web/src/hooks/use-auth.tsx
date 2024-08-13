@@ -1,19 +1,18 @@
-import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { replace } from "react-router-dom";
 
 import { useUserStore } from "@/store/user";
 
 export function useAuth() {
-  const router = useRouter();
+  // const router = useRouter();
   const { actions } = useUserStore();
 
   async function logoutUser() {
-    await signOut({
-      redirect: false,
-    });
+    // await signOut({
+    //   redirect: false,
+    // });
     actions.clearUser();
 
-    router.replace("/sign-in");
+    replace("/sign-in");
   }
 
   return {

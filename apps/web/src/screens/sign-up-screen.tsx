@@ -1,13 +1,11 @@
-import { Metadata } from "next";
-
 import { SignUpForm } from "@/components/sign-up-form";
 
-export const metadata: Metadata = {
-  title: "Sign Up - FTask Management",
-  description: "Finish your account registration",
-};
+// export const metadata: Metadata = {
+//   title: "Sign Up - FTask Management",
+//   description: "Finish your account registration",
+// };
 
-export default function SignUpPage() {
+export default function SignUpScreen() {
   return (
     <section className="max-w-md w-full mx-auto">
       <h2 className="mb-2 text-2xl font-semibold">Create account</h2>

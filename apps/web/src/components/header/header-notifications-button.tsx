@@ -1,5 +1,5 @@
 import { BellDot as BellDotIcon, Bell as BellIcon } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 
@@ -17,7 +17,7 @@ export function HeaderNotificationsButton({ total = 0 }: HeaderNotificationsButt
 
   return (
     <Button size="icon" asChild variant="outline">
-      <Link href="/dash/notifications?read=false" prefetch={false}>
+      <Link to="/dash/notifications?read=false">
         <NotificationIcon size={20} />
       </Link>
     </Button>

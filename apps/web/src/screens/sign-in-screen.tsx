@@ -1,15 +1,14 @@
-import { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 import { SignInForm } from "@/components/sign-in-form";
 import { Button } from "@/components/ui/button";
 
-export const metadata: Metadata = {
-  title: "Sign In - FTask Management",
-  description: "Do your login and make all projects easy.",
-};
+// export const metadata: Metadata = {
+//   title: "Sign In - FTask Management",
+//   description: "Do your login and make all projects easy.",
+// };
 
-export default function SignInPage() {
+export function SignInScreen() {
   return (
     <section className="max-w-md w-full mx-auto">
       <h2 className="mb-2 text-2xl font-semibold">Continue with your account</h2>
@@ -18,9 +17,7 @@ export default function SignInPage() {
       <SignInForm />
 
       <Button asChild variant="link">
-        <Link prefetch={false} href="/sign-up">
-          Don't have an account? Create now!
-        </Link>
+        <Link to="/sign-up">Don't have an account? Create now!</Link>
       </Button>
     </section>
   );
