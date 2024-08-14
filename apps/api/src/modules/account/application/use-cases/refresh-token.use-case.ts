@@ -27,8 +27,8 @@ export class RefreshTokenUseCase {
       const signature = await this.jwtProvider.decrypt<{ sub: string }>(input.refreshToken);
 
       const [accessToken, refreshToken] = await Promise.all([
-        this.jwtProvider.encrypt({ sub: signature }),
-        this.jwtProvider.encrypt({ sub: signature }, "30d"),
+        this.jwtProvider.encrypt({ sub: signature.sub }),
+        this.jwtProvider.encrypt({ sub: signature.sub }, "30d"),
       ]);
 
       return right({
