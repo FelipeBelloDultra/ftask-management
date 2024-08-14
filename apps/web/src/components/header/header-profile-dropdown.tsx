@@ -22,6 +22,8 @@ interface HeaderProfileProps {
 }
 
 function getInitials(name: string) {
+  if (!name) return "";
+
   const words = name.trim().split(/\s+/);
 
   const initials = words

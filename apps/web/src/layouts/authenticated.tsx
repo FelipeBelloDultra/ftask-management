@@ -1,25 +1,39 @@
+import { useQuery } from "@tanstack/react-query";
 import { Suspense, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 import { Header } from "@/components/header";
 import { PageContent } from "@/components/page-content";
 import { Sidebar } from "@/components/sidebar";
+import { showAuthenticatedUserService } from "@/services/show-authenticated-user";
 import { useUserStore } from "@/store/user";
 
 export function AuthenticatedLayout() {
   const { actions } = useUserStore();
+  const { data, isLoading } = useQuery({
+    queryKey: ["authenticated-user"],
+    queryFn: () => showAuthenticatedUserService(),
+    gcTime: 1,
+  });
 
   useEffect(() => {
-    actions.addUser({
-      email: "session.user.email",
-      id: "session.user.id",
-      name: "session.user.name",
-      pictureUrl: "session.user.picture_url",
-      token: "session.user.token",
-    });
-  }, []);
+    if (!data) return;
 
-  return <Outlet />;
+    actions.addUser({
+      email: data.email,
+      id: data.id,
+      name: data.name,
+      pictureUrl: data.pictureUrl,
+    });
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <>
+        <div>Loading...</div>
+      </>
+    );
+  }
 
   return (
     <main className="pl-72 pt-20 relative min-h-screen">

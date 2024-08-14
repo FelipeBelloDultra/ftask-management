@@ -2,7 +2,6 @@ import { create } from "zustand";
 
 interface User {
   id: string;
-  token: string;
   name: string;
   email: string;
   pictureUrl: string | null;
@@ -24,7 +23,6 @@ export const useUserStore = create<UserStoreProps>((set) => ({
   state: {
     user: {
       id: "",
-      token: "",
       email: "",
       name: "",
       pictureUrl: null,
@@ -39,7 +37,6 @@ export const useUserStore = create<UserStoreProps>((set) => ({
             email: user.email,
             name: user.name,
             pictureUrl: user.pictureUrl,
-            token: user.token,
           },
         },
       })),
@@ -48,7 +45,6 @@ export const useUserStore = create<UserStoreProps>((set) => ({
         state: {
           user: {
             id: "",
-            token: "",
             email: "",
             name: "",
             pictureUrl: null,

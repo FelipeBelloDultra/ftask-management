@@ -1,3 +1,6 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
+
+import { getTotalUnreadNotificationsService } from "@/services/get-total-unread-notifications";
 import { useUserStore } from "@/store/user";
 
 import { HeaderNavigation } from "./header-navigation";
@@ -5,20 +8,11 @@ import { HeaderNotificationsButton } from "./header-notifications-button";
 import { HeaderProfileDropdown } from "./header-profile-dropdown";
 
 export function Header() {
-  const user = useUserStore.getState().state.user;
-
-  // const response = await fetch("http://localhost:3333/api/notifications/count?read=false", {
-  //   method: "GET",
-  //   headers: {
-  //     Authorization: `Bearer ${user.token}`,
-  //   },
-  //   cache: "no-cache",
-  // });
-  // const { data } = (await response.json()) as { data: { total: number } };
-
-  const data = {
-    total: 10,
-  };
+  const { state } = useUserStore();
+  const { data } = useSuspenseQuery({
+    queryKey: ["notifications:total:unread"],
+    queryFn: () => getTotalUnreadNotificationsService(),
+  });
 
   return (
     <header className="flex justify-between items-center h-20 px-4 border-b w-full">
@@ -29,9 +23,9 @@ export function Header() {
 
         <HeaderProfileDropdown
           user={{
-            email: user.email,
-            pictureUrl: user.pictureUrl,
-            name: user.name,
+            email: state.user.email,
+            pictureUrl: state.user.pictureUrl,
+            name: state.user.name,
           }}
         />
       </section>

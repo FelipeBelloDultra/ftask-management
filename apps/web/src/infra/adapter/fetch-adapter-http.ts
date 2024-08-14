@@ -1,6 +1,8 @@
+import { REFRESH_TOKEN } from "@/services/endpoints";
+
 import { Http } from "../http";
 
-type Methods = "GET" | "OPTIONS" | "POST";
+type Methods = "GET" | "OPTIONS" | "POST" | "PATCH";
 
 interface CreateRequestSchema {
   url: string;
@@ -16,15 +18,51 @@ export class FetchAdapterHttp implements Http {
   }
 
   private createRequestSchema({ method, url, options }: CreateRequestSchema) {
+    const authorizationToken = localStorage.getItem("@_at");
+    const hasAuthorizationToken = !!authorizationToken;
+
     return new Request(url, {
       ...options,
       method,
       headers: {
         "Content-Type": "application/json",
+        ...(!!hasAuthorizationToken && {
+          Authorization: `Bearer ${authorizationToken}`,
+        }),
         ...(options?.headers && options.headers),
       },
       credentials: "include",
     });
+  }
+
+  private async refreshToken<ResponseType>(originalRequest: Request): Promise<ResponseType> {
+    const url = this.makeUrl(REFRESH_TOKEN);
+    const refreshTokenResponse = await fetch(
+      this.createRequestSchema({
+        method: "PATCH",
+        url,
+      }),
+    );
+
+    if (!refreshTokenResponse.ok) {
+      return Promise.reject(refreshTokenResponse);
+    }
+
+    const {
+      data: { token },
+    } = (await refreshTokenResponse.json()) as { data: { token: string } };
+
+    localStorage.setItem("@_at", token);
+    originalRequest.headers.append("Authorization", `Bearer ${token}`);
+
+    const originalRequestResponse = await fetch(originalRequest);
+
+    if (!originalRequestResponse.ok) {
+      return Promise.reject(originalRequestResponse);
+    }
+
+    const { data } = (await originalRequestResponse.json()) as { data: ResponseType };
+    return data;
   }
 
   public async get<ResponseType = unknown>(
@@ -37,6 +75,10 @@ export class FetchAdapterHttp implements Http {
       options,
     });
     const response = await fetch(request);
+
+    if (response.status === 401) {
+      return await this.refreshToken(request);
+    }
 
     if (!response.ok) {
       return Promise.reject(response);
@@ -61,6 +103,10 @@ export class FetchAdapterHttp implements Http {
       },
     });
     const response = await fetch(request);
+
+    if (response.status === 401) {
+      return await this.refreshToken(request);
+    }
 
     if (!response.ok) {
       return Promise.reject(response);
