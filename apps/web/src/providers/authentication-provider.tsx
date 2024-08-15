@@ -27,6 +27,7 @@ export function AuthenticationProvider({ children }: AuthenticationProviderProps
   const signOut = useCallback(() => {
     actions.clearUser();
     setSignedIn(false);
+    localStorage.removeItem("@_at");
   }, []);
 
   const signIn = useCallback(async (data: SignInData) => {
