@@ -64,11 +64,11 @@ export class PrismaProjectRepository implements ProjectRepository {
     const cacheHit = await this.cache.get(CACHE_KEY);
 
     if (cacheHit) {
-      const projects = JSON.parse(cacheHit) as Array<PrismaProject>;
+      const { projects, total } = JSON.parse(cacheHit) as { projects: Array<PrismaProject>; total: number };
 
       return {
         projects: projects.map(ProjectMapper.toDomain),
-        total: projects.length,
+        total,
       };
     }
 
@@ -92,7 +92,7 @@ export class PrismaProjectRepository implements ProjectRepository {
       }),
     ]);
 
-    await this.cache.set(CACHE_KEY, JSON.stringify(projects));
+    await this.cache.set(CACHE_KEY, JSON.stringify({ projects, total }));
 
     return {
       projects: projects.map(ProjectMapper.toDomain),

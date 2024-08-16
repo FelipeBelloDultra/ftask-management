@@ -66,11 +66,14 @@ export class PrismaNotificationRepository implements NotificationRepository {
     const cacheHit = await this.cache.get(CACHE_KEY);
 
     if (cacheHit) {
-      const notifications = JSON.parse(cacheHit) as Array<PrismaNotification>;
+      const { notifications, total } = JSON.parse(cacheHit) as {
+        notifications: Array<PrismaNotification>;
+        total: number;
+      };
 
       return {
         notifications: notifications.map(NotificationMapper.toDomain),
-        total: notifications.length,
+        total,
       };
     }
 
@@ -94,7 +97,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
       }),
     ]);
 
-    await this.cache.set(CACHE_KEY, JSON.stringify(notifications));
+    await this.cache.set(CACHE_KEY, JSON.stringify({ notifications, total: notificationsCount }));
 
     return {
       notifications: notifications.map(NotificationMapper.toDomain),
