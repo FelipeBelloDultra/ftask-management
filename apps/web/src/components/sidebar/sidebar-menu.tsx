@@ -24,21 +24,31 @@ export function SidebarMenu() {
   return (
     <nav className="flex-1 p-6">
       <ul className="flex flex-col gap-1">
-        {menus.map(({ key, icon, label, href, submenus, isActive }) =>
-          submenus?.length ? (
-            <SidebarMenuCollapsible
+        {menus.map(({ key, icon, label, href, submenus, isActive }) => {
+          if (submenus?.length)
+            return (
+              <SidebarMenuCollapsible
+                key={key}
+                icon={icon}
+                label={label}
+                submenus={submenus}
+                openedMenuKey={openedSubmenuKey}
+                onSubmenuCollapsibleToggled={() => changeToggleOpenedSubmenuKey(key)}
+                menuKey={key}
+              />
+            );
+
+          return (
+            <SidebarMenuItem
               key={key}
+              href={href}
               icon={icon}
               label={label}
-              submenus={submenus}
-              openedMenuKey={openedSubmenuKey}
+              isActive={isActive}
               onSubmenuCollapsibleToggled={() => changeToggleOpenedSubmenuKey(key)}
-              menuKey={key}
             />
-          ) : (
-            <SidebarMenuItem key={key} href={href} icon={icon} label={label} isActive={isActive} />
-          ),
-        )}
+          );
+        })}
       </ul>
     </nav>
   );

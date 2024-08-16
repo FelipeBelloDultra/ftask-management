@@ -1,5 +1,6 @@
 import {
   BellRing as BellRingIcon,
+  Building2 as Building2Icon,
   LayoutDashboard as LayoutDashboardIcon,
   LucideIcon,
   Settings as SettingsIcon,
@@ -49,6 +50,21 @@ export function getSidebarMenuList(pathname: string): Array<MenuItem> {
           label: "Profile",
           href: "/dash/settings/profile",
           isSubmenuActive: pathname === "/dash/settings/profile",
+        },
+      ],
+    },
+    {
+      key: "projects",
+      label: "Projects",
+      icon: Building2Icon,
+      href: "/dash/projects",
+      isActive: pathname === "/dash/projects",
+      submenus: [
+        {
+          key: "projects_my-projects",
+          label: "My Projects",
+          href: "/dash/projects/my",
+          isSubmenuActive: pathname === "/dash/projects/my",
         },
       ],
     },

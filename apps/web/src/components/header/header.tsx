@@ -10,7 +10,7 @@ import { HeaderProfileDropdown } from "./header-profile-dropdown";
 export function Header() {
   const { state } = useUserStore();
   const { data } = useSuspenseQuery({
-    queryKey: ["notifications:total:unread"],
+    queryKey: [`user-id-${state.user.id}:notifications:total:unread`],
     queryFn: () => getTotalUnreadNotificationsService(),
   });
 

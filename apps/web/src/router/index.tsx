@@ -29,6 +29,10 @@ export function Router() {
             <Route index element={<SettingsScreen />} />
             <Route path="profile" element={<SettingsProfileScreen />} />
           </Route>
+          <Route path="projects">
+            <Route index element={<div>main projects page</div>} />
+            <Route path="my" element={<div>My projects</div>} />
+          </Route>
         </Route>
       </Route>
 
