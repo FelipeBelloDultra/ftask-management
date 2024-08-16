@@ -13,7 +13,6 @@ interface SidebarMenuCollapsibleProps {
   icon: LucideIcon;
   label: string;
   submenus: Array<{
-    key: string;
     label: string;
     href: string;
     isSubmenuActive: boolean;
@@ -45,7 +44,7 @@ export function SidebarMenuCollapsible({
           <div className="my-2 pr-2 pl-7">
             {submenus.map((submenu) => (
               <Button
-                key={submenu.key}
+                key={submenu.href}
                 variant="ghost"
                 className={cn("w-full justify-start text-xs", submenu.isSubmenuActive && "underline font-bold")}
                 asChild

@@ -7,14 +7,19 @@ import {
 } from "lucide-react";
 
 interface SubmenuItem {
-  key: string;
   label: string;
   href: string;
   isSubmenuActive: boolean;
 }
 
-interface MenuItem {
+interface DividerItem {
+  isDivider: true;
   key: string;
+  label: string;
+}
+
+interface MenuItem {
+  isDivider: false;
   label: string;
   icon: LucideIcon;
   href: string;
@@ -22,31 +27,32 @@ interface MenuItem {
   submenus?: Array<SubmenuItem>;
 }
 
-export function getSidebarMenuList(pathname: string): Array<MenuItem> {
+type Menu = DividerItem | MenuItem;
+
+export function getSidebarMenuList(pathname: string): Array<Menu> {
   return [
     {
-      key: "dashboard",
+      isDivider: false,
       label: "Dashboard",
       icon: LayoutDashboardIcon,
       href: "/dash",
       isActive: pathname === "/dash",
     },
     {
-      key: "notifications",
+      isDivider: false,
       label: "Notifications",
       icon: BellRingIcon,
       href: "/dash/notifications",
       isActive: pathname === "/dash/notifications",
     },
     {
-      key: "settings",
+      isDivider: false,
       label: "Settings",
       icon: SettingsIcon,
       href: "/dash/settings",
       isActive: pathname === "/dash/settings",
       submenus: [
         {
-          key: "settings_profile",
           label: "Profile",
           href: "/dash/settings/profile",
           isSubmenuActive: pathname === "/dash/settings/profile",
@@ -54,14 +60,13 @@ export function getSidebarMenuList(pathname: string): Array<MenuItem> {
       ],
     },
     {
-      key: "projects",
+      isDivider: false,
       label: "Projects",
       icon: Building2Icon,
       href: "/dash/projects",
       isActive: pathname === "/dash/projects",
       submenus: [
         {
-          key: "projects_my-projects",
           label: "My Projects",
           href: "/dash/projects/my",
           isSubmenuActive: pathname === "/dash/projects/my",

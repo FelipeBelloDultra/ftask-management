@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import { getSidebarMenuList } from "@/constants/menu-options";
@@ -7,45 +7,66 @@ import { SidebarMenuCollapsible } from "./sidebar-menu-collapsible";
 import { SidebarMenuItem } from "./sidebar-menu-item";
 
 export function SidebarMenu() {
+  const [openedSubmenuKey, setOpenedSubmenuKey] = useState<null | string>(null);
   const { pathname } = useLocation();
   const menus = getSidebarMenuList(pathname);
-  const [openedSubmenuKey, setOpenedSubmenuKey] = useState<null | string>(null);
 
   function changeToggleOpenedSubmenuKey(key: string) {
-    const submenu = menus.find((menu) => menu.key === key);
+    const submenu = menus.find((menu) => !menu.isDivider && menu.href === key);
 
     setOpenedSubmenuKey((prev) => {
-      if (prev === key || !submenu) return null;
+      if (submenu?.isDivider || prev === key || !submenu) return null;
 
-      return submenu.key;
+      return submenu.href;
     });
   }
+
+  useEffect(() => {
+    const hrefKey = pathname;
+
+    setOpenedSubmenuKey((prev) => {
+      if (prev === hrefKey) return hrefKey;
+
+      return hrefKey;
+    });
+  }, [pathname]);
 
   return (
     <nav className="flex-1 p-6">
       <ul className="flex flex-col gap-1">
-        {menus.map(({ key, icon, label, href, submenus, isActive }) => {
-          if (submenus?.length)
+        {menus.map((menu) => {
+          if (menu.isDivider)
+            return (
+              <li
+                key={menu.key}
+                className="relative before:right-0 before:left-0 before:h-px before:absolute before:bg-muted before:top-1/2 text-center my-4"
+              >
+                <span className="px-2 bg-zinc-950 relative">{menu.label}</span>
+              </li>
+            );
+
+          if (menu.submenus?.length) {
             return (
               <SidebarMenuCollapsible
-                key={key}
-                icon={icon}
-                label={label}
-                submenus={submenus}
+                key={menu.href}
+                icon={menu.icon}
+                label={menu.label}
+                submenus={menu.submenus}
                 openedMenuKey={openedSubmenuKey}
-                onSubmenuCollapsibleToggled={() => changeToggleOpenedSubmenuKey(key)}
-                menuKey={key}
+                onSubmenuCollapsibleToggled={() => changeToggleOpenedSubmenuKey(menu.href)}
+                menuKey={menu.href}
               />
             );
+          }
 
           return (
             <SidebarMenuItem
-              key={key}
-              href={href}
-              icon={icon}
-              label={label}
-              isActive={isActive}
-              onSubmenuCollapsibleToggled={() => changeToggleOpenedSubmenuKey(key)}
+              key={menu.href}
+              href={menu.href}
+              icon={menu.icon}
+              label={menu.label}
+              isActive={menu.isActive}
+              onSubmenuCollapsibleToggled={() => changeToggleOpenedSubmenuKey(menu.href)}
             />
           );
         })}
