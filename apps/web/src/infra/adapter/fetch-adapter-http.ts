@@ -1,3 +1,4 @@
+import { env } from "@/config/env";
 import { REFRESH_TOKEN } from "@/services/endpoints";
 
 import { Http } from "../http";
@@ -11,14 +12,14 @@ interface CreateRequestSchema {
 }
 
 export class FetchAdapterHttp implements Http {
-  private readonly baseUrl: string = import.meta.env.VITE_APP_API_URL;
+  private readonly baseUrl: string = env.apiUrl;
 
   private makeUrl(url: string | URL) {
     return `${this.baseUrl}${url}`;
   }
 
   private createRequestSchema({ method, url, options }: CreateRequestSchema) {
-    const authorizationToken = localStorage.getItem("@_at");
+    const authorizationToken = localStorage.getItem(env.jwtPrefix);
     const hasAuthorizationToken = !!authorizationToken;
 
     return new Request(url, {
@@ -52,7 +53,7 @@ export class FetchAdapterHttp implements Http {
       data: { token },
     } = (await refreshTokenResponse.json()) as { data: { token: string } };
 
-    localStorage.setItem("@_at", token);
+    localStorage.setItem(env.jwtPrefix, token);
     originalRequest.headers.append("Authorization", `Bearer ${token}`);
 
     const originalRequestResponse = await fetch(originalRequest);

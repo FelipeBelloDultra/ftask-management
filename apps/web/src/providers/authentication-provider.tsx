@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useCallback, useState } from "react";
 
+import { env } from "@/config/env";
 import { authenticateUserService } from "@/services/authenticate-user-service";
 import { useUserStore } from "@/store/user";
 
@@ -21,19 +22,19 @@ interface AuthenticationProviderProps {
 export const AuthenticationContext = createContext({} as AuthenticationContextProps);
 
 export function AuthenticationProvider({ children }: AuthenticationProviderProps) {
-  const [signedIn, setSignedIn] = useState(() => !!localStorage.getItem("@_at"));
+  const [signedIn, setSignedIn] = useState(() => !!localStorage.getItem(env.jwtPrefix));
   const { actions } = useUserStore();
 
   const signOut = useCallback(() => {
     actions.clearUser();
     setSignedIn(false);
-    localStorage.removeItem("@_at");
+    localStorage.removeItem(env.jwtPrefix);
   }, []);
 
   const signIn = useCallback(async (data: SignInData) => {
     const { token } = await authenticateUserService(data);
 
-    localStorage.setItem("@_at", token);
+    localStorage.setItem(env.jwtPrefix, token);
 
     setSignedIn(true);
   }, []);
