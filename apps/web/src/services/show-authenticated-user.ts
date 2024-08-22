@@ -1,21 +1,10 @@
 import { fetchAdapter } from "@/infra/adapter/fetch-adapter-http";
+import { PersistenceUser, UserMapper } from "@/infra/mappers/user-mapper";
 
 import { SHOW_AUTHENTICATED_USER } from "./endpoints";
 
-interface ShowAuthenticatedUserServiceResponse {
-  id: string;
-  picture_url: string | null;
-  email: string;
-  name: string;
-}
-
 export async function showAuthenticatedUserService() {
-  const response = await fetchAdapter.get<ShowAuthenticatedUserServiceResponse>(SHOW_AUTHENTICATED_USER);
+  const response = await fetchAdapter.get<PersistenceUser>(SHOW_AUTHENTICATED_USER);
 
-  return {
-    id: response.id,
-    pictureUrl: response.picture_url,
-    email: response.email,
-    name: response.name,
-  };
+  return UserMapper.toDomain(response);
 }
