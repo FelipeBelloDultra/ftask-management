@@ -6,6 +6,10 @@ export interface CountByRecipientIdFilters {
   read: boolean;
 }
 
+export interface FetchManyByRecipientIdFilters {
+  read?: boolean;
+}
+
 export interface NotificationRepository {
   create(notification: Notification): Promise<void>;
   save(notification: Notification): Promise<void>;
@@ -13,6 +17,7 @@ export interface NotificationRepository {
   fetchManyByRecipientId(
     recipientId: UniqueEntityID,
     pagination: Pagination,
+    fetchManyByRecipientIdFilters: FetchManyByRecipientIdFilters,
   ): Promise<{
     notifications: Array<Notification>;
     total: number;

@@ -49,7 +49,7 @@ export class PrismaProjectRepository implements ProjectRepository {
       this.prismaConnection.project.create({
         data: ProjectMapper.toPersistence(project),
       }),
-      this.cache.delete(`account-${project.ownerId.toValue()}:projects:*`),
+      this.cache.delete(this.cache.createKey([`account-${project.ownerId.toValue()}`, "projects", "*"])),
     ]);
   }
 
@@ -60,7 +60,12 @@ export class PrismaProjectRepository implements ProjectRepository {
     projects: Array<Project>;
     total: number;
   }> {
-    const CACHE_KEY = `account-${ownerId.toValue()}:projects:limit-${pagination.limit}:page-${pagination.page}`;
+    const CACHE_KEY = this.cache.createKey([
+      `account-${ownerId.toValue()}`,
+      "projects",
+      `limit-${pagination.limit}`,
+      `page-${pagination.page}`,
+    ]);
     const cacheHit = await this.cache.get(CACHE_KEY);
 
     if (cacheHit) {

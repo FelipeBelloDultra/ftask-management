@@ -9,11 +9,20 @@ import { makeFetchNotificationsByRecipientId } from "@/modules/notification/appl
 const paramSchema = z.object({
   page: z.string().optional().default("1").transform(Number).pipe(z.number().min(1)),
   limit: z.string().optional().default("10").transform(Number).pipe(z.number().min(5)),
+  read: z
+    .string()
+    .optional()
+    .transform((x) => {
+      if (x?.toLowerCase() === "true") return true;
+      if (x?.toLowerCase() === "false") return false;
+
+      return undefined;
+    }),
 });
 
 export class FetchNotificationsByRecipientIdController implements Controller {
   public async handler(req: Request, res: Response): Promise<Response> {
-    const { limit, page } = paramSchema.parse(req.query);
+    const { limit, page, read } = paramSchema.parse(req.query);
     const { id } = req.account;
 
     const fetchNotificationsByRecipientId = makeFetchNotificationsByRecipientId();
@@ -22,6 +31,7 @@ export class FetchNotificationsByRecipientIdController implements Controller {
       recipientId: id,
       limit,
       page,
+      read,
     });
 
     if (result.isRight()) {

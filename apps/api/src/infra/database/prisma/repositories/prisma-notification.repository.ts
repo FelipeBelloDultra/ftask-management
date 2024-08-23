@@ -6,6 +6,7 @@ import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { CacheRepository } from "@/infra/cache/cache.repository";
 import {
   CountByRecipientIdFilters,
+  FetchManyByRecipientIdFilters,
   NotificationRepository,
 } from "@/modules/notification/application/repositories/notification.repository";
 import { Notification } from "@/modules/notification/domain/entity/notification";
@@ -27,7 +28,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
       this.prismaConnection.notification.create({
         data: NotificationMapper.toPersistence(notification),
       }),
-      this.cache.delete(`account-${notification.recipientId.toValue()}:notifications:*`),
+      this.cache.delete(this.cache.createKey([`account-${notification.recipientId.toValue()}`, "notifications", "*"])),
     ]);
   }
 
@@ -39,7 +40,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
         },
         data: NotificationMapper.toPersistence(notification),
       }),
-      this.cache.delete(`account-${notification.recipientId.toValue()}:notifications:*`),
+      this.cache.delete(this.cache.createKey([`account-${notification.recipientId.toValue()}`, "notifications", "*"])),
     ]);
   }
 
@@ -58,11 +59,22 @@ export class PrismaNotificationRepository implements NotificationRepository {
   public async fetchManyByRecipientId(
     recipientId: UniqueEntityID,
     pagination: Pagination,
+    filters: FetchManyByRecipientIdFilters,
   ): Promise<{
     notifications: Array<Notification>;
     total: number;
   }> {
-    const CACHE_KEY = `account-${recipientId.toValue()}:notifications:limit-${pagination.limit}:page-${pagination.page}`;
+    const keys = [
+      `account-${recipientId.toValue()}`,
+      "notifications",
+      `limit-${pagination.limit}`,
+      `page-${pagination.page}`,
+    ];
+    if (filters.read !== undefined && typeof filters.read === "boolean") {
+      keys.push(`read-${filters.read}`);
+    }
+
+    const CACHE_KEY = this.cache.createKey(keys);
     const cacheHit = await this.cache.get(CACHE_KEY);
 
     if (cacheHit) {
@@ -77,12 +89,19 @@ export class PrismaNotificationRepository implements NotificationRepository {
       };
     }
 
+    let filter = {};
+
+    if (filters.read !== undefined && typeof filters.read === "boolean") {
+      filter = { readAt: filters.read ? { not: null } : null };
+    }
+
     const [notifications, notificationsCount] = await Promise.all([
       this.prismaConnection.notification.findMany({
         take: pagination.take,
         skip: pagination.skip,
         where: {
           recipientId: recipientId.toValue(),
+          ...filter,
         },
         orderBy: [
           {
@@ -93,6 +112,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
       this.prismaConnection.notification.count({
         where: {
           recipientId: recipientId.toValue(),
+          ...filter,
         },
       }),
     ]);
@@ -104,13 +124,19 @@ export class PrismaNotificationRepository implements NotificationRepository {
       total: notificationsCount,
     };
   }
+
   public async countByRecipientId(
     recipientId: UniqueEntityID,
     filters: CountByRecipientIdFilters,
   ): Promise<{
     total: number;
   }> {
-    const CACHE_KEY = `account-${recipientId.toValue()}:notifications:count:read-${filters.read}`;
+    const CACHE_KEY = this.cache.createKey([
+      `account-${recipientId.toValue()}`,
+      "notifications",
+      "count",
+      `read-${filters.read}`,
+    ]);
     const cacheHit = await this.cache.get(CACHE_KEY);
 
     if (cacheHit) {

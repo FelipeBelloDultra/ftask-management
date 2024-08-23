@@ -11,6 +11,7 @@ type Input = {
   recipientId: string;
   limit: number;
   page: number;
+  read?: boolean;
 };
 type OnError = never;
 type OnSuccess = { notifications: Notification[]; pagination: Pagination; total: number };
@@ -30,7 +31,10 @@ export class FetchNotificationsByRecipientIdUseCase {
       limit: input.limit,
       page: input.page,
     });
-    const { notifications, total } = await this.notificationRepository.fetchManyByRecipientId(accountId, pagination);
+
+    const { notifications, total } = await this.notificationRepository.fetchManyByRecipientId(accountId, pagination, {
+      read: input.read,
+    });
 
     return right({
       notifications,
