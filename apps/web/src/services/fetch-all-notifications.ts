@@ -9,8 +9,20 @@ interface FetchNotificationsResponse {
   pagination: PersistencePagination;
 }
 
-export async function fetchAllNotifications() {
-  const { notifications, pagination } = await fetchAdapter.get<FetchNotificationsResponse>(ALL_NOTIFICATIONS);
+interface AllNotificationsParams {
+  read?: boolean;
+}
+
+export async function fetchAllNotifications(params?: AllNotificationsParams) {
+  const urlSearch = new URLSearchParams();
+
+  if (params) {
+    urlSearch.set("read", String(params.read));
+  }
+
+  const { notifications, pagination } = await fetchAdapter.get<FetchNotificationsResponse>(
+    `${ALL_NOTIFICATIONS}?${urlSearch.toString()}`,
+  );
 
   return {
     notifications: notifications.map(NotificationMapper.toDomain),
