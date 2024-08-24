@@ -11,14 +11,19 @@ interface FetchNotificationsResponse {
 
 interface AllNotificationsParams {
   read?: boolean;
+  page: number;
+  limit: number;
 }
 
-export async function fetchAllNotifications(params?: AllNotificationsParams) {
+export async function fetchAllNotifications(params: AllNotificationsParams) {
   const urlSearch = new URLSearchParams();
 
-  if (params) {
-    urlSearch.set("read", String(params.read));
+  if (params.read !== undefined && typeof params.read === "boolean") {
+    urlSearch.set("read", String(params.read || false));
   }
+
+  urlSearch.set("page", String(params.page || 1));
+  urlSearch.set("limit", String(params.limit || 10));
 
   const { notifications, pagination } = await fetchAdapter.get<FetchNotificationsResponse>(
     `${ALL_NOTIFICATIONS}?${urlSearch.toString()}`,
