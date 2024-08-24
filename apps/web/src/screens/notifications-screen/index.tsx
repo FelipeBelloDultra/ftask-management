@@ -1,6 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
 import { Bell as BellIcon } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
 
 import { Pagination } from "@/components/pagination";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,49 +12,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { fetchAllNotifications } from "@/services/fetch-all-notifications";
 
 import { NotificationFilters } from "./components/notification-filters";
+import { useNotifications } from "./useNotifications";
 
 export function NotificationsScreen() {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const limit = Number(searchParams.get("limit") || "10");
-  const read = searchParams.get("read") === "true";
-  const page = Number(searchParams.get("page") || "1");
-
-  const { data } = useQuery({
-    queryKey: ["notifications", read, limit, page],
-    queryFn: () => fetchAllNotifications({ read, limit, page }),
-  });
-
-  function handleSetSearchParams(key: string, value: string) {
-    setSearchParams((params) => {
-      params.set(key, value);
-
-      return params;
-    });
-  }
-
-  function resetPagination() {
-    setSearchParams((params) => {
-      params.delete("limit");
-      params.delete("page");
-
-      return params;
-    });
-  }
-
-  function handleSelectFilter(value: string) {
-    resetPagination();
-    handleSetSearchParams("read", value);
-  }
+  const { data, page, read, limit, handleSetSearchParams, handleSelectFilter } = useNotifications();
 
   return data ? (
     <Card className="w-full max-w-4xl mx-auto mt-5">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-bold">Notification center</CardTitle>
-        <NotificationFilters read={read} onSetRead={(v) => handleSelectFilter(String(v))} />
+        <NotificationFilters read={read} onSetRead={handleSelectFilter} />
       </CardHeader>
       <CardContent>
         <Table>
