@@ -92,9 +92,21 @@ model Notification {
   readAt      DateTime? @map("read_at")
   createdAt   DateTime  @default(now()) @map("created_at")
 
-  recipient Account @relation(fields: [recipientId], references: [id])
+  recipient             Account                 @relation(fields: [recipientId], references: [id])
+  notificationsMetadata NotificationsMetadata[]
 
   @@map("notifications")
+}
+
+model NotificationsMetadata {
+  id             String @id @default(uuid())
+  notificationId String @map("notification_id")
+  key            String
+  value          String
+
+  notification Notification @relation(fields: [notificationId], references: [id])
+
+  @@map("notifications_metadata")
 }
 
 enum ProjectStatus {
