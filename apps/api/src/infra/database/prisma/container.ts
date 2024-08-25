@@ -2,6 +2,7 @@ import { container, Lifecycle } from "tsyringe";
 
 import { AccountRepository } from "@/modules/account/application/repositories/account.repository";
 import { MemberRepository } from "@/modules/account/application/repositories/member.repository";
+import { NotificationMetadataRepository } from "@/modules/notification/application/repositories/notification-metadata.repository";
 import { NotificationRepository } from "@/modules/notification/application/repositories/notification.repository";
 import { ProjectMemberRepository } from "@/modules/project/application/repositories/project-member.repository";
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
@@ -10,6 +11,7 @@ import { TaskRepository } from "@/modules/project/application/repositories/task.
 import { PrismaConnection } from "./prisma-connection";
 import { PrismaAccountRepository } from "./repositories/prisma-account.repository";
 import { PrismaMemberRepository } from "./repositories/prisma-member.repository";
+import { PrismaNotificationMetadataRepository } from "./repositories/prisma-notification-metadata.repository";
 import { PrismaNotificationRepository } from "./repositories/prisma-notification.repository";
 import { PrismaProjectMemberRepository } from "./repositories/prisma-project-member.repository";
 import { PrismaProjectRepository } from "./repositories/prisma-project.repository";
@@ -73,6 +75,15 @@ container.register<NotificationRepository>(
   "NotificationRepository",
   {
     useClass: PrismaNotificationRepository,
+  },
+  {
+    lifecycle: Lifecycle.Singleton,
+  },
+);
+container.register<NotificationMetadataRepository>(
+  "NotificationMetadataRepository",
+  {
+    useClass: PrismaNotificationMetadataRepository,
   },
   {
     lifecycle: Lifecycle.Singleton,
