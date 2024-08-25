@@ -11,7 +11,7 @@ export function useNotifications() {
   const read = readFromUrl !== null ? readFromUrl === "true" : undefined;
   const page = Number(searchParams.get("page") || "1");
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["notifications", read, limit, page],
     queryFn: () => fetchAllNotifications({ read, limit, page }),
   });
@@ -46,9 +46,9 @@ export function useNotifications() {
   return {
     handleSelectFilter,
     handleSetSearchParams,
+    isLoading,
     data,
     read,
-    limit,
     page,
   };
 }
