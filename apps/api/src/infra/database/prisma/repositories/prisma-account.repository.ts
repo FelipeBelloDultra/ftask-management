@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { DomainEvents } from "@/core/events/domain-events";
 import { AccountRepository } from "@/modules/account/application/repositories/account.repository";
 import { Account } from "@/modules/account/domain/entity/account";
 
@@ -42,6 +43,7 @@ export class PrismaAccountRepository implements AccountRepository {
     await this.prismaConnection.account.create({
       data: await AccountMapper.toPersistence(account),
     });
+    DomainEvents.dispatchEventsForAggregate(account.id);
   }
 
   public async save(account: Account): Promise<void> {

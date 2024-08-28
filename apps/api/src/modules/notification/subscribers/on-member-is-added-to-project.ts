@@ -16,10 +16,10 @@ export class OnMemberIsAddedToProject implements EventHandler {
   }
 
   public setupSubscriptions(): void {
-    DomainEvents.register(this.sendNotificationToAccount.bind(this), MemberIsAddedToProjectEvent.name);
+    DomainEvents.register(this.sendNewProjectMemberNotification.bind(this), MemberIsAddedToProjectEvent.name);
   }
 
-  private async sendNotificationToAccount({ memberWithProject }: MemberIsAddedToProjectEvent) {
+  private async sendNewProjectMemberNotification({ memberWithProject }: MemberIsAddedToProjectEvent) {
     await this.sendNotificationUseCase.execute({
       title: "New Project Member",
       content: `Hello! You was added to the project ${memberWithProject.project.name} as member`,

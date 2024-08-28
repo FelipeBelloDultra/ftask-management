@@ -1,4 +1,5 @@
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { DomainEvents } from "@/core/events/domain-events";
 import { AccountRepository } from "@/modules/account/application/repositories/account.repository";
 import { Account } from "@/modules/account/domain/entity/account";
 
@@ -19,6 +20,7 @@ export class InMemoryAccountRepository implements AccountRepository {
 
   public async create(account: Account): Promise<void> {
     this.accounts.push(account);
+    DomainEvents.dispatchEventsForAggregate(account.id);
   }
 
   public async save(account: Account): Promise<void> {

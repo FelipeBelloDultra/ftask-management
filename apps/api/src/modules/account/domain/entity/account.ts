@@ -1,6 +1,7 @@
-import { Entity } from "@/core/entity/entity";
+import { AggregateRoot } from "@/core/entity/aggregate-root";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { Optional } from "@/core/types/optional";
+import { CompleteAccountProfileEvent } from "@/modules/account/domain/events/complete-account-profile-event";
 
 import { Password } from "./value-objects/password";
 import { PictureUrl } from "./value-objects/picture-url";
@@ -12,7 +13,7 @@ export interface AccountProps {
   pictureUrl: PictureUrl | null;
 }
 
-export class Account extends Entity<AccountProps> {
+export class Account extends AggregateRoot<AccountProps> {
   public get name() {
     return this.props.name;
   }
@@ -34,12 +35,19 @@ export class Account extends Entity<AccountProps> {
   }
 
   public static create(props: Optional<AccountProps, "pictureUrl">, id?: UniqueEntityID) {
-    return new Account(
+    const isNewAccount = !id;
+    const account = new Account(
       {
         ...props,
         pictureUrl: props.pictureUrl ?? null,
       },
       id,
     );
+
+    if (isNewAccount) {
+      account.addDomainEvent(new CompleteAccountProfileEvent(account));
+    }
+
+    return account;
   }
 }
