@@ -1,6 +1,7 @@
 import { Right } from "@/core/either";
 import { makeAccount } from "@/test/factories/make-account";
 import { makeNotification } from "@/test/factories/make-notification";
+import { InMemoryNotificationMetadataRepository } from "@/test/repositories/in-memory-notification-metadata.repository";
 import { InMemoryNotificationRepository } from "@/test/repositories/in-memory-notification.repository";
 
 import { CountNotificationsByRecipientIdUseCase } from "./count-notifications-by-recipient-id.use-cases";
@@ -10,7 +11,7 @@ describe("CountNotificationsByRecipientIdUseCase", () => {
   let inMemoryNotificationRepository: InMemoryNotificationRepository;
 
   beforeEach(() => {
-    inMemoryNotificationRepository = new InMemoryNotificationRepository();
+    inMemoryNotificationRepository = new InMemoryNotificationRepository(new InMemoryNotificationMetadataRepository());
     sut = new CountNotificationsByRecipientIdUseCase(inMemoryNotificationRepository);
   });
 

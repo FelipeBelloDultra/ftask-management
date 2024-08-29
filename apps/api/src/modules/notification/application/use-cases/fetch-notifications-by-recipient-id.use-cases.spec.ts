@@ -2,6 +2,7 @@ import { Right } from "@/core/either";
 import { Notification } from "@/modules/notification/domain/entity/notification";
 import { makeAccount } from "@/test/factories/make-account";
 import { makeNotification } from "@/test/factories/make-notification";
+import { InMemoryNotificationMetadataRepository } from "@/test/repositories/in-memory-notification-metadata.repository";
 import { InMemoryNotificationRepository } from "@/test/repositories/in-memory-notification.repository";
 
 import { FetchNotificationsByRecipientIdUseCase } from "./fetch-notifications-by-recipient-id.use-cases";
@@ -11,7 +12,7 @@ describe("FetchNotificationsByRecipientId", () => {
   let inMemoryNotificationRepository: InMemoryNotificationRepository;
 
   beforeEach(() => {
-    inMemoryNotificationRepository = new InMemoryNotificationRepository();
+    inMemoryNotificationRepository = new InMemoryNotificationRepository(new InMemoryNotificationMetadataRepository());
     sut = new FetchNotificationsByRecipientIdUseCase(inMemoryNotificationRepository);
   });
 

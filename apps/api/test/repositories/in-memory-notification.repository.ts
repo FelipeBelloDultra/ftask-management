@@ -1,5 +1,6 @@
 import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { NotificationMetadataRepository } from "@/modules/notification/application/repositories/notification-metadata.repository";
 import {
   CountByRecipientIdFilters,
   FetchManyByRecipientIdFilters,
@@ -10,8 +11,12 @@ import { Notification } from "@/modules/notification/domain/entity/notification"
 export class InMemoryNotificationRepository implements NotificationRepository {
   public readonly notifications: Notification[] = [];
 
+  public constructor(private readonly notificationMetadataRepository: NotificationMetadataRepository) {}
+
   public async create(notification: Notification): Promise<void> {
     this.notifications.push(notification);
+
+    this.notificationMetadataRepository.createMany(notification.additionalInfos.getItems());
   }
 
   public async save(notification: Notification): Promise<void> {
