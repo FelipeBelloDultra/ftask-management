@@ -24,6 +24,12 @@ export class OnNewAccountIsCreated implements EventHandler {
       title: "Welcome to our platform",
       content: `Hello ${account.name}! Thank you for joining our community. To complete your profile, please go to Profile menu and add your profile picture`,
       recipientId: account.id.toValue(),
+      additionalInfos: [
+        {
+          key: "setup_profile_picture_url",
+          value: "/settings/profile",
+        },
+      ],
     });
   }
 }

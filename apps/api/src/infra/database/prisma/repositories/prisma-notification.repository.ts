@@ -4,6 +4,7 @@ import { inject, injectable } from "tsyringe";
 import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { CacheRepository } from "@/infra/cache/cache.repository";
+import { NotificationMetadataRepository } from "@/modules/notification/application/repositories/notification-metadata.repository";
 import {
   CountByRecipientIdFilters,
   FetchManyByRecipientIdFilters,
@@ -21,6 +22,8 @@ export class PrismaNotificationRepository implements NotificationRepository {
     private readonly prismaConnection: PrismaConnection,
     @inject("CacheRepository")
     private readonly cache: CacheRepository,
+    @inject("NotificationMetadataRepository")
+    private readonly notificationMetadataRepository: NotificationMetadataRepository,
   ) {}
 
   public async create(notification: Notification): Promise<void> {
@@ -30,6 +33,8 @@ export class PrismaNotificationRepository implements NotificationRepository {
       }),
       this.cache.delete(this.cache.createKey([`account-${notification.recipientId.toValue()}`, "notifications", "*"])),
     ]);
+
+    await this.notificationMetadataRepository.createMany(notification.additionalInfos.getItems());
   }
 
   public async save(notification: Notification): Promise<void> {

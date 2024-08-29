@@ -24,6 +24,12 @@ export class OnMemberIsAddedToProject implements EventHandler {
       title: "New Project Member",
       content: `Hello! You was added to the project ${memberWithProject.project.name} as member`,
       recipientId: memberWithProject.member.accountId.toValue(),
+      additionalInfos: [
+        {
+          key: "project_id",
+          value: memberWithProject.project.id.toValue(),
+        },
+      ],
     });
   }
 }
