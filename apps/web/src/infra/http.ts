@@ -5,4 +5,9 @@ export interface Http {
     body: RequestBody,
     options?: Omit<RequestInit, "method">,
   ): Promise<ResponseType>;
+  patch<ResponseType = unknown, RequestBody = unknown>(
+    url: string | URL,
+    body: RequestBody,
+    options?: Omit<RequestInit, "method">,
+  ): Promise<ResponseType>;
 }

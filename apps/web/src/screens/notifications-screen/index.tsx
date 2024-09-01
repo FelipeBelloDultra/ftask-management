@@ -1,8 +1,10 @@
-import { BellDot as BellDotIcon, Bell as BellIcon } from "lucide-react";
+import { BellDot as BellDotIcon, Bell as BellIcon, EyeIcon } from "lucide-react";
 
 import { Pagination } from "@/components/pagination";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { readNotificationService } from "@/services/mark-notification-as-read";
 
 import * as Loadings from "./components/loadings";
 import { NotificationFilters } from "./components/notification-filters";
@@ -10,6 +12,12 @@ import { useNotifications } from "./useNotifications";
 
 export function NotificationsScreen() {
   const { data, page, read, isLoading, handleSetSearchParams, handleSelectFilter } = useNotifications();
+
+  function updateNotification(id: string) {
+    readNotificationService({
+      notificationId: id,
+    });
+  }
 
   return (
     <Card className="w-full max-w-4xl mx-auto mt-5">
@@ -29,8 +37,9 @@ export function NotificationsScreen() {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[50px]">Status</TableHead>
-                <TableHead className="w-[550px]">Message</TableHead>
+                <TableHead className="w-[450px]">Message</TableHead>
                 <TableHead className="text-right">Received at</TableHead>
+                <TableHead></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -41,15 +50,24 @@ export function NotificationsScreen() {
                     <TableRow key={notification.id}>
                       <TableCell>
                         {!notification.readAt ? (
-                          <BellIcon className="h-5 w-5 text-muted-foreground" />
+                          <Button variant="ghost" size="icon" onClick={() => updateNotification(notification.id)}>
+                            <BellDotIcon className="h-5 w-5 text-blue-500" />
+                          </Button>
                         ) : (
-                          <BellDotIcon className="h-5 w-5 text-blue-500" />
+                          <Button variant="ghost" size="icon" disabled>
+                            <BellIcon className="h-5 w-5 text-muted-foreground" />
+                          </Button>
                         )}
                       </TableCell>
                       <TableCell className="font-medium">
-                        <p className="truncate w-[550px]">{notification.content}</p>
+                        <p className="truncate w-[450px]">{notification.content}</p>
                       </TableCell>
                       <TableCell className="text-right">{notification.relativeCreatedAt()}</TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="ghost" size="icon">
+                          <EyeIcon className="text-muted-foreground size-5" />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))
                 : null}

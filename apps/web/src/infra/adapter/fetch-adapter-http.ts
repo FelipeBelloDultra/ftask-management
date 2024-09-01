@@ -119,6 +119,34 @@ export class FetchAdapterHttp implements Http {
 
     return data;
   }
+
+  public async patch<ResponseType = unknown, RequestBody = unknown>(
+    url: string | URL,
+    body: RequestBody,
+    options?: Omit<RequestInit, "method">,
+  ): Promise<ResponseType> {
+    const request = this.createRequestSchema({
+      method: "PATCH",
+      url: this.makeUrl(url),
+      options: {
+        ...options,
+        body: JSON.stringify(body),
+      },
+    });
+    const response = await fetch(request);
+
+    if (response.status === 401) {
+      return await this.refreshToken(request);
+    }
+
+    if (!response.ok) {
+      return Promise.reject(response);
+    }
+
+    const { data } = (await response.json()) as { data: ResponseType };
+
+    return data;
+  }
 }
 
 export const fetchAdapter = new FetchAdapterHttp();
