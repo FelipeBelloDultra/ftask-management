@@ -31,7 +31,9 @@ export class PrismaNotificationRepository implements NotificationRepository {
       this.prismaConnection.notification.create({
         data: NotificationMapper.toPersistence(notification),
       }),
-      this.cache.delete(this.cache.createKey([`account-${notification.recipientId.toValue()}`, "notifications", "*"])),
+      this.cache.deleteByPrefix(
+        this.cache.createKey([`account-${notification.recipientId.toValue()}`, "notifications"]),
+      ),
     ]);
 
     await this.notificationMetadataRepository.createMany(notification.additionalInfos.getItems());
@@ -45,7 +47,9 @@ export class PrismaNotificationRepository implements NotificationRepository {
         },
         data: NotificationMapper.toPersistence(notification),
       }),
-      this.cache.delete(this.cache.createKey([`account-${notification.recipientId.toValue()}`, "notifications", "*"])),
+      this.cache.deleteByPrefix(
+        this.cache.createKey([`account-${notification.recipientId.toValue()}`, "notifications"]),
+      ),
     ]);
   }
 

@@ -49,7 +49,7 @@ export class PrismaProjectRepository implements ProjectRepository {
       this.prismaConnection.project.create({
         data: ProjectMapper.toPersistence(project),
       }),
-      this.cache.delete(this.cache.createKey([`account-${project.ownerId.toValue()}`, "projects", "*"])),
+      this.cache.deleteByPrefix(this.cache.createKey([`account-${project.ownerId.toValue()}`, "projects"])),
     ]);
   }
 
