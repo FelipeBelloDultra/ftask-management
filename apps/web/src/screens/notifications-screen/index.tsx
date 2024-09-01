@@ -21,7 +21,7 @@ export function NotificationsScreen() {
   }
 
   return (
-    <Card className="w-full max-w-4xl mx-auto mt-5">
+    <Card className="w-full max-w-4xl mx-auto">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-bold">Notification center</CardTitle>
         {isLoading ? (
@@ -57,11 +57,11 @@ export function NotificationsScreen() {
                         ) : (
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger>
-                                <div className="size-10 flex items-center justify-center opacity-50">
+                              <Button variant="ghost" size="icon" className="cursor-default opacity-50" asChild>
+                                <TooltipTrigger>
                                   <BellIcon className="h-5 w-5 text-muted-foreground" />
-                                </div>
-                              </TooltipTrigger>
+                                </TooltipTrigger>
+                              </Button>
                               <TooltipContent>
                                 Read at: <br />
                                 {notification.getRelativeDate(notification.readAt)}
