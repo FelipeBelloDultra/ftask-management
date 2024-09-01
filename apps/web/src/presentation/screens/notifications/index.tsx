@@ -1,14 +1,14 @@
 import { BellDot as BellDotIcon, Bell as BellIcon, EyeIcon } from "lucide-react";
 
-import { Pagination } from "@/components/pagination";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Pagination } from "@/presentation/components/pagination";
+import { Button } from "@/presentation/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/presentation/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/presentation/components/ui/tooltip";
 import { readNotificationService } from "@/services/mark-notification-as-read";
 
-import * as Loadings from "./components/loadings";
-import { NotificationFilters } from "./components/notification-filters";
+import * as Loadings from "./_components/loadings";
+import { NotificationFilters } from "./_components/notification-filters";
 import { useNotifications } from "./useNotifications";
 
 export function NotificationsScreen() {
