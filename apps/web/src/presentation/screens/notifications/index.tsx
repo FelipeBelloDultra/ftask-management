@@ -14,12 +14,6 @@ import { useNotifications } from "./useNotifications";
 export function NotificationsScreen() {
   const { data, page, read, isLoading, handleSetSearchParams, handleSelectFilter } = useNotifications();
 
-  function updateNotification(id: string) {
-    readNotificationService({
-      notificationId: id,
-    });
-  }
-
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -51,7 +45,15 @@ export function NotificationsScreen() {
                     <TableRow key={notification.id}>
                       <TableCell>
                         {!notification.readAt ? (
-                          <Button variant="ghost" size="icon" onClick={() => updateNotification(notification.id)}>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() =>
+                              readNotificationService({
+                                notificationId: notification.id,
+                              })
+                            }
+                          >
                             <BellDotIcon className="h-5 w-5 text-blue-500" />
                           </Button>
                         ) : (
