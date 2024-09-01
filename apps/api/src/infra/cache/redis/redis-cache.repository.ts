@@ -23,6 +23,18 @@ export class RedisCacheRepository implements CacheRepository {
     await this.redisConnection.del(key);
   }
 
+  public async deleteByPrefix(keyPattern: string): Promise<void> {
+    const pattern = this.createKey([keyPattern, "*"]);
+    const keys = await this.redisConnection.keys(pattern);
+    const pipeline = this.redisConnection.pipeline();
+
+    keys.forEach((key) => {
+      pipeline.del(key);
+    });
+
+    await pipeline.exec();
+  }
+
   public createKey(keys: Array<string>): string {
     return keys.join(":");
   }
