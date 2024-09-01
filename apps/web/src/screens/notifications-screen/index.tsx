@@ -4,6 +4,7 @@ import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { readNotificationService } from "@/services/mark-notification-as-read";
 
 import * as Loadings from "./components/loadings";
@@ -54,15 +55,27 @@ export function NotificationsScreen() {
                             <BellDotIcon className="h-5 w-5 text-blue-500" />
                           </Button>
                         ) : (
-                          <Button variant="ghost" size="icon" disabled>
-                            <BellIcon className="h-5 w-5 text-muted-foreground" />
-                          </Button>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <div className="size-10 flex items-center justify-center opacity-50">
+                                  <BellIcon className="h-5 w-5 text-muted-foreground" />
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                Read at: <br />
+                                {notification.getRelativeDate(notification.readAt)}
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
                         )}
                       </TableCell>
                       <TableCell className="font-medium">
                         <p className="truncate w-[450px]">{notification.content}</p>
                       </TableCell>
-                      <TableCell className="text-right">{notification.relativeCreatedAt()}</TableCell>
+                      <TableCell className="text-right">
+                        {notification.getRelativeDate(notification.createdAt)}
+                      </TableCell>
                       <TableCell className="text-right">
                         <Button variant="ghost" size="icon">
                           <EyeIcon className="text-muted-foreground size-5" />

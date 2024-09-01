@@ -38,10 +38,10 @@ export class Notification {
     this.props = props;
   }
 
-  public relativeCreatedAt(): string {
+  public getRelativeDate(date: Date): string {
     const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
     const now = new Date();
-    const diffInSeconds = (+this.createdAt - +now) / 1000;
+    const diffInSeconds = (+date - +now) / 1000;
 
     const SECONDS_IN_MINUTES = 60; // 1 minute (seconds * seconds)
     const SECONDS_IN_HOURS = SECONDS_IN_MINUTES * 60; // 1 hour (seconds * minutes * hours)
