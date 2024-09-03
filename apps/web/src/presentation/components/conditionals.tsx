@@ -15,6 +15,8 @@ interface ChooseProps {
 
 export function If({ children, condition }: StatementProps) {
   if (condition) return children;
+
+  return null;
 }
 
 export function Choose({ children }: ChooseProps) {
@@ -38,6 +40,8 @@ export function Choose({ children }: ChooseProps) {
 
 export function When({ children, condition }: StatementProps) {
   if (condition) return children;
+
+  return null;
 }
 
 export function Otherwise({ children }: StatementChildrenType) {

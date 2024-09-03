@@ -1,5 +1,6 @@
 import { BellDot as BellDotIcon, Bell as BellIcon, EyeIcon } from "lucide-react";
 
+import { Choose, If, Otherwise, When } from "@/presentation/components/conditionals";
 import { Pagination } from "@/presentation/components/pagination";
 import { Button } from "@/presentation/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/presentation/components/ui/card";
@@ -14,63 +15,79 @@ import { useNotifications } from "./useNotifications";
 export function NotificationsScreen() {
   const { data, page, read, isLoading, handleSetSearchParams, handleSelectFilter } = useNotifications();
 
+  const isNotLoadingAndHasData = !isLoading && !!data?.notifications.length;
+  const isNotLoadingAndHasNoData = !isLoading && !data?.notifications.length;
+
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-bold">Notification center</CardTitle>
-        {isLoading ? (
-          <Loadings.SkeletonLoadingFilters />
-        ) : (
-          <NotificationFilters read={read} onSetRead={handleSelectFilter} />
-        )}
+        <Choose>
+          <When condition={isLoading}>
+            <Loadings.SkeletonLoadingFilters />
+          </When>
+
+          <Otherwise>
+            <NotificationFilters read={read} onSetRead={handleSelectFilter} />
+          </Otherwise>
+        </Choose>
       </CardHeader>
       <CardContent>
-        {!isLoading && !data?.notifications.length ? (
-          <h4 className="text-muted-foreground text-lg mt-3">No notifications found.</h4>
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[50px]">Status</TableHead>
-                <TableHead className="w-[450px]">Message</TableHead>
-                <TableHead className="text-right">Received at</TableHead>
-                <TableHead></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading ? <Loadings.SkeletonLoadingTableData /> : null}
+        <Choose>
+          <When condition={isNotLoadingAndHasNoData}>
+            <h4 className="text-muted-foreground text-lg mt-3">No notifications found.</h4>
+          </When>
 
-              {!isLoading && !!data?.notifications.length
-                ? data.notifications.map((notification) => (
+          <Otherwise>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[50px]">Status</TableHead>
+                  <TableHead className="w-[450px]">Message</TableHead>
+                  <TableHead className="text-right">Received at</TableHead>
+                  <TableHead></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <If condition={isLoading}>
+                  <Loadings.SkeletonLoadingTableData />
+                </If>
+
+                <If condition={isNotLoadingAndHasData}>
+                  {data?.notifications.map((notification) => (
                     <TableRow key={notification.id}>
                       <TableCell>
-                        {!notification.readAt ? (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() =>
-                              readNotificationService({
-                                notificationId: notification.id,
-                              })
-                            }
-                          >
-                            <BellDotIcon className="h-5 w-5 text-blue-500" />
-                          </Button>
-                        ) : (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <Button variant="ghost" size="icon" className="cursor-default opacity-50" asChild>
-                                <TooltipTrigger>
-                                  <BellIcon className="h-5 w-5 text-muted-foreground" />
-                                </TooltipTrigger>
-                              </Button>
-                              <TooltipContent>
-                                Read at: <br />
-                                {notification.getRelativeDate(notification.readAt)}
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        )}
+                        <Choose>
+                          <When condition={!notification.readAt}>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() =>
+                                readNotificationService({
+                                  notificationId: notification.id,
+                                })
+                              }
+                            >
+                              <BellDotIcon className="h-5 w-5 text-blue-500" />
+                            </Button>
+                          </When>
+
+                          <Otherwise>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <Button variant="ghost" size="icon" className="cursor-default opacity-50" asChild>
+                                  <TooltipTrigger>
+                                    <BellIcon className="h-5 w-5 text-muted-foreground" />
+                                  </TooltipTrigger>
+                                </Button>
+                                <TooltipContent>
+                                  Read at: <br />
+                                  {notification.getRelativeDate(notification.readAt as Date)}
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </Otherwise>
+                        </Choose>
                       </TableCell>
                       <TableCell className="font-medium">
                         <p className="truncate w-[450px]">{notification.content}</p>
@@ -84,26 +101,31 @@ export function NotificationsScreen() {
                         </Button>
                       </TableCell>
                     </TableRow>
-                  ))
-                : null}
-            </TableBody>
-          </Table>
-        )}
+                  ))}
+                </If>
+              </TableBody>
+            </Table>
+          </Otherwise>
+        </Choose>
       </CardContent>
 
       <CardFooter className="pt-6">
         <div className="flex flex-col flex-1">
-          {isLoading ? (
-            <Loadings.SkeletonLoadingPagination />
-          ) : (
-            <Pagination
-              onLimitPerPageChange={(limit) => handleSetSearchParams("limit", limit)}
-              onPageChange={(page) => handleSetSearchParams("page", String(page))}
-              page={page}
-              perPage={data?.pagination.limit || 0}
-              totalCount={data?.pagination.total.records || 0}
-            />
-          )}
+          <Choose>
+            <When condition={isLoading}>
+              <Loadings.SkeletonLoadingPagination />
+            </When>
+
+            <Otherwise>
+              <Pagination
+                onLimitPerPageChange={(limit) => handleSetSearchParams("limit", limit)}
+                onPageChange={(page) => handleSetSearchParams("page", String(page))}
+                page={page}
+                perPage={data?.pagination.limit || 0}
+                totalCount={data?.pagination.total.records || 0}
+              />
+            </Otherwise>
+          </Choose>
         </div>
       </CardFooter>
     </Card>

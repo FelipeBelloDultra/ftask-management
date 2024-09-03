@@ -1,8 +1,8 @@
 import { LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import { Button } from "@/presentation/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Button } from "@/presentation/components/ui/button";
 
 interface SidebarMenuItemProps {
   onSubmenuCollapsibleToggled(): void;
