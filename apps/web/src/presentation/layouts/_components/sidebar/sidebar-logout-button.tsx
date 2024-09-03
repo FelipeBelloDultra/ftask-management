@@ -1,5 +1,4 @@
-import { LogOut as LogOutIcon } from "lucide-react";
-
+import { LogOutIcon } from "@/presentation/components/icons";
 import { Button } from "@/presentation/components/ui/button";
 import { useAuth } from "@/presentation/hooks/use-auth";
 

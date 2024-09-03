@@ -1,5 +1,4 @@
-import { ChevronRight as ChevronRightIcon } from "lucide-react";
-
+import { ChevronRightIcon } from "@/presentation/components/icons";
 import { Skeleton } from "@/presentation/components/ui/skeleton";
 
 export function HeaderLoading() {

@@ -1,6 +1,6 @@
-import { LogOut as LogOutIcon, UserPen as UserPenIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import { LogOutIcon, UserPenIcon } from "@/presentation/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/presentation/components/ui/avatar";
 import { Button } from "@/presentation/components/ui/button";
 import {

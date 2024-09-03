@@ -1,6 +1,6 @@
-import { BellDot as BellDotIcon, Bell as BellIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import { BellDotIcon, BellIcon } from "@/presentation/components/icons";
 import { Button } from "@/presentation/components/ui/button";
 
 function getNotificationIcon(hasUnread = false) {

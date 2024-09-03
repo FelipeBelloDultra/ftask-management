@@ -1,5 +1,4 @@
-import { ChevronDown as ChevronDownIcon } from "lucide-react";
-
+import { ChevronDownIcon } from "@/presentation/components/icons";
 import { Button } from "@/presentation/components/ui/button";
 import {
   DropdownMenu,

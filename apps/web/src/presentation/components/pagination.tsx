@@ -1,5 +1,9 @@
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
-
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronsLeftIcon,
+  ChevronsRightIcon,
+} from "@/presentation/components/icons";
 import {
   Select,
   SelectContent,
@@ -60,7 +64,7 @@ export function Pagination({ page, totalCount, perPage, onPageChange, onLimitPer
               disabled={page === 1}
             >
               <span className="sr-only">First page</span>
-              <ChevronsLeft className="h-4 w-4" />
+              <ChevronsLeftIcon className="h-4 w-4" />
             </Button>
 
             <Button
@@ -70,7 +74,7 @@ export function Pagination({ page, totalCount, perPage, onPageChange, onLimitPer
               disabled={page === 1}
             >
               <span className="sr-only">Previous page</span>
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeftIcon className="h-4 w-4" />
             </Button>
 
             <Button
@@ -80,7 +84,7 @@ export function Pagination({ page, totalCount, perPage, onPageChange, onLimitPer
               disabled={pages <= page}
             >
               <span className="sr-only">Next page</span>
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRightIcon className="h-4 w-4" />
             </Button>
 
             <Button
@@ -90,7 +94,7 @@ export function Pagination({ page, totalCount, perPage, onPageChange, onLimitPer
               disabled={pages <= page}
             >
               <span className="sr-only">Last page</span>
-              <ChevronsRight className="h-4 w-4" />
+              <ChevronsRightIcon className="h-4 w-4" />
             </Button>
           </div>
         </div>

@@ -1,5 +1,6 @@
-import { TerminalIcon } from "lucide-react";
 import { Outlet } from "react-router-dom";
+
+import { TerminalIcon } from "@/presentation/components/icons";
 
 import { AuthActionButton } from "./_components/auth-action-button";
 

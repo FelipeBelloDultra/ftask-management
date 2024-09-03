@@ -1,7 +1,7 @@
-import { LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
+import { LucideIconType } from "@/presentation/components/icons";
 import { Button } from "@/presentation/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/presentation/components/ui/collapsible";
 
@@ -9,7 +9,7 @@ interface SidebarMenuCollapsibleProps {
   onSubmenuCollapsibleToggled(): void;
   openedMenuKey: string | null;
   menuKey: string;
-  icon: LucideIcon;
+  icon: LucideIconType;
   label: string;
   submenus: Array<{
     label: string;

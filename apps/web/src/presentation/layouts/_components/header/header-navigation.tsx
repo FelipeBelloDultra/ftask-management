@@ -1,7 +1,7 @@
-import { ChevronRight as ChevronRightIcon } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+import { ChevronRightIcon } from "@/presentation/components/icons";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,25 +10,6 @@ import {
   BreadcrumbPage,
 } from "@/presentation/components/ui/breadcrumb";
 import { Button } from "@/presentation/components/ui/button";
-
-const mapping = {
-  dash: {
-    label: "Dashboard",
-  },
-  notifications: {
-    label: "Notifications",
-  },
-  profile: {
-    label: "Profile",
-  },
-  settings: {
-    label: "Settings",
-  },
-} as {
-  [key: string]: {
-    label: string;
-  };
-};
 
 export function HeaderNavigation() {
   const { pathname } = useLocation();
@@ -39,7 +20,6 @@ export function HeaderNavigation() {
 
     return segments.map((segment, index) => {
       const isLastSegment = index === lastIndex;
-      const segmentLabel = mapping[segment]?.label || segment;
       const href = `/${segments.slice(0, index + 1).join("/")}`;
 
       return (
@@ -47,11 +27,11 @@ export function HeaderNavigation() {
           {index > 0 ? <ChevronRightIcon size={18} /> : null}
 
           {isLastSegment ? (
-            <BreadcrumbPage className="px-2">{segmentLabel}</BreadcrumbPage>
+            <BreadcrumbPage className="px-2">{segment}</BreadcrumbPage>
           ) : (
             <BreadcrumbLink asChild>
               <Button asChild variant="link" className="text-muted-foreground px-2 py-0">
-                <Link to={href}>{segmentLabel}</Link>
+                <Link to={href}>{segment}</Link>
               </Button>
             </BreadcrumbLink>
           )}

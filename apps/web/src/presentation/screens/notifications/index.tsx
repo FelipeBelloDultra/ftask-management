@@ -1,7 +1,7 @@
-import { BellDot as BellDotIcon, Bell as BellIcon, EyeIcon } from "lucide-react";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { Choose, If, Otherwise, When } from "@/presentation/components/conditionals";
+import { BellDotIcon, BellIcon, EyeIcon } from "@/presentation/components/icons";
 import { Pagination } from "@/presentation/components/pagination";
 import { Button } from "@/presentation/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/presentation/components/ui/card";

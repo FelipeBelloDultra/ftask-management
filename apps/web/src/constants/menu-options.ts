@@ -1,10 +1,10 @@
 import {
-  BellRing as BellRingIcon,
-  Building2 as Building2Icon,
-  LayoutDashboard as LayoutDashboardIcon,
-  LucideIcon,
-  Settings as SettingsIcon,
-} from "lucide-react";
+  BellRingIcon,
+  Building2Icon,
+  LayoutDashboardIcon,
+  LucideIconType,
+  SettingsIcon,
+} from "@/presentation/components/icons";
 
 interface SubmenuItem {
   label: string;
@@ -21,7 +21,7 @@ interface DividerItem {
 interface MenuItem {
   isDivider: false;
   label: string;
-  icon: LucideIcon;
+  icon: LucideIconType;
   href: string;
   isActive: boolean;
   submenus?: Array<SubmenuItem>;

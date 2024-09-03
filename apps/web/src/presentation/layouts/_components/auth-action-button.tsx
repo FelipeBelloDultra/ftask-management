@@ -1,6 +1,6 @@
-import { LogIn as LogInIcon, UserPlus as UserPlusIcon } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
+import { LogInIcon, UserPlusIcon } from "@/presentation/components/icons";
 import { Button } from "@/presentation/components/ui/button";
 
 export function AuthActionButton() {
