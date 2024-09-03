@@ -1,6 +1,7 @@
 services:
     postgres_db:
         image: bitnami/postgresql:16.2.0
+        restart: always
         ports:
             - 5432:5432
         environment:
@@ -15,6 +16,7 @@ services:
 
     redis_cache:
         image: bitnami/redis:7.0.15
+        restart: always
         ports:
             - 6379:6379
         environment:
