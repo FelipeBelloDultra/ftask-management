@@ -4,6 +4,7 @@ import { AuthenticatedLayout } from "@/presentation/layouts/authenticated";
 import { UnauthenticatedLayout } from "@/presentation/layouts/unauthenticated";
 import { DashboardScreen } from "@/presentation/screens/dashboard";
 import { NotificationsScreen } from "@/presentation/screens/notifications";
+import { NotificationDetailScreen } from "@/presentation/screens/notifications/details";
 import { SettingsScreen } from "@/presentation/screens/settings";
 import { SettingsProfileScreen } from "@/presentation/screens/settings/profile";
 import { SignInScreen } from "@/presentation/screens/sign-in";
@@ -24,7 +25,9 @@ export function Router() {
       <Route element={<AuthGuard isPrivate={true} />}>
         <Route path="/dash" element={<AuthenticatedLayout />}>
           <Route index element={<DashboardScreen />} />
-          <Route path="notifications" element={<NotificationsScreen />} />
+          <Route path="notifications" element={<NotificationsScreen />}>
+            <Route path=":notificationId" element={<NotificationDetailScreen />} />
+          </Route>
           <Route path="settings">
             <Route index element={<SettingsScreen />} />
             <Route path="profile" element={<SettingsProfileScreen />} />
