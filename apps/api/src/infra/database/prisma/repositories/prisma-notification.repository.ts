@@ -11,7 +11,9 @@ import {
   NotificationRepository,
 } from "@/modules/notification/application/repositories/notification.repository";
 import { Notification } from "@/modules/notification/domain/entity/notification";
+import { NotificationDetail } from "@/modules/notification/domain/entity/value-objects/notification-detail";
 
+import { NotificationDetailMapper } from "../mappers/notification-detail-mapper";
 import { NotificationMapper } from "../mappers/notification-mapper";
 import { PrismaConnection } from "../prisma-connection";
 
@@ -63,6 +65,21 @@ export class PrismaNotificationRepository implements NotificationRepository {
     if (!notification) return null;
 
     return NotificationMapper.toDomain(notification);
+  }
+
+  public async findDetailById(id: UniqueEntityID): Promise<NotificationDetail | null> {
+    const notificationDetail = await this.prismaConnection.notification.findUnique({
+      where: {
+        id: id.toValue(),
+      },
+      include: {
+        notificationsMetadata: true,
+      },
+    });
+
+    if (!notificationDetail) return null;
+
+    return NotificationDetailMapper.toDomain(notificationDetail);
   }
 
   public async fetchManyByRecipientId(

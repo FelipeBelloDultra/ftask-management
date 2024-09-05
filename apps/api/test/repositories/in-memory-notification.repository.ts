@@ -1,17 +1,19 @@
 import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
-import { NotificationMetadataRepository } from "@/modules/notification/application/repositories/notification-metadata.repository";
 import {
   CountByRecipientIdFilters,
   FetchManyByRecipientIdFilters,
   NotificationRepository,
 } from "@/modules/notification/application/repositories/notification.repository";
 import { Notification } from "@/modules/notification/domain/entity/notification";
+import { NotificationDetail } from "@/modules/notification/domain/entity/value-objects/notification-detail";
+
+import { InMemoryNotificationMetadataRepository } from "./in-memory-notification-metadata.repository";
 
 export class InMemoryNotificationRepository implements NotificationRepository {
   public readonly notifications: Notification[] = [];
 
-  public constructor(private readonly notificationMetadataRepository: NotificationMetadataRepository) {}
+  public constructor(private readonly notificationMetadataRepository: InMemoryNotificationMetadataRepository) {}
 
   public async create(notification: Notification): Promise<void> {
     this.notifications.push(notification);
@@ -35,6 +37,28 @@ export class InMemoryNotificationRepository implements NotificationRepository {
     }
 
     return notification;
+  }
+
+  public async findDetailById(id: UniqueEntityID): Promise<NotificationDetail | null> {
+    const notification = this.notifications.find((n) => n.id.equals(id));
+
+    if (!notification) {
+      return null;
+    }
+
+    const notificationMetadata = this.notificationMetadataRepository.notificationsMetadata.filter((n) =>
+      n.notificationId.equals(notification.id),
+    );
+
+    return NotificationDetail.create({
+      notificationId: notification.id,
+      recipientId: notification.recipientId,
+      additionalInfos: notificationMetadata,
+      content: notification.content,
+      createdAt: notification.createdAt,
+      title: notification.title,
+      readAt: notification.readAt,
+    });
   }
 
   public async fetchManyByRecipientId(
