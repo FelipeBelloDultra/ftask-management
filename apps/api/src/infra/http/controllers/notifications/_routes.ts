@@ -5,6 +5,7 @@ import { ensureAuthenticatedMiddleware } from "@/infra/http/middlewares/factorie
 import { CountNotificationsByRecipientIdController } from "./count-notifications-by-recipient-id.controller";
 import { FetchNotificationsByRecipientIdController } from "./fetch-notifications-by-recipient-id.controller";
 import { MarkNotificationAsReadController } from "./mark-notification-as-read.controller";
+import { ShowNotificationDetailByIdController } from "./show-notification-detail-by-id.controller";
 
 const router = Router();
 
@@ -23,8 +24,10 @@ router.patch(
   ensureAuthenticatedMiddleware.handle(),
   new MarkNotificationAsReadController().handler,
 );
-router.get("/notifications/:notificationId", ensureAuthenticatedMiddleware.handle(), (req, res) =>
-  res.json({ message: "not implemented yet" }).status(400),
+router.get(
+  "/notifications/:notificationId",
+  ensureAuthenticatedMiddleware.handle(),
+  new ShowNotificationDetailByIdController().handler,
 );
 
 export { router };

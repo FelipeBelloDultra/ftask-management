@@ -3,7 +3,10 @@ import { z } from "zod";
 
 import { Controller } from "@/infra/http/controller";
 import { NotificationDetailPresenter } from "@/infra/presenters/notificaiton-detail-presenter";
+import { NotificationNotFoundError } from "@/modules/notification/application/use-cases/errors/notification-not-found.error";
 import { makeShowNotificationDetailById } from "@/modules/notification/application/use-cases/factories/make-show-notificiation-detail-by-id";
+
+import { HttpException } from "../../http-exception";
 
 const routeParamSchema = z.object({
   notificationId: z.string().uuid(),
@@ -26,5 +29,15 @@ export class ShowNotificationDetailByIdController implements Controller {
         data: NotificationDetailPresenter.toHTTP(result.value.notificationDetail),
       });
     }
+
+    switch (result.value.constructor) {
+      case NotificationNotFoundError:
+        throw new HttpException({
+          message: "Notification not found",
+          statusCode: 404,
+        });
+    }
+
+    throw new Error();
   }
 }
