@@ -22,5 +22,6 @@ export {
   Building2 as Building2Icon,
   LayoutDashboard as LayoutDashboardIcon,
   EyeIcon,
+  EyeOff as EyeOffIcon,
   type LucideIcon as LucideIconType,
 } from "lucide-react";

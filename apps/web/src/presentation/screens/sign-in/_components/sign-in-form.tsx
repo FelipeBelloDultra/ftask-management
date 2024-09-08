@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useSearchParams } from "react-router-dom";
 import { z } from "zod";
 
 import { Loader2Icon } from "@/presentation/components/icons";
@@ -30,12 +31,15 @@ const signInSchema = z.object({
 type SignInFormSchema = z.infer<typeof signInSchema>;
 
 export function SignInForm() {
+  const [searchParams] = useSearchParams();
+  const email = searchParams.get("email");
+  const mustFocusEmail = Boolean(!email);
   const { signIn } = useAuth();
   const { toast } = useToast();
   const form = useForm<SignInFormSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: "",
+      email: email ? email : "",
       password: "",
     },
   });
@@ -70,7 +74,13 @@ export function SignInForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="name@example.com" className="w-full" {...field} />
+                <Input
+                  autoFocus={mustFocusEmail}
+                  type="email"
+                  placeholder="name@example.com"
+                  className="w-full"
+                  {...field}
+                />
               </FormControl>
               <FormMessage className="font-semibold" />
             </FormItem>
@@ -84,7 +94,13 @@ export function SignInForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="my-password" className="w-full" {...field} />
+                <Input
+                  autoFocus={!mustFocusEmail}
+                  type="password"
+                  placeholder="my-password"
+                  className="w-full"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
