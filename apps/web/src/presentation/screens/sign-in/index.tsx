@@ -5,11 +5,6 @@ import { Button } from "@/presentation/components/ui/button";
 
 import { SignInForm } from "./_components/sign-in-form";
 
-// export const metadata: Metadata = {
-//   title: "Sign In - FTask Management",
-//   description: "Do your login and make all projects easy.",
-// };
-
 export function SignInScreen() {
   return (
     <AnimatedPage>

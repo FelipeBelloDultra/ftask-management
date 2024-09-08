@@ -2,11 +2,6 @@ import { AnimatedPage } from "@/presentation/components/animated-page";
 
 import { SignUpForm } from "./_components/sign-up-form";
 
-// export const metadata: Metadata = {
-//   title: "Sign Up - FTask Management",
-//   description: "Finish your account registration",
-// };
-
 export default function SignUpScreen() {
   return (
     <AnimatedPage>
