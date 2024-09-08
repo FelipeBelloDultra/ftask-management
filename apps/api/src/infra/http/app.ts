@@ -94,8 +94,8 @@ export class App {
       }),
     );
     this.expressInstance.use(cookieParser());
-    this.setGlobalErrorHandler();
     this.registerRoutes();
+    this.setGlobalErrorHandler();
   }
 
   public async startServices() {
