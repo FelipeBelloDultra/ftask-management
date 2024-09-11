@@ -36,6 +36,6 @@ export class RedisCacheRepository implements CacheRepository {
   }
 
   public createKey(keys: Array<string>): string {
-    return keys.join(":");
+    return keys.join(".");
   }
 }

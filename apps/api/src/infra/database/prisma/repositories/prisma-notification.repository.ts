@@ -13,7 +13,7 @@ import {
 import { Notification } from "@/modules/notification/domain/entity/notification";
 import { NotificationDetail } from "@/modules/notification/domain/entity/value-objects/notification-detail";
 
-import { NotificationDetailMapper } from "../mappers/notification-detail-mapper";
+import { NotificationDetailMapper, PrismaNotificationDetail } from "../mappers/notification-detail-mapper";
 import { NotificationMapper } from "../mappers/notification-mapper";
 import { PrismaConnection } from "../prisma-connection";
 
@@ -52,6 +52,7 @@ export class PrismaNotificationRepository implements NotificationRepository {
       this.cache.deleteByPrefix(
         this.cache.createKey([`account-${notification.recipientId.toValue()}`, "notifications"]),
       ),
+      this.cache.deleteByPrefix(this.cache.createKey(["notification", notification.id.toValue()])),
     ]);
   }
 
@@ -68,6 +69,17 @@ export class PrismaNotificationRepository implements NotificationRepository {
   }
 
   public async findDetailById(id: UniqueEntityID): Promise<NotificationDetail | null> {
+    const CACHE_KEY = this.cache.createKey(["notification", id.toValue(), "details"]);
+    const cacheHit = await this.cache.get(CACHE_KEY);
+
+    if (cacheHit) {
+      const { notificationDetail } = JSON.parse(cacheHit) as {
+        notificationDetail: PrismaNotificationDetail;
+      };
+
+      return NotificationDetailMapper.toDomain(notificationDetail);
+    }
+
     const notificationDetail = await this.prismaConnection.notification.findUnique({
       where: {
         id: id.toValue(),
@@ -78,6 +90,8 @@ export class PrismaNotificationRepository implements NotificationRepository {
     });
 
     if (!notificationDetail) return null;
+
+    await this.cache.set(CACHE_KEY, JSON.stringify({ notificationDetail }));
 
     return NotificationDetailMapper.toDomain(notificationDetail);
   }

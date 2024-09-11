@@ -8,7 +8,7 @@ import { NotificationDetail } from "@/modules/notification/domain/entity/value-o
 
 import { NotificationMetadataMapper } from "./notification-metadata-mapper";
 
-type PrismaNotificationDetail = PrismaNotification & {
+export type PrismaNotificationDetail = PrismaNotification & {
   notificationsMetadata: Array<PrismaNotificationsMetadata>;
 };
 
