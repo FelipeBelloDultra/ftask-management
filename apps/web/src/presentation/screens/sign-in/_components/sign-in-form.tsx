@@ -30,16 +30,24 @@ const signInSchema = z.object({
 
 type SignInFormSchema = z.infer<typeof signInSchema>;
 
+function validateExternalEmail(email: string | null): string {
+  if (!email) return "";
+
+  const { success, data } = z.string().email().safeParse(email);
+
+  return !success ? "" : data;
+}
+
 export function SignInForm() {
   const [searchParams] = useSearchParams();
-  const email = searchParams.get("email");
+  const email = validateExternalEmail(searchParams.get("email"));
   const mustFocusEmail = Boolean(!email);
   const { signIn } = useAuth();
   const { toast } = useToast();
   const form = useForm<SignInFormSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: email ? email : "",
+      email,
       password: "",
     },
   });

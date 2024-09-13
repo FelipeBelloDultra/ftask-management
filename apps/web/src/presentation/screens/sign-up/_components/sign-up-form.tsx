@@ -40,7 +40,7 @@ export function SignUpForm() {
         variant: "default",
         duration: 3000,
       });
-      navigate(`/sign-in?email=${data.email}`);
+      navigate(`/sign-in?email=${encodeURI(data.email)}`);
     } catch (error) {
       if (error instanceof Response && error.status === 409) {
         toast({
