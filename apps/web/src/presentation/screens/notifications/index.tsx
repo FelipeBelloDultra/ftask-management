@@ -12,7 +12,7 @@ import { readNotificationService } from "@/services/mark-notification-as-read";
 
 import * as Loadings from "./_components/loadings";
 import { NotificationFilters } from "./_components/notification-filters";
-import { useNotifications } from "./useNotifications";
+import { useNotifications } from "./_hooks/use-notifications";
 
 export function NotificationsScreen() {
   const { data, page, read, isLoading, handleSetSearchParams, handleSelectFilter } = useNotifications();
