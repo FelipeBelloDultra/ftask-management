@@ -17,7 +17,7 @@ export function NotificationDetailScreen() {
   const { search } = useLocation();
   const { notificationId } = useParams() as { notificationId: string };
   const { data, isLoading, error } = useQuery({
-    queryKey: ["notification", notificationId],
+    queryKey: ["notifications", notificationId],
     queryFn: () => showNotificationDetail({ notificationId }),
   });
 

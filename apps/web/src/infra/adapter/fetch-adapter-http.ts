@@ -122,7 +122,7 @@ export class FetchAdapterHttp implements Http {
 
   public async patch<ResponseType = unknown, RequestBody = unknown>(
     url: string | URL,
-    body: RequestBody,
+    body?: RequestBody,
     options?: Omit<RequestInit, "method">,
   ): Promise<ResponseType> {
     const request = this.createRequestSchema({
@@ -130,7 +130,9 @@ export class FetchAdapterHttp implements Http {
       url: this.makeUrl(url),
       options: {
         ...options,
-        body: JSON.stringify(body),
+        ...(body !== undefined && {
+          body: JSON.stringify(body),
+        }),
       },
     });
     const response = await fetch(request);
@@ -141,6 +143,10 @@ export class FetchAdapterHttp implements Http {
 
     if (!response.ok) {
       return Promise.reject(response);
+    }
+
+    if (response.status === 204) {
+      return void 0 as ResponseType;
     }
 
     const { data } = (await response.json()) as { data: ResponseType };

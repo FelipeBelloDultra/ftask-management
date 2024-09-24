@@ -9,5 +9,5 @@ interface ReadNotificationServiceParams {
 export async function readNotificationService({ notificationId }: ReadNotificationServiceParams) {
   const url = READ_NOTIFICATION.replace(":notificationId", notificationId);
 
-  await fetchAdapter.patch(url, {});
+  await fetchAdapter.patch(url);
 }

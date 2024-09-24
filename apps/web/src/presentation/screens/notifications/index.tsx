@@ -8,14 +8,14 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/presenta
 import { Dialog } from "@/presentation/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/presentation/components/ui/tooltip";
-import { readNotificationService } from "@/services/mark-notification-as-read";
 
 import * as Loadings from "./_components/loadings";
 import { NotificationFilters } from "./_components/notification-filters";
 import { useNotifications } from "./_hooks/use-notifications";
 
 export function NotificationsScreen() {
-  const { data, page, read, isLoading, handleSetSearchParams, handleSelectFilter } = useNotifications();
+  const { data, page, read, isLoading, handleSetSearchParams, handleSelectFilter, handleReadNotification } =
+    useNotifications();
   const { search } = useLocation();
   const { notificationId } = useParams() as { notificationId: string | undefined };
   const navigate = useNavigate();
@@ -78,11 +78,7 @@ export function NotificationsScreen() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() =>
-                                  readNotificationService({
-                                    notificationId: notification.id,
-                                  })
-                                }
+                                onClick={() => handleReadNotification(notification.id)}
                               >
                                 <BellDotIcon className="h-5 w-5 text-blue-500" />
                               </Button>
