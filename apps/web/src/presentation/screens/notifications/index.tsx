@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { Choose, If, Otherwise, When } from "@/presentation/components/conditionals";
 import { BellDotIcon, BellIcon, EyeIcon } from "@/presentation/components/icons";
@@ -23,13 +23,12 @@ export function NotificationsScreen() {
   const isNotLoadingAndHasData = !isLoading && !!data?.notifications.length;
   const isNotLoadingAndHasNoData = !isLoading && !data?.notifications.length;
 
-  function handleNavigateToNotificationDetail(notificationId: string) {
-    navigate(`/dash/notifications/${notificationId}${search}`);
-  }
-
   function onCloseNotificationDetail(isOpen: boolean) {
     if (!isOpen) {
-      navigate(`/dash/notifications${search}`);
+      navigate({
+        pathname: "/dash/notifications",
+        search,
+      });
     }
   }
 
@@ -108,12 +107,15 @@ export function NotificationsScreen() {
                           {notification.getRelativeDate(notification.createdAt)}
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleNavigateToNotificationDetail(notification.id)}
-                          >
-                            <EyeIcon className="text-muted-foreground size-5" />
+                          <Button variant="ghost" size="icon" asChild>
+                            <Link
+                              to={{
+                                pathname: `/dash/notifications/${notification.id}`,
+                                search,
+                              }}
+                            >
+                              <EyeIcon className="text-muted-foreground size-5" />
+                            </Link>
                           </Button>
                         </TableCell>
                       </TableRow>

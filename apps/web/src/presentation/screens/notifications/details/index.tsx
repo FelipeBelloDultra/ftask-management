@@ -1,16 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 
-import { Choose, Otherwise, When } from "@/presentation/components/conditionals";
-import {
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/presentation/components/ui/dialog";
+import { Choose, If, Otherwise, When } from "@/presentation/components/conditionals";
+import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";
 import { showNotificationDetail } from "@/services/show-notification-detail";
 
+import { FooterMetadata } from "./_components/footer-metadata";
 import * as Loadings from "./_components/loadings";
 
 export function NotificationDetailScreen() {
@@ -21,11 +16,17 @@ export function NotificationDetailScreen() {
     queryFn: () => showNotificationDetail({ notificationId }),
   });
 
-  const isNotLoadingAndHasData = !isLoading && Boolean(data?.notification);
   const isNotLoadingAndHasNoData = !isLoading && !data?.notification;
 
-  if (error) {
-    return <Navigate to={`/dash/notifications${search}`} />;
+  if (error || isNotLoadingAndHasNoData) {
+    return (
+      <Navigate
+        to={{
+          pathname: `/dash/notifications`,
+          search,
+        }}
+      />
+    );
   }
 
   return (
@@ -53,7 +54,11 @@ export function NotificationDetailScreen() {
           </Otherwise>
         </Choose>
 
-        <DialogFooter>test</DialogFooter>
+        <If condition={Boolean(data?.notification.metadata.length)}>
+          <footer className="flex flex-col gap-3 items-start">
+            {data?.notification.metadata.map((metadata) => <FooterMetadata key={metadata.key} metadata={metadata} />)}
+          </footer>
+        </If>
       </main>
     </DialogContent>
   );
