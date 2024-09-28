@@ -1,22 +1,47 @@
-import { useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import { UploadIcon } from "@/presentation/components/icons";
 import { Button } from "@/presentation/components/ui/button";
 import { Input } from "@/presentation/components/ui/input";
+import { useUserStore } from "@/presentation/store/user";
 
 interface UploadPictureProps {
   originalPictureUrl: string | null;
 }
 
+const VALID_TYPES = ["image/jpeg", "image/png", "image/jpg"];
+const MAX_SIZE_LIMIT = 2 * 1024 * 1024; // limit file size to 2MB
+
+function isValidFile(file: File) {
+  return VALID_TYPES.includes(file.type) && file.size <= MAX_SIZE_LIMIT;
+}
+
 export function UploadPicture({ originalPictureUrl }: UploadPictureProps) {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(originalPictureUrl);
+  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
+
+  const { actions } = useUserStore();
   const inputFileRef = useRef<HTMLInputElement>(null);
 
-  const canDisabledCancelButton = filePreviewUrl === null;
-  const canSaveUploadedFile = uploadedFile !== null;
+  const isSaveDisabled = !uploadedFile;
+  const isCancelDisabled = !uploadedFile;
 
-  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+  useEffect(() => {
+    setFilePreviewUrl(originalPictureUrl);
+  }, [originalPictureUrl]);
+
+  useEffect(() => {
+    if (uploadedFile) {
+      const objectUrl = URL.createObjectURL(uploadedFile);
+      setFilePreviewUrl(objectUrl);
+
+      return () => {
+        URL.revokeObjectURL(objectUrl);
+      };
+    }
+  }, [uploadedFile]);
+
+  function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files) {
       const file = event.target.files[0];
 
@@ -25,26 +50,44 @@ export function UploadPicture({ originalPictureUrl }: UploadPictureProps) {
         return;
       }
 
-      setFilePreviewUrl(URL.createObjectURL(file));
       setUploadedFile(file);
     }
   }
 
-  function isValidFile(file: File) {
-    const VALID_TYPES = ["image/jpeg", "image/png", "image/jpg"];
-    const MAX_SIZE_LIMIT = 2 * 1024 * 1024; // limit file size to 2MB
-    return VALID_TYPES.includes(file.type) && file.size <= MAX_SIZE_LIMIT;
-  }
-
   function handleResetStates() {
-    setUploadedFile(null);
     setFilePreviewUrl(originalPictureUrl);
+    setUploadedFile(null);
   }
 
   function handleOpenFileSelectorTree() {
     if (inputFileRef.current) {
       inputFileRef.current.click();
     }
+  }
+
+  async function handleSubmit() {
+    if (!uploadedFile) return;
+
+    const formData = new FormData();
+    formData.append("picture", uploadedFile);
+
+    const response = await fetch("http://localhost:3333/api/account/upload/picture", {
+      method: "PATCH",
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("@ftm")}`,
+      },
+      credentials: "include",
+    });
+    const { data } = await response.json();
+
+    actions.addUser({
+      email: data.email,
+      id: data.id,
+      name: data.name,
+      pictureUrl: data.picture_url,
+    });
+    handleResetStates();
   }
 
   return (
@@ -71,9 +114,11 @@ export function UploadPicture({ originalPictureUrl }: UploadPictureProps) {
       </div>
 
       <div className="flex flex-col gap-4 mt-6">
-        <Button disabled={!canSaveUploadedFile}>Save</Button>
+        <Button onClick={handleSubmit} disabled={isSaveDisabled}>
+          Save
+        </Button>
 
-        <Button onClick={handleResetStates} variant="secondary" disabled={canDisabledCancelButton}>
+        <Button onClick={handleResetStates} variant="secondary" disabled={isCancelDisabled}>
           Cancel
         </Button>
       </div>
