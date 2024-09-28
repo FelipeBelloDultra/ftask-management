@@ -21,6 +21,7 @@ export {
   BellRing as BellRingIcon,
   Building2 as Building2Icon,
   LayoutDashboard as LayoutDashboardIcon,
+  UploadIcon,
   EyeIcon,
   EyeOff as EyeOffIcon,
   type LucideIcon as LucideIconType,
