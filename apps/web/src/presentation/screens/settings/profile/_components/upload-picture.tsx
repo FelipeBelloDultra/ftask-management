@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
+import { Choose, Otherwise, When } from "@/presentation/components/conditionals";
 import { UploadIcon } from "@/presentation/components/icons";
 import { Button } from "@/presentation/components/ui/button";
 import { Input } from "@/presentation/components/ui/input";
@@ -103,11 +104,15 @@ export function UploadPicture({ originalPictureUrl }: UploadPictureProps) {
         </Button>
 
         <span className="border-dashed border flex items-center justify-center rounded-full size-36 overflow-hidden p-2 transition peer-hover:border-muted-foreground peer-focus-visible:border-muted-foreground">
-          {filePreviewUrl ? (
-            <img src={filePreviewUrl} className="object-contain max-w-full h-auto" />
-          ) : (
-            <span>No file selected</span>
-          )}
+          <Choose>
+            <When condition={!!filePreviewUrl}>
+              <img src={filePreviewUrl!} className="object-contain max-w-full h-auto" />
+            </When>
+
+            <Otherwise>
+              <span>No file selected</span>
+            </Otherwise>
+          </Choose>
         </span>
 
         <Input ref={inputFileRef} onChange={handleFileChange} className="hidden" type="file" accept=".jpeg,.jpg,.png" />
