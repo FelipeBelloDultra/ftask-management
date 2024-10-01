@@ -4,7 +4,7 @@ import { Button } from "@/presentation/components/ui/button";
 import { Input } from "@/presentation/components/ui/input";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/presentation/components/ui/tooltip";
 
-import { useUploadPicture } from "./use-upload-picture";
+import { useUploadPicture } from "../_hooks/use-upload-picture";
 
 export function UploadPicture() {
   const {
