@@ -12,7 +12,7 @@ export function SettingsProfileScreen() {
   return (
     <section className="w-full max-w-xl mx-auto flex gap-8">
       <aside className="pt-3 self-start">
-        <UploadPicture originalPictureUrl={state.user.pictureUrl} />
+        <UploadPicture />
       </aside>
 
       <Card className="w-full self-start">
