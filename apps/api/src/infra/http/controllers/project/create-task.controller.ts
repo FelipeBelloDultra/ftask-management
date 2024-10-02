@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Controller } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
 import { TaskPresenter } from "@/infra/presenters/task-presenter";
+import { CreateTaskDto } from "@/modules/project/application/dtos/create-task-dto";
 import { NotAllowedError } from "@/modules/project/application/use-cases/errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "@/modules/project/application/use-cases/errors/project-member-not-found.error";
 import { ProjectNotFoundError } from "@/modules/project/application/use-cases/errors/project-not-found.error";
@@ -29,14 +30,16 @@ export class CreateTaskController implements Controller {
 
     const createTask = makeCreateTask();
 
-    const result = await createTask.execute({
-      title,
-      description,
-      dueDate: due_date,
-      assigneeId: assignee_id,
-      ownerAccountId: id,
-      projectId,
-    });
+    const result = await createTask.execute(
+      CreateTaskDto.create({
+        title,
+        description,
+        dueDate: due_date,
+        assigneeId: assignee_id,
+        ownerAccountId: id,
+        projectId,
+      }),
+    );
 
     if (result.isRight()) {
       return res.status(201).json({

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { Controller } from "@/infra/http/controller";
 import { AccountPresenter } from "@/infra/presenters/account-presenter";
+import { UploadAndSaveAccountPictureDto } from "@/modules/account/application/dtos/upload-and-save-account-picture-dto";
 import { InvalidAccountPictureTypeError } from "@/modules/account/application/use-cases/errors/invalid-account-picture-type.error";
 import { makeUploadAndSaveAccountPictureUseCase } from "@/modules/account/application/use-cases/factories/make-upload-and-save-account-picture";
 import { AccountNotFoundError } from "@/modules/project/application/use-cases/errors/account-not-found.error";
@@ -14,12 +15,14 @@ export class UploadAccountPictureController implements Controller {
     const { id } = req.account;
 
     const uploadAndSaveAccountPicture = makeUploadAndSaveAccountPictureUseCase();
-    const result = await uploadAndSaveAccountPicture.execute({
-      accountId: id,
-      fileName: originalname,
-      fileType: mimetype,
-      body: buffer,
-    });
+    const result = await uploadAndSaveAccountPicture.execute(
+      UploadAndSaveAccountPictureDto.create({
+        accountId: id,
+        fileName: originalname,
+        fileType: mimetype,
+        body: buffer,
+      }),
+    );
 
     if (result.isRight()) {
       return res.status(200).json({

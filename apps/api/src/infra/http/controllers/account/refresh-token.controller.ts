@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { Controller } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
+import { RefreshTokenDto } from "@/modules/account/application/dtos/refresh-token-dto";
 import { InvalidRefreshToken } from "@/modules/account/application/use-cases/errors/invalid-refresh-token.error";
 import { makeRefreshToken } from "@/modules/account/application/use-cases/factories/make-refresh-token";
 
@@ -23,7 +24,11 @@ export class RefreshTokenController implements Controller {
 
     const { refresh_token } = parsedCookies.data;
     const refreshToken = makeRefreshToken();
-    const result = await refreshToken.execute({ refreshToken: refresh_token });
+    const result = await refreshToken.execute(
+      RefreshTokenDto.create({
+        refreshToken: refresh_token,
+      }),
+    );
 
     if (result.isRight()) {
       return res

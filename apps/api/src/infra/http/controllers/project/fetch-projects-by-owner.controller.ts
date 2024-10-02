@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Controller } from "@/infra/http/controller";
 import { PaginationPresenter } from "@/infra/presenters/pagination-presenter";
 import { ProjectPresenter } from "@/infra/presenters/project-presenter";
+import { FetchProjectsByOwnerDto } from "@/modules/project/application/dtos/fetch-projects-by-owner-dto";
 import { makeFetchProjectsByOwner } from "@/modules/project/application/use-cases/factories/make-fetch-projects-by-owner";
 
 const paramSchema = z.object({
@@ -18,11 +19,13 @@ export class FetchProjectsByOwnerController implements Controller {
 
     const fetchProjectsByOwner = makeFetchProjectsByOwner();
 
-    const result = await fetchProjectsByOwner.execute({
-      ownerId: id,
-      limit,
-      page,
-    });
+    const result = await fetchProjectsByOwner.execute(
+      FetchProjectsByOwnerDto.create({
+        ownerId: id,
+        limit,
+        page,
+      }),
+    );
 
     if (result.isRight()) {
       return res.status(200).json({

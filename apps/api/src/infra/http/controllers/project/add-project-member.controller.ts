@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Controller } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
 import { MemberWithProjectPresenter } from "@/infra/presenters/member-with-project-presenter";
+import { AddProjectMemberDto } from "@/modules/project/application/dtos/add-project-member-dto";
 import { MemberNotFoundError } from "@/modules/project/application/use-cases/errors/member-not-found.error";
 import { NotAllowedError } from "@/modules/project/application/use-cases/errors/not-allowed.error";
 import { OwnerCannotBeAddedAsMemberError } from "@/modules/project/application/use-cases/errors/owner-cannot-be-added-as-member.error";
@@ -26,11 +27,13 @@ export class AddProjectMemberController implements Controller {
 
     const addProjectMember = makeAddProjectMember();
 
-    const result = await addProjectMember.execute({
-      memberAccountEmail: member_email,
-      ownerAccountId: id,
-      projectId: projectId,
-    });
+    const result = await addProjectMember.execute(
+      AddProjectMemberDto.create({
+        memberAccountEmail: member_email,
+        ownerAccountId: id,
+        projectId: projectId,
+      }),
+    );
 
     if (result.isRight()) {
       return res.status(201).json({

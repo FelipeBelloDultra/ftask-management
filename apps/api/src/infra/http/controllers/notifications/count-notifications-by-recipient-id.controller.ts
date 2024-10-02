@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { z } from "zod";
 
 import { Controller } from "@/infra/http/controller";
+import { CountNotificationsByRecipientIdDto } from "@/modules/notification/application/dtos/count-notifications-by-recipient-id-dto";
 import { makeCountNotificationsByRecipientId } from "@/modules/notification/application/use-cases/factories/make-count-notifications-by-recipient-id";
 
 const paramSchema = z.object({
@@ -20,10 +21,12 @@ export class CountNotificationsByRecipientIdController implements Controller {
 
     const countNotificationsByRecipientId = makeCountNotificationsByRecipientId();
 
-    const result = await countNotificationsByRecipientId.execute({
-      recipientId: id,
-      read,
-    });
+    const result = await countNotificationsByRecipientId.execute(
+      CountNotificationsByRecipientIdDto.create({
+        recipientId: id,
+        read,
+      }),
+    );
 
     if (result.isRight()) {
       return res.status(200).json({

@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { Controller } from "@/infra/http/controller";
 import { NotificationDetailPresenter } from "@/infra/presenters/notificaiton-detail-presenter";
+import { ShowNotificationDetailByIdDto } from "@/modules/notification/application/dtos/show-notification-detail-by-id-dto";
 import { NotificationNotFoundError } from "@/modules/notification/application/use-cases/errors/notification-not-found.error";
 import { makeShowNotificationDetailById } from "@/modules/notification/application/use-cases/factories/make-show-notificiation-detail-by-id";
 
@@ -19,10 +20,12 @@ export class ShowNotificationDetailByIdController implements Controller {
 
     const showNotificationDetailById = makeShowNotificationDetailById();
 
-    const result = await showNotificationDetailById.execute({
-      recipientId: id,
-      notificationId,
-    });
+    const result = await showNotificationDetailById.execute(
+      ShowNotificationDetailByIdDto.create({
+        recipientId: id,
+        notificationId,
+      }),
+    );
 
     if (result.isRight()) {
       return res.status(200).json({

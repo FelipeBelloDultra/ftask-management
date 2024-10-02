@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Controller } from "@/infra/http/controller";
 import { NotificationPresenter } from "@/infra/presenters/notification-presenter";
 import { PaginationPresenter } from "@/infra/presenters/pagination-presenter";
+import { FetchNotificationsByRecipientIdDto } from "@/modules/notification/application/dtos/fetch-notifications-by-recipient-id-dto";
 import { makeFetchNotificationsByRecipientId } from "@/modules/notification/application/use-cases/factories/make-fetch-notifications-by-recipient-id";
 
 const paramSchema = z.object({
@@ -27,12 +28,14 @@ export class FetchNotificationsByRecipientIdController implements Controller {
 
     const fetchNotificationsByRecipientId = makeFetchNotificationsByRecipientId();
 
-    const result = await fetchNotificationsByRecipientId.execute({
-      recipientId: id,
-      limit,
-      page,
-      read,
-    });
+    const result = await fetchNotificationsByRecipientId.execute(
+      FetchNotificationsByRecipientIdDto.create({
+        recipientId: id,
+        limit,
+        page,
+        read,
+      }),
+    );
 
     if (result.isRight()) {
       return res.status(200).json({

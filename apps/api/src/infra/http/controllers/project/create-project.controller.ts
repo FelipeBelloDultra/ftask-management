@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Controller } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
 import { ProjectPresenter } from "@/infra/presenters/project-presenter";
+import { CreateProjectDto } from "@/modules/project/application/dtos/create-project-dto";
 import { AccountNotFoundError } from "@/modules/project/application/use-cases/errors/account-not-found.error";
 import { DuplicatedProjectSlugError } from "@/modules/project/application/use-cases/errors/duplicated-project-slug.error";
 import { makeCreateProject } from "@/modules/project/application/use-cases/factories/make-create-project";
@@ -27,12 +28,14 @@ export class CreateProjectController implements Controller {
 
     const createProject = makeCreateProject();
 
-    const result = await createProject.execute({
-      ownerAccountId: id,
-      name,
-      description,
-      dueDate: due_date,
-    });
+    const result = await createProject.execute(
+      CreateProjectDto.create({
+        ownerAccountId: id,
+        name,
+        description,
+        dueDate: due_date,
+      }),
+    );
 
     if (result.isRight()) {
       return res.status(201).json({

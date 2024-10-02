@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { z } from "zod";
 
 import { Controller } from "@/infra/http/controller";
+import { MarkNotificationAsReadDto } from "@/modules/notification/application/dtos/mark-notification-as-read-dto";
 import { DifferentAccountNotificationError } from "@/modules/notification/application/use-cases/errors/different-account-notification.error";
 import { NotificationAlreadyMarkedAsReadError } from "@/modules/notification/application/use-cases/errors/notification-already-marked-as-read.error";
 import { NotificationNotFoundError } from "@/modules/notification/application/use-cases/errors/notification-not-found.error";
@@ -20,10 +21,12 @@ export class MarkNotificationAsReadController implements Controller {
 
     const markNotificationAsRead = makeMarkNotificationAsRead();
 
-    const result = await markNotificationAsRead.execute({
-      recipientId: id,
-      notificationId,
-    });
+    const result = await markNotificationAsRead.execute(
+      MarkNotificationAsReadDto.create({
+        recipientId: id,
+        notificationId,
+      }),
+    );
 
     if (result.isRight()) {
       return res.status(204).send();

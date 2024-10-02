@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Controller } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
 import { AccountPresenter } from "@/infra/presenters/account-presenter";
+import { AuthenticateAccountDto } from "@/modules/account/application/dtos/authenticate-account-dto";
 import { InvalidCombinationError } from "@/modules/account/application/use-cases/errors/invalid-combination.error";
 import { makeAuthenticateAccount } from "@/modules/account/application/use-cases/factories/make-authenticate-account";
 
@@ -17,10 +18,12 @@ export class AuthenticateAccountController implements Controller {
     const { email, password } = schema.parse(req.body);
 
     const authenticateAccount = makeAuthenticateAccount();
-    const result = await authenticateAccount.execute({
-      email,
-      password,
-    });
+    const result = await authenticateAccount.execute(
+      AuthenticateAccountDto.create({
+        email,
+        password,
+      }),
+    );
 
     if (result.isRight()) {
       const { accessToken, refreshToken, account } = result.value;

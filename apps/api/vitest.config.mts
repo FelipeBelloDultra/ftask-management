@@ -11,8 +11,10 @@ export default defineConfig({
       provider: "v8",
       include: [
         "src/modules/**/domain/**",
+        "!src/core/entity/dto.ts",
         "src/modules/**/application/{subscribers,use-cases}/**",
         "!src/modules/**/application/use-cases/factories/**",
+        "!src/modules/**/application/use-cases/dtos/**",
         "!src/modules/**/domain/events/**",
       ],
     },
