@@ -4,6 +4,8 @@ import { makeNotification } from "@/test/factories/make-notification";
 import { InMemoryNotificationMetadataRepository } from "@/test/repositories/in-memory-notification-metadata.repository";
 import { InMemoryNotificationRepository } from "@/test/repositories/in-memory-notification.repository";
 
+import { CountNotificationsByRecipientIdDto } from "../dtos/count-notifications-by-recipient-id-dto";
+
 import { CountNotificationsByRecipientIdUseCase } from "./count-notifications-by-recipient-id.use-cases";
 
 describe("CountNotificationsByRecipientIdUseCase", () => {
@@ -48,22 +50,30 @@ describe("CountNotificationsByRecipientIdUseCase", () => {
     );
 
     const [result1, result2, result3, result4] = (await Promise.all([
-      sut.execute({
-        recipientId: account1.id.toValue(),
-        read: true,
-      }),
-      sut.execute({
-        recipientId: account1.id.toValue(),
-        read: false,
-      }),
-      sut.execute({
-        recipientId: account2.id.toValue(),
-        read: true,
-      }),
-      sut.execute({
-        recipientId: account2.id.toValue(),
-        read: false,
-      }),
+      sut.execute(
+        CountNotificationsByRecipientIdDto.create({
+          recipientId: account1.id.toValue(),
+          read: true,
+        }),
+      ),
+      sut.execute(
+        CountNotificationsByRecipientIdDto.create({
+          recipientId: account1.id.toValue(),
+          read: false,
+        }),
+      ),
+      sut.execute(
+        CountNotificationsByRecipientIdDto.create({
+          recipientId: account2.id.toValue(),
+          read: true,
+        }),
+      ),
+      sut.execute(
+        CountNotificationsByRecipientIdDto.create({
+          recipientId: account2.id.toValue(),
+          read: false,
+        }),
+      ),
     ])) as Array<Right<never, { total: number }>>;
 
     expect(result1.value.total).toBe(4);

@@ -7,15 +7,11 @@ import { ProjectRepository } from "@/modules/project/application/repositories/pr
 import { Project } from "@/modules/project/domain/entity/project";
 import { DueDate } from "@/modules/project/domain/entity/value-objects/due-date";
 
+import { CreateProjectDto } from "../dtos/create-project-dto";
+
 import { AccountNotFoundError } from "./errors/account-not-found.error";
 import { DuplicatedProjectSlugError } from "./errors/duplicated-project-slug.error";
 
-type Input = {
-  ownerAccountId: string;
-  name: string;
-  description: string | null;
-  dueDate: Date | null;
-};
 type OnError = DuplicatedProjectSlugError | AccountNotFoundError;
 type OnSuccess = { project: Project };
 type Output = Either<OnError, OnSuccess>;
@@ -29,7 +25,7 @@ export class CreateProjectUseCase {
     private readonly accountRepository: AccountRepository,
   ) {}
 
-  public async execute(input: Input): Promise<Output> {
+  public async execute(input: CreateProjectDto): Promise<Output> {
     const accountId = UniqueEntityID.create(input.ownerAccountId);
 
     const account = await this.accountRepository.findById(accountId);

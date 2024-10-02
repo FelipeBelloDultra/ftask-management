@@ -6,11 +6,8 @@ import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
 import { Project } from "@/modules/project/domain/entity/project";
 
-type Input = {
-  ownerId: string;
-  page: number;
-  limit: number;
-};
+import { FetchProjectsByOwnerDto } from "../dtos/fetch-projects-by-owner-dto";
+
 type OnError = never;
 type OnSuccess = { projects: Project[]; pagination: Pagination; total: number };
 type Output = Either<OnError, OnSuccess>;
@@ -22,7 +19,7 @@ export class FetchProjectsByOwnerUseCase {
     private readonly projectRepository: ProjectRepository,
   ) {}
 
-  public async execute(input: Input): Promise<Output> {
+  public async execute(input: FetchProjectsByOwnerDto): Promise<Output> {
     const ownerId = UniqueEntityID.create(input.ownerId);
 
     const pagination = Pagination.create({

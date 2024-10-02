@@ -7,16 +7,11 @@ import { Account } from "@/modules/account/domain/entity/account";
 import { AccountNotFoundError } from "@/modules/project/application/use-cases/errors/account-not-found.error";
 
 import { PictureUrl } from "../../domain/entity/value-objects/picture-url";
+import { UploadAndSaveAccountPictureDto } from "../dtos/upload-and-save-account-picture-dto";
 import { AccountRepository } from "../repositories/account.repository";
 
 import { InvalidAccountPictureTypeError } from "./errors/invalid-account-picture-type.error";
 
-type Input = {
-  accountId: string;
-  fileName: string;
-  fileType: string;
-  body: Buffer;
-};
 type OnError = AccountNotFoundError | InvalidAccountPictureTypeError;
 type OnSuccess = {
   account: Account;
@@ -32,7 +27,7 @@ export class UploadAndSaveAccountPictureUseCase {
     private readonly uploaderProvider: UploaderProvider,
   ) {}
 
-  public async execute(input: Input): Promise<Output> {
+  public async execute(input: UploadAndSaveAccountPictureDto): Promise<Output> {
     if (!/^(image\/(jpeg|png|jpg))$/.test(input.fileType)) {
       return left(new InvalidAccountPictureTypeError(input.fileType));
     }

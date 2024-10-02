@@ -3,6 +3,8 @@ import { makeProject } from "@/test/factories/make-project";
 import { InMemoryAccountRepository } from "@/test/repositories/in-memory-account.repository";
 import { InMemoryProjectRepository } from "@/test/repositories/in-memory-project.repository";
 
+import { CreateProjectDto } from "../dtos/create-project-dto";
+
 import { CreateProjectUseCase } from "./create-project.use-case";
 import { AccountNotFoundError } from "./errors/account-not-found.error";
 import { DuplicatedProjectSlugError } from "./errors/duplicated-project-slug.error";
@@ -24,12 +26,12 @@ describe("CreateProjectUseCase", () => {
 
     await inMemoryAccountRepository.create(account);
 
-    const input = {
+    const input = CreateProjectDto.create({
       ownerAccountId: account.id.toValue(),
       name: "Project name",
       description: "Project description",
       dueDate: new Date("2000-01-01T08:00:00"),
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -41,12 +43,12 @@ describe("CreateProjectUseCase", () => {
     const account = makeAccount();
     await inMemoryAccountRepository.create(account);
 
-    const input = {
+    const input = CreateProjectDto.create({
       ownerAccountId: account.id.toValue(),
       name: "Project name",
       description: "Project description",
       dueDate: null,
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -63,12 +65,12 @@ describe("CreateProjectUseCase", () => {
     await inMemoryAccountRepository.create(account);
     await inMemoryProjectRepository.create(project);
 
-    const input = {
+    const input = CreateProjectDto.create({
       ownerAccountId: account.id.toValue(),
       name: "Project name",
       description: "Project description",
       dueDate: null,
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -77,12 +79,12 @@ describe("CreateProjectUseCase", () => {
   });
 
   it("should not be able to create project with invalid account", async () => {
-    const input = {
+    const input = CreateProjectDto.create({
       ownerAccountId: "invalid-id",
       name: "Project name",
       description: "Project description",
       dueDate: null,
-    };
+    });
 
     const result = await sut.execute(input);
 

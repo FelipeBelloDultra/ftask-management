@@ -5,6 +5,8 @@ import { makeAccount } from "@/test/factories/make-account";
 import { FakeStorageProvider } from "@/test/providers/fake-storage.provider";
 import { InMemoryAccountRepository } from "@/test/repositories/in-memory-account.repository";
 
+import { UploadAndSaveAccountPictureDto } from "../dtos/upload-and-save-account-picture-dto";
+
 import { InvalidAccountPictureTypeError } from "./errors/invalid-account-picture-type.error";
 import { UploadAndSaveAccountPictureUseCase } from "./upload-and-save-account-picture.use-case";
 
@@ -23,36 +25,42 @@ describe("UploadAndSaveAccountPictureUseCase", () => {
     const account = makeAccount();
     await inMemoryAccountRepository.create(account);
 
-    const result = (await sut.execute({
-      accountId: account.id.toValue(),
-      fileName: "profile.png",
-      fileType: "image/png",
-      body: Buffer.from(""),
-    })) as Right<never, { account: Account }>;
+    const result = (await sut.execute(
+      UploadAndSaveAccountPictureDto.create({
+        accountId: account.id.toValue(),
+        fileName: "profile.png",
+        fileType: "image/png",
+        body: Buffer.from(""),
+      }),
+    )) as Right<never, { account: Account }>;
 
     expect(result.isRight()).toBeTruthy();
     expect(result.value.account.pictureUrl?.value).toBeDefined();
   });
 
   it("should not be able to change profile picture if account does not exist", async () => {
-    const result = await sut.execute({
-      accountId: "invalid-id",
-      fileName: "profile.png",
-      fileType: "image/png",
-      body: Buffer.from(""),
-    });
+    const result = await sut.execute(
+      UploadAndSaveAccountPictureDto.create({
+        accountId: "invalid-id",
+        fileName: "profile.png",
+        fileType: "image/png",
+        body: Buffer.from(""),
+      }),
+    );
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(AccountNotFoundError);
   });
 
   it("should not be able to change profile picture if file type is invalid", async () => {
-    const result = await sut.execute({
-      accountId: "id",
-      fileName: "profile.mp3",
-      fileType: "audio/mpeg",
-      body: Buffer.from(""),
-    });
+    const result = await sut.execute(
+      UploadAndSaveAccountPictureDto.create({
+        accountId: "id",
+        fileName: "profile.mp3",
+        fileType: "audio/mpeg",
+        body: Buffer.from(""),
+      }),
+    );
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(InvalidAccountPictureTypeError);

@@ -1,6 +1,8 @@
 import { makeAccount } from "@/test/factories/make-account";
 import { InMemoryAccountRepository } from "@/test/repositories/in-memory-account.repository";
 
+import { CreateAccountDto } from "../dtos/create-account-dto";
+
 import { CreateAccountUseCase } from "./create-account.use-case";
 import { AccountAlreadyExistsError } from "./errors/account-already-exists.error";
 
@@ -17,11 +19,11 @@ describe("CreateAccountUseCase", () => {
     const PASSWORD = "password";
     const account = makeAccount();
 
-    const input = {
+    const input = CreateAccountDto.create({
       name: account.name,
       email: account.email,
       password: "password",
-    };
+    });
     const result = await sut.execute(input);
 
     expect(result.isRight()).toBeTruthy();
@@ -33,11 +35,11 @@ describe("CreateAccountUseCase", () => {
     const account = makeAccount();
     await inMemoryAccountRepository.create(account);
 
-    const input = {
+    const input = CreateAccountDto.create({
       name: "account-name",
       email: account.email,
       password: "account-password",
-    };
+    });
 
     const result = await sut.execute(input);
 

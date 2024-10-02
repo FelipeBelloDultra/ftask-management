@@ -5,14 +5,9 @@ import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { Notification } from "@/modules/notification/domain/entity/notification";
 
+import { FetchNotificationsByRecipientIdDto } from "../dtos/fetch-notifications-by-recipient-id-dto";
 import { NotificationRepository } from "../repositories/notification.repository";
 
-type Input = {
-  recipientId: string;
-  limit: number;
-  page: number;
-  read?: boolean;
-};
 type OnError = never;
 type OnSuccess = { notifications: Notification[]; pagination: Pagination; total: number };
 type Output = Either<OnError, OnSuccess>;
@@ -24,7 +19,7 @@ export class FetchNotificationsByRecipientIdUseCase {
     private readonly notificationRepository: NotificationRepository,
   ) {}
 
-  public async execute(input: Input): Promise<Output> {
+  public async execute(input: FetchNotificationsByRecipientIdDto): Promise<Output> {
     const accountId = UniqueEntityID.create(input.recipientId);
 
     const pagination = Pagination.create({

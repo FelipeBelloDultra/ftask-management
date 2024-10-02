@@ -6,6 +6,8 @@ import { InMemoryProjectMemberRepository } from "@/test/repositories/in-memory-p
 import { InMemoryProjectRepository } from "@/test/repositories/in-memory-project.repository";
 import { InMemoryTaskRepository } from "@/test/repositories/in-memory-task.repository";
 
+import { CreateTaskDto } from "../dtos/create-task-dto";
+
 import { CreateTaskUseCase } from "./create-task.use-case";
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "./errors/project-member-not-found.error";
@@ -43,14 +45,14 @@ describe("CreateTaskUseCase", () => {
       inMemoryProjectMemberRepository.create(projectMember),
     ]);
 
-    const input = {
+    const input = CreateTaskDto.create({
       ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
       assigneeId: member.id.toValue(),
       title: "Task title",
       description: "Task description",
       dueDate: new Date(),
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -61,14 +63,14 @@ describe("CreateTaskUseCase", () => {
   it("should not be able to create a new task with no project", async () => {
     const account = makeAccount();
 
-    const input = {
+    const input = CreateTaskDto.create({
       ownerAccountId: account.id.toValue(),
       projectId: "invalid-project-id",
       assigneeId: "assignee-id",
       title: "Task title",
       description: "Task description",
       dueDate: new Date(),
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -82,14 +84,14 @@ describe("CreateTaskUseCase", () => {
 
     await Promise.all([inMemoryProjectRepository.create(project)]);
 
-    const input = {
+    const input = CreateTaskDto.create({
       ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
       assigneeId: "member-id",
       title: "Task title",
       description: "Task description",
       dueDate: new Date(),
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -114,14 +116,14 @@ describe("CreateTaskUseCase", () => {
       inMemoryProjectRepository.create(project),
     ]);
 
-    const input = {
+    const input = CreateTaskDto.create({
       ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
       assigneeId: member.id.toValue(),
       title: "Task title",
       description: "Task description",
       dueDate: new Date(),
-    };
+    });
 
     const result = await sut.execute(input);
 

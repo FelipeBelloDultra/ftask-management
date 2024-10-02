@@ -2,6 +2,8 @@ import { AccountNotFoundError } from "@/modules/project/application/use-cases/er
 import { makeAccount } from "@/test/factories/make-account";
 import { InMemoryAccountRepository } from "@/test/repositories/in-memory-account.repository";
 
+import { ShowAuthenticatedAccountDto } from "../dtos/show-authenticated-account-dto";
+
 import { ShowAuthenticatedAccountUseCase } from "./show-authenticated-account.use-case";
 
 describe("ShowAuthenticatedAccount", () => {
@@ -17,13 +19,21 @@ describe("ShowAuthenticatedAccount", () => {
     const account = makeAccount();
     await inMemoryAccountRepository.create(account);
 
-    const result = await sut.execute({ accountId: account.id.toValue() });
+    const result = await sut.execute(
+      ShowAuthenticatedAccountDto.create({
+        accountId: account.id.toValue(),
+      }),
+    );
 
     expect(result.isRight()).toBeTruthy();
   });
 
   it("should not show the authenticated account if account does not exists", async () => {
-    const result = await sut.execute({ accountId: "invalid-id" });
+    const result = await sut.execute(
+      ShowAuthenticatedAccountDto.create({
+        accountId: "invalid-id",
+      }),
+    );
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(AccountNotFoundError);

@@ -8,18 +8,12 @@ import { TaskRepository } from "@/modules/project/application/repositories/task.
 import { Task } from "@/modules/project/domain/entity/task";
 import { DueDate } from "@/modules/project/domain/entity/value-objects/due-date";
 
+import { CreateTaskDto } from "../dtos/create-task-dto";
+
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "./errors/project-member-not-found.error";
 import { ProjectNotFoundError } from "./errors/project-not-found.error";
 
-type Input = {
-  dueDate: Date;
-  assigneeId: string;
-  projectId: string;
-  description: string;
-  title: string;
-  ownerAccountId: string;
-};
 type OnError = ProjectNotFoundError | NotAllowedError | ProjectMemberNotFoundError;
 type OnSuccess = { task: Task };
 type Output = Either<OnError, OnSuccess>;
@@ -35,7 +29,7 @@ export class CreateTaskUseCase {
     private readonly projectMemberRepository: ProjectMemberRepository,
   ) {}
 
-  public async execute(input: Input): Promise<Output> {
+  public async execute(input: CreateTaskDto): Promise<Output> {
     const project = await this.projectRepository.findById(UniqueEntityID.create(input.projectId));
     if (!project) {
       return left(new ProjectNotFoundError());

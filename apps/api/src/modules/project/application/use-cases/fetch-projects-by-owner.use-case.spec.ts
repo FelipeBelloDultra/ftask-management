@@ -4,6 +4,8 @@ import { makeAccount } from "@/test/factories/make-account";
 import { makeProject } from "@/test/factories/make-project";
 import { InMemoryProjectRepository } from "@/test/repositories/in-memory-project.repository";
 
+import { FetchProjectsByOwnerDto } from "../dtos/fetch-projects-by-owner-dto";
+
 import { FetchProjectsByOwnerUseCase } from "./fetch-projects-by-owner.use-case";
 
 describe("FetchProjectsByOwnerUseCase", () => {
@@ -26,10 +28,13 @@ describe("FetchProjectsByOwnerUseCase", () => {
 
     await Promise.all(projects.map((n) => inMemoryProjectRepository.create(n)));
 
-    const result = (await sut.execute({ ownerId: account.id.toValue(), limit: 10, page: 1 })) as Right<
-      never,
-      { projects: Project[]; total: number }
-    >;
+    const result = (await sut.execute(
+      FetchProjectsByOwnerDto.create({
+        ownerId: account.id.toValue(),
+        limit: 10,
+        page: 1,
+      }),
+    )) as Right<never, { projects: Project[]; total: number }>;
 
     expect(result.isRight()).toBeTruthy();
     expect(result.value.projects.length).toBe(10);

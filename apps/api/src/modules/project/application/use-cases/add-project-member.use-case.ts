@@ -9,17 +9,14 @@ import { ProjectMemberRepository } from "@/modules/project/application/repositor
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
 import { MemberWithProject } from "@/modules/project/domain/entity/member-with-project";
 
+import { AddProjectMemberDto } from "../dtos/add-project-member-dto";
+
 import { MemberNotFoundError } from "./errors/member-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { OwnerCannotBeAddedAsMemberError } from "./errors/owner-cannot-be-added-as-member.error";
 import { ProjectMemberAlreadyExistsError } from "./errors/project-member-already-exists.error";
 import { ProjectNotFoundError } from "./errors/project-not-found.error";
 
-type Input = {
-  projectId: string;
-  memberAccountEmail: string;
-  ownerAccountId: string;
-};
 type OnError =
   | NotAllowedError
   | MemberNotFoundError
@@ -42,7 +39,7 @@ export class AddProjectMemberUseCase {
     private readonly projectMemberRepository: ProjectMemberRepository,
   ) {}
 
-  public async execute(input: Input): Promise<Output> {
+  public async execute(input: AddProjectMemberDto): Promise<Output> {
     const projectId = UniqueEntityID.create(input.projectId);
     const project = await this.projectRepository.findById(projectId);
     if (!project) {

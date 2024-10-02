@@ -6,6 +6,8 @@ import { InMemoryMemberRepository } from "@/test/repositories/in-memory-member.r
 import { InMemoryProjectMemberRepository } from "@/test/repositories/in-memory-project-member.repository";
 import { InMemoryProjectRepository } from "@/test/repositories/in-memory-project.repository";
 
+import { AddProjectMemberDto } from "../dtos/add-project-member-dto";
+
 import { AddProjectMemberUseCase } from "./add-project-member.use-case";
 import { MemberNotFoundError } from "./errors/member-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";
@@ -46,11 +48,11 @@ describe("AddProjectMemberUseCase", () => {
       inMemoryAccountRepository.create(ownerAccount),
     ]);
 
-    const input = {
+    const input = AddProjectMemberDto.create({
       memberAccountEmail: account.email,
       ownerAccountId: ownerAccount.id.toValue(),
       projectId: project.id.toValue(),
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -60,11 +62,11 @@ describe("AddProjectMemberUseCase", () => {
   });
 
   it("should not be able to add project member if project does not exists", async () => {
-    const input = {
+    const input = AddProjectMemberDto.create({
       memberAccountEmail: "member-account-email",
       ownerAccountId: "owner-account-id",
       projectId: "invalid-project-id",
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -77,11 +79,11 @@ describe("AddProjectMemberUseCase", () => {
     const project = makeProject();
     await Promise.all([inMemoryProjectRepository.create(project), inMemoryAccountRepository.create(account)]);
 
-    const input = {
+    const input = AddProjectMemberDto.create({
       memberAccountEmail: account.email,
       ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -96,11 +98,11 @@ describe("AddProjectMemberUseCase", () => {
     });
     await Promise.all([inMemoryProjectRepository.create(project), inMemoryAccountRepository.create(account)]);
 
-    const input = {
+    const input = AddProjectMemberDto.create({
       memberAccountEmail: "invalid-member-account-email",
       ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -125,11 +127,11 @@ describe("AddProjectMemberUseCase", () => {
       inMemoryProjectRepository.create(project),
     ]);
 
-    const input = {
+    const input = AddProjectMemberDto.create({
       memberAccountEmail: account.email,
       ownerAccountId: ownerAccount.id.toValue(),
       projectId: project.id.toValue(),
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -153,11 +155,11 @@ describe("AddProjectMemberUseCase", () => {
       inMemoryMemberRepository.create(member),
     ]);
 
-    const input = {
+    const input = AddProjectMemberDto.create({
       memberAccountEmail: account.email,
       ownerAccountId: account.id.toValue(),
       projectId: project.id.toValue(),
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -177,11 +179,11 @@ describe("AddProjectMemberUseCase", () => {
       inMemoryAccountRepository.create(ownerAccount),
     ]);
 
-    const input = {
+    const input = AddProjectMemberDto.create({
       memberAccountEmail: account.email,
       ownerAccountId: ownerAccount.id.toValue(),
       projectId: project.id.toValue(),
-    };
+    });
     await sut.execute(input);
 
     const result = await sut.execute(input);

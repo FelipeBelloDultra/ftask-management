@@ -3,11 +3,10 @@ import { inject, injectable } from "tsyringe";
 import { JwtProvider } from "@/application/providers/jwt.provider";
 import { Either, left, right } from "@/core/either";
 
+import { RefreshTokenDto } from "../dtos/refresh-token-dto";
+
 import { InvalidRefreshToken } from "./errors/invalid-refresh-token.error";
 
-type Input = {
-  refreshToken: string;
-};
 type OnError = InvalidRefreshToken;
 type OnSuccess = {
   accessToken: string;
@@ -22,7 +21,7 @@ export class RefreshTokenUseCase {
     private readonly jwtProvider: JwtProvider,
   ) {}
 
-  public async execute(input: Input): Promise<Output> {
+  public async execute(input: RefreshTokenDto): Promise<Output> {
     try {
       const signature = await this.jwtProvider.decrypt<{ sub: string }>(input.refreshToken);
 

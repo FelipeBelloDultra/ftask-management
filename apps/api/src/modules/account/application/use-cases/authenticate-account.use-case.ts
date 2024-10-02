@@ -5,12 +5,10 @@ import { Either, left, right } from "@/core/either";
 import { AccountRepository } from "@/modules/account/application/repositories/account.repository";
 import { Account } from "@/modules/account/domain/entity/account";
 
+import { AuthenticateAccountDto } from "../dtos/authenticate-account-dto";
+
 import { InvalidCombinationError } from "./errors/invalid-combination.error";
 
-type Input = {
-  email: string;
-  password: string;
-};
 type OnError = InvalidCombinationError;
 type OnSuccess = {
   accessToken: string;
@@ -28,7 +26,7 @@ export class AuthenticateAccountUseCase {
     private readonly jwtProvider: JwtProvider,
   ) {}
 
-  public async execute(input: Input): Promise<Output> {
+  public async execute(input: AuthenticateAccountDto): Promise<Output> {
     const account = await this.accountRepository.findByEmail(input.email);
     if (!account) {
       return left(new InvalidCombinationError());

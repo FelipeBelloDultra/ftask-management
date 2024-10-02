@@ -4,16 +4,13 @@ import { Either, left, right } from "@/core/either";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { Notification } from "@/modules/notification/domain/entity/notification";
 
+import { MarkNotificationAsReadDto } from "../dtos/mark-notification-as-read-dto";
 import { NotificationRepository } from "../repositories/notification.repository";
 
 import { DifferentAccountNotificationError } from "./errors/different-account-notification.error";
 import { NotificationAlreadyMarkedAsReadError } from "./errors/notification-already-marked-as-read.error";
 import { NotificationNotFoundError } from "./errors/notification-not-found.error";
 
-type Input = {
-  notificationId: string;
-  recipientId: string;
-};
 type OnError = NotificationNotFoundError | DifferentAccountNotificationError | NotificationAlreadyMarkedAsReadError;
 type OnSuccess = { notification: Notification };
 type Output = Either<OnError, OnSuccess>;
@@ -25,7 +22,7 @@ export class MarkNotificationAsReadUseCase {
     private readonly notificationRepository: NotificationRepository,
   ) {}
 
-  public async execute(input: Input): Promise<Output> {
+  public async execute(input: MarkNotificationAsReadDto): Promise<Output> {
     const notificationId = UniqueEntityID.create(input.notificationId);
     const notification = await this.notificationRepository.findById(notificationId);
 

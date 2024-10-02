@@ -5,6 +5,8 @@ import { makeNotification } from "@/test/factories/make-notification";
 import { InMemoryNotificationMetadataRepository } from "@/test/repositories/in-memory-notification-metadata.repository";
 import { InMemoryNotificationRepository } from "@/test/repositories/in-memory-notification.repository";
 
+import { FetchNotificationsByRecipientIdDto } from "../dtos/fetch-notifications-by-recipient-id-dto";
+
 import { FetchNotificationsByRecipientIdUseCase } from "./fetch-notifications-by-recipient-id.use-cases";
 
 describe("FetchNotificationsByRecipientId", () => {
@@ -27,10 +29,13 @@ describe("FetchNotificationsByRecipientId", () => {
 
     await Promise.all(notifications.map((n) => inMemoryNotificationRepository.create(n)));
 
-    const result = (await sut.execute({ recipientId: account.id.toValue(), limit: 10, page: 1 })) as Right<
-      never,
-      { notifications: Notification[]; total: number }
-    >;
+    const result = (await sut.execute(
+      FetchNotificationsByRecipientIdDto.create({
+        recipientId: account.id.toValue(),
+        limit: 10,
+        page: 1,
+      }),
+    )) as Right<never, { notifications: Notification[]; total: number }>;
 
     expect(result.isRight()).toBeTruthy();
     expect(result.value.notifications.length).toBe(10);

@@ -4,14 +4,11 @@ import { Either, left, right } from "@/core/either";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 
 import { NotificationDetail } from "../../domain/entity/value-objects/notification-detail";
+import { ShowNotificationDetailByIdDto } from "../dtos/show-notification-detail-by-id-dto";
 import { NotificationRepository } from "../repositories/notification.repository";
 
 import { NotificationNotFoundError } from "./errors/notification-not-found.error";
 
-type Input = {
-  recipientId: string;
-  notificationId: string;
-};
 type OnError = NotificationNotFoundError;
 type OnSuccess = { notificationDetail: NotificationDetail };
 type Output = Either<OnError, OnSuccess>;
@@ -23,7 +20,7 @@ export class ShowNotificationDetailByIdUseCase {
     private readonly notificationRepository: NotificationRepository,
   ) {}
 
-  public async execute(input: Input): Promise<Output> {
+  public async execute(input: ShowNotificationDetailByIdDto): Promise<Output> {
     const recipientId = UniqueEntityID.create(input.recipientId);
     const notificationId = UniqueEntityID.create(input.notificationId);
     const notificationDetail = await this.notificationRepository.findDetailById(notificationId);

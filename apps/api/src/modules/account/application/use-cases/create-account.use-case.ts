@@ -5,13 +5,10 @@ import { AccountRepository } from "@/modules/account/application/repositories/ac
 import { Account } from "@/modules/account/domain/entity/account";
 import { Password } from "@/modules/account/domain/entity/value-objects/password";
 
+import { CreateAccountDto } from "../dtos/create-account-dto";
+
 import { AccountAlreadyExistsError } from "./errors/account-already-exists.error";
 
-type Input = {
-  name: string;
-  email: string;
-  password: string;
-};
 type OnError = AccountAlreadyExistsError;
 type OnSuccess = { account: Account };
 type Output = Either<OnError, OnSuccess>;
@@ -23,7 +20,7 @@ export class CreateAccountUseCase {
     private readonly accountRepository: AccountRepository,
   ) {}
 
-  public async execute(input: Input): Promise<Output> {
+  public async execute(input: CreateAccountDto): Promise<Output> {
     const existingAccount = await this.accountRepository.findByEmail(input.email);
     if (existingAccount) {
       return left(new AccountAlreadyExistsError());

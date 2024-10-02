@@ -5,6 +5,7 @@ import { InMemoryNotificationRepository } from "@/test/repositories/in-memory-no
 
 import { NotificationMetadata } from "../../domain/entity/notification-metadata";
 import { NotificationMetadataList } from "../../domain/entity/notification-metadata-list";
+import { ShowNotificationDetailByIdDto } from "../dtos/show-notification-detail-by-id-dto";
 
 import { NotificationNotFoundError } from "./errors/notification-not-found.error";
 import { ShowNotificationDetailByIdUseCase } from "./show-notification-detail-by-id.use-case";
@@ -34,10 +35,12 @@ describe("ShowNotificationDetailByIdUseCase", () => {
 
     await inMemoryNotificationRepository.create(notification);
 
-    const result = await sut.execute({
-      recipientId: account.id.toValue(),
-      notificationId: notification.id.toValue(),
-    });
+    const result = await sut.execute(
+      ShowNotificationDetailByIdDto.create({
+        recipientId: account.id.toValue(),
+        notificationId: notification.id.toValue(),
+      }),
+    );
 
     if (result.isLeft()) {
       throw new Error(result.value.name);
@@ -51,10 +54,12 @@ describe("ShowNotificationDetailByIdUseCase", () => {
   it("should cannot show the notification by id if the notification does not exist", async () => {
     const account = makeAccount();
 
-    const result = await sut.execute({
-      recipientId: account.id.toValue(),
-      notificationId: "invalid-notification-id",
-    });
+    const result = await sut.execute(
+      ShowNotificationDetailByIdDto.create({
+        recipientId: account.id.toValue(),
+        notificationId: "invalid-notification-id",
+      }),
+    );
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(NotificationNotFoundError);
@@ -66,10 +71,12 @@ describe("ShowNotificationDetailByIdUseCase", () => {
 
     await inMemoryNotificationRepository.create(notification);
 
-    const result = await sut.execute({
-      recipientId: "invalid-recipient-id",
-      notificationId: notification.id.toValue(),
-    });
+    const result = await sut.execute(
+      ShowNotificationDetailByIdDto.create({
+        recipientId: "invalid-recipient-id",
+        notificationId: notification.id.toValue(),
+      }),
+    );
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(NotificationNotFoundError);

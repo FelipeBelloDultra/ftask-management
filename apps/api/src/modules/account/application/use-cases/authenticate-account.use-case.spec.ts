@@ -3,6 +3,8 @@ import { makeAccount } from "@/test/factories/make-account";
 import { FakeJwtProvider } from "@/test/providers/fake-jwt.provider";
 import { InMemoryAccountRepository } from "@/test/repositories/in-memory-account.repository";
 
+import { AuthenticateAccountDto } from "../dtos/authenticate-account-dto";
+
 import { AuthenticateAccountUseCase } from "./authenticate-account.use-case";
 import { InvalidCombinationError } from "./errors/invalid-combination.error";
 
@@ -24,10 +26,10 @@ describe("AuthenticateAccountUseCase", () => {
     });
     await inMemoryAccountRepository.create(account);
 
-    const input = {
+    const input = AuthenticateAccountDto.create({
       email: account.email,
       password: "account-password",
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -41,10 +43,10 @@ describe("AuthenticateAccountUseCase", () => {
   });
 
   it("should not be able to authenticate an account with wrong email", async () => {
-    const input = {
+    const input = AuthenticateAccountDto.create({
       email: "invalid-email",
       password: "account-password",
-    };
+    });
 
     const result = await sut.execute(input);
 
@@ -58,10 +60,10 @@ describe("AuthenticateAccountUseCase", () => {
     });
     await inMemoryAccountRepository.create(account);
 
-    const input = {
+    const input = AuthenticateAccountDto.create({
       email: "account-email",
       password: "invalid-password",
-    };
+    });
 
     const result = await sut.execute(input);
 

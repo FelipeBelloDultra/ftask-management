@@ -5,11 +5,9 @@ import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { Account } from "@/modules/account/domain/entity/account";
 import { AccountNotFoundError } from "@/modules/project/application/use-cases/errors/account-not-found.error";
 
+import { ShowAuthenticatedAccountDto } from "../dtos/show-authenticated-account-dto";
 import { AccountRepository } from "../repositories/account.repository";
 
-type Input = {
-  accountId: string;
-};
 type OnError = AccountNotFoundError;
 type OnSuccess = {
   account: Account;
@@ -23,7 +21,7 @@ export class ShowAuthenticatedAccountUseCase {
     private readonly accountRepository: AccountRepository,
   ) {}
 
-  public async execute({ accountId }: Input): Promise<Output> {
+  public async execute({ accountId }: ShowAuthenticatedAccountDto): Promise<Output> {
     const account = await this.accountRepository.findById(UniqueEntityID.create(accountId));
     if (!account) {
       return left(new AccountNotFoundError());

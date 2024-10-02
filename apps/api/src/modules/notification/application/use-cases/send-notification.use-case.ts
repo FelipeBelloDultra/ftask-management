@@ -7,12 +7,8 @@ import { Notification } from "@/modules/notification/domain/entity/notification"
 import { NotificationMetadata } from "@/modules/notification/domain/entity/notification-metadata";
 import { NotificationMetadataList } from "@/modules/notification/domain/entity/notification-metadata-list";
 
-type Input = {
-  title: string;
-  content: string;
-  recipientId: string;
-  additionalInfos?: Array<{ key: string; value: string }>;
-};
+import { SendNotificationDto } from "../dtos/send-notification-dto";
+
 type OnError = never;
 type OnSuccess = { notification: Notification };
 type Output = Either<OnError, OnSuccess>;
@@ -24,7 +20,7 @@ export class SendNotificationUseCase {
     private readonly notificationRepository: NotificationRepository,
   ) {}
 
-  public async execute(input: Input): Promise<Output> {
+  public async execute(input: SendNotificationDto): Promise<Output> {
     const recipientId = UniqueEntityID.create(input.recipientId);
 
     const notification = Notification.create({
