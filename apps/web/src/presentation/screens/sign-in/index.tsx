@@ -5,7 +5,7 @@ import { Button } from "@/presentation/components/ui/button";
 
 import { SignInForm } from "./_components/sign-in-form";
 
-export function SignInScreen() {
+export default function SignInScreen() {
   return (
     <AnimatedPage>
       <section className="max-w-md w-full mx-auto">

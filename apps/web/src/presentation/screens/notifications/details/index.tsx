@@ -8,7 +8,7 @@ import { showNotificationDetail } from "@/services/show-notification-detail";
 import { FooterMetadata } from "./_components/footer-metadata";
 import * as Loadings from "./_components/loadings";
 
-export function NotificationDetailScreen() {
+export default function NotificationDetailScreen() {
   const { search } = useLocation();
   const { notificationId } = useParams() as { notificationId: string };
   const { data, isLoading, error } = useQuery({

@@ -7,6 +7,7 @@ import { useUserStore } from "@/presentation/store/user";
 import { showAuthenticatedUserService } from "@/services/show-authenticated-user";
 
 import { Choose, Otherwise, When } from "../components/conditionals";
+import { Skeleton } from "../components/ui/skeleton";
 import { useAuth } from "../hooks/use-auth";
 
 import { Header } from "./_components/header";
@@ -52,7 +53,9 @@ export function AuthenticatedLayout() {
           </div>
 
           <PageContent>
-            <Outlet />
+            <Suspense fallback={<Skeleton className="fixed w-full top-20 left-72 z-50 h-3 rounded-none" />}>
+              <Outlet />
+            </Suspense>
           </PageContent>
         </main>
       </When>

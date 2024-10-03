@@ -1,8 +1,10 @@
+import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 
 import { TerminalIcon } from "@/presentation/components/icons";
 
 import { AuthActionButton } from "./_components/auth-action-button";
+import { SkeletonLoadingUnauthenticatedPage } from "./_components/loadings";
 
 export function UnauthenticatedLayout() {
   return (
@@ -24,7 +26,9 @@ export function UnauthenticatedLayout() {
       <AuthActionButton />
 
       <main className="flex flex-col justify-center w-1/2 p-8 text-white">
-        <Outlet />
+        <Suspense fallback={<SkeletonLoadingUnauthenticatedPage />}>
+          <Outlet />
+        </Suspense>
       </main>
     </section>
   );

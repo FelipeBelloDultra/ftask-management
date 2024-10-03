@@ -13,7 +13,7 @@ import * as Loadings from "./_components/loadings";
 import { NotificationFilters } from "./_components/notification-filters";
 import { useNotifications } from "./_hooks/use-notifications";
 
-export function NotificationsScreen() {
+export default function NotificationsScreen() {
   const { data, page, read, isLoading, handleSetSearchParams, handleSelectFilter, handleReadNotification } =
     useNotifications();
   const { search } = useLocation();

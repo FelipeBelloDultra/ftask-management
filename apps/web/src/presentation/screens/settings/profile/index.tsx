@@ -6,7 +6,7 @@ import { useUserStore } from "@/presentation/store/user";
 
 import { UploadPicture } from "./_components/upload-picture";
 
-export function SettingsProfileScreen() {
+export default function SettingsProfileScreen() {
   const { state } = useUserStore();
 
   return (

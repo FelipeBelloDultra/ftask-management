@@ -2,13 +2,15 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import { AuthenticatedLayout } from "@/presentation/layouts/authenticated";
 import { UnauthenticatedLayout } from "@/presentation/layouts/unauthenticated";
-import { DashboardScreen } from "@/presentation/screens/dashboard";
-import { NotificationsScreen } from "@/presentation/screens/notifications";
-import { NotificationDetailScreen } from "@/presentation/screens/notifications/details";
-import { SettingsScreen } from "@/presentation/screens/settings";
-import { SettingsProfileScreen } from "@/presentation/screens/settings/profile";
-import { SignInScreen } from "@/presentation/screens/sign-in";
-import SignUpScreen from "@/presentation/screens/sign-up";
+import {
+  DashboardScreen,
+  NotificationDetailScreen,
+  NotificationsScreen,
+  SettingsProfileScreen,
+  SettingsScreen,
+  SignInScreen,
+  SignUpScreen,
+} from "@/presentation/screens";
 
 import { AuthGuard } from "./auth-guard";
 
