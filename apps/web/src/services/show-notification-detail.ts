@@ -1,4 +1,5 @@
-import { fetchAdapter } from "@/infra/adapter/fetch-adapter-http";
+import { httpClientAdapter } from "@/infra/adapter/fetch-adapter-http";
+import { HttpMethods } from "@/infra/http";
 
 import { NOTIFICATION_DETAIL } from "./endpoints";
 
@@ -26,7 +27,7 @@ export async function showNotificationDetail({
   notificationId,
 }: ShowNotificationDetailServiceParams): Promise<ShowNotificationDetailServiceResponse> {
   const url = NOTIFICATION_DETAIL.replace(":notificationId", notificationId);
-  const notification = await fetchAdapter.get<{
+  const notification = await httpClientAdapter.sendRequest<{
     id: string;
     title: string;
     created_at: string;
@@ -37,7 +38,10 @@ export async function showNotificationDetail({
       key: string;
       value: string;
     }>;
-  }>(url);
+  }>({
+    method: HttpMethods.GET,
+    url,
+  });
 
   return {
     notification: {

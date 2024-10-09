@@ -1,4 +1,5 @@
-import { fetchAdapter } from "@/infra/adapter/fetch-adapter-http";
+import { httpClientAdapter } from "@/infra/adapter/fetch-adapter-http";
+import { HttpMethods } from "@/infra/http";
 import { NotificationMapper, PersistenceNotification } from "@/infra/mappers/notification-mapper";
 import { PaginationMapper, PersistencePagination } from "@/infra/mappers/pagination-mapper";
 
@@ -25,9 +26,10 @@ export async function fetchAllNotifications(params: AllNotificationsParams) {
   urlSearch.set("page", String(params.page || 1));
   urlSearch.set("limit", String(params.limit || 10));
 
-  const { notifications, pagination } = await fetchAdapter.get<FetchNotificationsResponse>(
-    `${ALL_NOTIFICATIONS}?${urlSearch.toString()}`,
-  );
+  const { notifications, pagination } = await httpClientAdapter.sendRequest<FetchNotificationsResponse>({
+    method: HttpMethods.GET,
+    url: `${ALL_NOTIFICATIONS}?${urlSearch.toString()}`,
+  });
 
   return {
     notifications: notifications.map(NotificationMapper.toDomain),

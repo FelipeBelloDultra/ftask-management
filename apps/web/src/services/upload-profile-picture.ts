@@ -1,4 +1,5 @@
-import { fetchAdapter } from "@/infra/adapter/fetch-adapter-http";
+import { httpClientAdapter } from "@/infra/adapter/fetch-adapter-http";
+import { HttpMethods } from "@/infra/http";
 import { PersistenceUser, UserMapper } from "@/infra/mappers/user-mapper";
 
 import { UPLOAD_ACCOUNT_PICTURE } from "./endpoints";
@@ -11,7 +12,11 @@ export async function uploadProfilePicture({ pictureFile }: UploadProfilePicture
   const formData = new FormData();
   formData.append("picture", pictureFile);
 
-  const response = await fetchAdapter.patch<PersistenceUser>(UPLOAD_ACCOUNT_PICTURE, formData);
+  const response = await httpClientAdapter.sendRequest<PersistenceUser, FormData>({
+    method: HttpMethods.PATCH,
+    url: UPLOAD_ACCOUNT_PICTURE,
+    body: formData,
+  });
 
   return UserMapper.toDomain(response);
 }

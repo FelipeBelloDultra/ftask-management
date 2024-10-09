@@ -1,4 +1,5 @@
-import { fetchAdapter } from "@/infra/adapter/fetch-adapter-http";
+import { httpClientAdapter } from "@/infra/adapter/fetch-adapter-http";
+import { HttpMethods } from "@/infra/http";
 
 import { COUNT_NOTIFICATIONS } from "./endpoints";
 
@@ -7,7 +8,10 @@ interface GetTotalUnreadNotificationsResponse {
 }
 
 export async function getTotalUnreadNotificationsService() {
-  const response = await fetchAdapter.get<GetTotalUnreadNotificationsResponse>(`${COUNT_NOTIFICATIONS}/?read=false`);
+  const response = await httpClientAdapter.sendRequest<GetTotalUnreadNotificationsResponse>({
+    method: HttpMethods.GET,
+    url: `${COUNT_NOTIFICATIONS}/?read=false`,
+  });
 
   return {
     total: response.total,

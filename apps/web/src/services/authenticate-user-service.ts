@@ -1,4 +1,5 @@
-import { fetchAdapter } from "@/infra/adapter/fetch-adapter-http";
+import { httpClientAdapter } from "@/infra/adapter/fetch-adapter-http";
+import { HttpMethods } from "@/infra/http";
 
 import { AUTHENTICATE_USER } from "./endpoints";
 
@@ -14,7 +15,11 @@ interface AuthenticateUserServiceResponse {
 export async function authenticateUserService(
   data: AuthenticateUserServiceParams,
 ): Promise<AuthenticateUserServiceResponse> {
-  const response = await fetchAdapter.post<{ token: string }>(AUTHENTICATE_USER, data);
+  const response = await httpClientAdapter.sendRequest<{ token: string }, AuthenticateUserServiceParams>({
+    method: HttpMethods.POST,
+    url: AUTHENTICATE_USER,
+    body: data,
+  });
 
   return response;
 }

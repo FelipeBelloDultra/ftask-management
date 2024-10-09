@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import { useUserStore } from "@/presentation/store/user";
+import { uploadProfilePicture } from "@/services/upload-profile-picture";
 
 const VALID_TYPES = ["image/jpeg", "image/png", "image/jpg"];
 const MAX_SIZE_LIMIT = 2 * 1024 * 1024; // limit file size to 2MB
@@ -49,24 +50,15 @@ export function useUploadPicture() {
   async function handleSubmit() {
     if (!uploadedFile) return;
 
-    const formData = new FormData();
-    formData.append("picture", uploadedFile);
-
-    const response = await fetch("http://localhost:3333/api/account/upload/picture", {
-      method: "PATCH",
-      body: formData,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("@ftm")}`,
-      },
-      credentials: "include",
+    const user = await uploadProfilePicture({
+      pictureFile: uploadedFile,
     });
-    const { data } = await response.json();
 
     actions.addUser({
-      email: data.email,
-      id: data.id,
-      name: data.name,
-      pictureUrl: data.picture_url,
+      email: user.email,
+      id: user.id,
+      name: user.name,
+      pictureUrl: user.pictureUrl,
     });
     handleResetStates();
   }

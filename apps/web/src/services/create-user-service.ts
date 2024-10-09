@@ -1,5 +1,6 @@
 import { User } from "@/domain/user";
-import { fetchAdapter } from "@/infra/adapter/fetch-adapter-http";
+import { httpClientAdapter } from "@/infra/adapter/fetch-adapter-http";
+import { HttpMethods } from "@/infra/http";
 import { PersistenceUser, UserMapper } from "@/infra/mappers/user-mapper";
 
 import { CREATE_USER } from "./endpoints";
@@ -15,7 +16,11 @@ interface CreateUserResponse {
 }
 
 export async function createUserService(data: CreateUserParams): Promise<CreateUserResponse> {
-  const response = await fetchAdapter.post<PersistenceUser>(CREATE_USER, data);
+  const response = await httpClientAdapter.sendRequest<PersistenceUser, CreateUserParams>({
+    method: HttpMethods.POST,
+    url: CREATE_USER,
+    body: data,
+  });
 
   return {
     user: UserMapper.toDomain({
