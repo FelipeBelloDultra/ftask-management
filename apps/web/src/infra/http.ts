@@ -1,13 +1,18 @@
-export interface Http {
-  get<ResponseType = unknown>(url: string | URL, options?: Omit<RequestInit, "method" | "body">): Promise<ResponseType>;
-  post<ResponseType = unknown, RequestBody = unknown>(
-    url: string | URL,
-    body: RequestBody,
-    options?: Omit<RequestInit, "method">,
-  ): Promise<ResponseType>;
-  patch<ResponseType = unknown, RequestBody = unknown>(
-    url: string | URL,
-    body?: RequestBody,
-    options?: Omit<RequestInit, "method">,
-  ): Promise<ResponseType>;
+export interface HttpRequest<Body> {
+  url: string | URL;
+  method: HttpMethods;
+  headers?: Record<string, string>;
+  body?: Body;
+}
+
+export interface HttpClient {
+  sendRequest<TResponse = void, TBody = unknown>(request: HttpRequest<TBody>): Promise<TResponse>;
+}
+
+export enum HttpMethods {
+  GET = "GET",
+  POST = "POST",
+  PATCH = "PATCH",
+  DELETE = "DELETE",
+  PUT = "PUT",
 }

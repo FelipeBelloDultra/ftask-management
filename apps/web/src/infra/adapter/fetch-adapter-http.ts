@@ -1,48 +1,124 @@
-// TODO::: Fix refresh token strategy (send event and create listener in auth-provider) and verify return of refresh token function
-
 import { env } from "@/config/env";
 import { REFRESH_TOKEN } from "@/services/endpoints";
 
-import { Http } from "../http";
+import { HttpClient, HttpMethods, HttpRequest } from "../http";
 
-type Methods = "GET" | "OPTIONS" | "POST" | "PATCH";
+class HttpClientAdapter implements HttpClient {
+  public constructor(private readonly baseUrl = env.apiUrl) {}
 
-interface CreateRequestSchema {
-  url: string;
-  method: Methods;
-  options?: RequestInit;
-}
+  public async sendRequest<TResponse = unknown, TBody = unknown>({
+    body,
+    method,
+    url,
+    headers,
+  }: HttpRequest<TBody>): Promise<TResponse> {
+    const request = this.makeRequestObject<TBody>({
+      method,
+      url: this.makeUrl(url),
+      body,
+      headers,
+    });
+    let response = await fetch(request);
 
-export class FetchAdapterHttp implements Http {
-  private readonly baseUrl: string = env.apiUrl;
+    if (response.status === 401) {
+      response = await this.refreshToken(request);
+    }
+
+    return await this.formatResponse<TResponse>(response);
+  }
 
   private makeUrl(url: string | URL) {
     return `${this.baseUrl}${url}`;
   }
 
-  private createRequestSchema({ method, url, options }: CreateRequestSchema) {
+  private formatBody<TBody>(body: HttpRequest<TBody>["body"]): string | Blob | FormData {
+    if (typeof body === "string") {
+      return body;
+    }
+    if (body instanceof Blob) {
+      return body;
+    }
+    if (body instanceof ArrayBuffer) {
+      return new Blob([body]);
+    }
+    if (body instanceof FormData) {
+      return body;
+    }
+    if (typeof body === "object") {
+      return JSON.stringify(body);
+    }
+
+    throw new Error("invalid body type");
+  }
+
+  private makeRequestContentType(body: string | Blob | FormData | undefined) {
+    if (typeof body === "string") {
+      try {
+        JSON.parse(body);
+        return "application/json";
+      } catch {
+        return "text/plain";
+      }
+    }
+
+    if (body instanceof Blob) {
+      return body.type || "application/octet-stream";
+    }
+
+    if (body instanceof FormData) {
+      return undefined;
+    }
+
+    return "application/json";
+  }
+
+  private makeRequestObject<TBody>(request: HttpRequest<TBody>) {
     const authorizationToken = localStorage.getItem(env.jwtPrefix);
     const hasAuthorizationToken = !!authorizationToken;
+    const body = request.body ? this.formatBody(request.body) : undefined;
+    const contentType = this.makeRequestContentType(body);
 
-    return new Request(url, {
-      ...options,
-      method,
+    return new Request(request.url, {
+      method: request.method,
       headers: {
-        "Content-Type": "application/json",
-        ...(!!hasAuthorizationToken && {
+        ...(Boolean(contentType) && {
+          "Content-Type": contentType,
+        }),
+        ...request.headers,
+        ...(hasAuthorizationToken && {
           Authorization: `Bearer ${authorizationToken}`,
         }),
-        ...(options?.headers && options.headers),
       },
       credentials: "include",
+      body,
     });
   }
 
-  private async refreshToken<ResponseType>(originalRequest: Request): Promise<ResponseType> {
+  private async formatResponse<TResponse>(response: Response): Promise<TResponse> {
+    if (!response.ok) {
+      return Promise.reject(response);
+    }
+
+    if (response.status === 204) {
+      return void 0 as TResponse;
+    }
+
+    const responseBody = (await response.json()) as { data: TResponse };
+    return responseBody.data;
+  }
+
+  private async refreshToken(originalRequest: Request) {
     const url = this.makeUrl(REFRESH_TOKEN);
+    const headers: Record<string, string> = {};
+    originalRequest.headers.forEach((value, key) => {
+      headers[key] = value;
+    });
+
     const refreshTokenResponse = await fetch(
-      this.createRequestSchema({
-        method: "PATCH",
+      this.makeRequestObject({
+        method: HttpMethods.PATCH,
+        body: originalRequest.body,
+        headers,
         url,
       }),
     );
@@ -58,101 +134,8 @@ export class FetchAdapterHttp implements Http {
     localStorage.setItem(env.jwtPrefix, token);
     originalRequest.headers.append("Authorization", `Bearer ${token}`);
 
-    const originalRequestResponse = await fetch(originalRequest);
-
-    if (!originalRequestResponse.ok) {
-      return Promise.reject(originalRequestResponse);
-    }
-
-    const { data } = (await originalRequestResponse.json()) as { data: ResponseType };
-    return data;
-  }
-
-  public async get<ResponseType = unknown>(
-    url: string | URL,
-    options?: Omit<RequestInit, "method" | "body">,
-  ): Promise<ResponseType> {
-    const request = this.createRequestSchema({
-      method: "GET",
-      url: this.makeUrl(url),
-      options,
-    });
-    const response = await fetch(request);
-
-    if (response.status === 401) {
-      return await this.refreshToken(request);
-    }
-
-    if (!response.ok) {
-      return Promise.reject(response);
-    }
-
-    const { data } = (await response.json()) as { data: ResponseType };
-
-    return data;
-  }
-
-  public async post<ResponseType = unknown, RequestBody = unknown>(
-    url: string | URL,
-    body: RequestBody,
-    options?: Omit<RequestInit, "method">,
-  ): Promise<ResponseType> {
-    const request = this.createRequestSchema({
-      method: "POST",
-      url: this.makeUrl(url),
-      options: {
-        ...options,
-        body: JSON.stringify(body),
-      },
-    });
-    const response = await fetch(request);
-
-    if (response.status === 401) {
-      return await this.refreshToken(request);
-    }
-
-    if (!response.ok) {
-      return Promise.reject(response);
-    }
-
-    const { data } = (await response.json()) as { data: ResponseType };
-
-    return data;
-  }
-
-  public async patch<ResponseType = unknown, RequestBody = unknown>(
-    url: string | URL,
-    body?: RequestBody,
-    options?: Omit<RequestInit, "method">,
-  ): Promise<ResponseType> {
-    const request = this.createRequestSchema({
-      method: "PATCH",
-      url: this.makeUrl(url),
-      options: {
-        ...options,
-        ...(body !== undefined && {
-          body: JSON.stringify(body),
-        }),
-      },
-    });
-    const response = await fetch(request);
-
-    if (response.status === 401) {
-      return await this.refreshToken(request);
-    }
-
-    if (!response.ok) {
-      return Promise.reject(response);
-    }
-
-    if (response.status === 204) {
-      return void 0 as ResponseType;
-    }
-
-    const { data } = (await response.json()) as { data: ResponseType };
-
-    return data;
+    return await fetch(originalRequest);
   }
 }
 
-export const fetchAdapter = new FetchAdapterHttp();
+export const httpClientAdapter = new HttpClientAdapter();
