@@ -1,5 +1,8 @@
+import { DefaultError, useMutation } from "@tanstack/react-query";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
+import { User } from "@/domain/user";
+import { useToast } from "@/presentation/components/ui/use-toast";
 import { useUserStore } from "@/presentation/store/user";
 import { uploadProfilePicture } from "@/services/upload-profile-picture";
 
@@ -12,13 +15,33 @@ function isValidFile(file: File) {
 
 export function useUploadPicture() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const { toast } = useToast();
+  const { mutate, isPending } = useMutation<User, DefaultError, File>({
+    mutationFn: (uploadedFile: File) =>
+      uploadProfilePicture({
+        pictureFile: uploadedFile,
+      }),
+    onSuccess: (user) => {
+      actions.addUser(user);
+      handleResetStates();
+    },
+    onError: () => {
+      toast({
+        title: "Failed to upload profile picture",
+        description: "Something went wrong uploading profile picture, please try again",
+        variant: "destructive",
+        duration: 3000,
+      });
+      handleResetStates();
+    },
+  });
 
   const { actions, state } = useUserStore();
   const inputFileRef = useRef<HTMLInputElement>(null);
 
   const filePreviewUrl = uploadedFile ? URL.createObjectURL(uploadedFile) : state.user.pictureUrl;
-  const isSaveDisabled = !uploadedFile;
-  const isCancelDisabled = !uploadedFile;
+  const isSaveDisabled = !uploadedFile || isPending;
+  const isCancelDisabled = !uploadedFile || isPending;
 
   useEffect(() => {
     if (uploadedFile && filePreviewUrl) {
@@ -50,17 +73,7 @@ export function useUploadPicture() {
   async function handleSubmit() {
     if (!uploadedFile) return;
 
-    const user = await uploadProfilePicture({
-      pictureFile: uploadedFile,
-    });
-
-    actions.addUser({
-      email: user.email,
-      id: user.id,
-      name: user.name,
-      pictureUrl: user.pictureUrl,
-    });
-    handleResetStates();
+    mutate(uploadedFile);
   }
 
   return {
@@ -68,6 +81,7 @@ export function useUploadPicture() {
     isSaveDisabled,
     isCancelDisabled,
     inputFileRef,
+    isLoading: isPending,
     handleFileChange,
     handleOpenFileSelectorTree,
     handleSubmit,

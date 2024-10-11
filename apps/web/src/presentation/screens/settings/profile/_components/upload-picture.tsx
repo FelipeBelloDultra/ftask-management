@@ -1,5 +1,5 @@
 import { Choose, Otherwise, When } from "@/presentation/components/conditionals";
-import { InfoIcon, UploadIcon } from "@/presentation/components/icons";
+import { InfoIcon, Loader2Icon, UploadIcon } from "@/presentation/components/icons";
 import { Button } from "@/presentation/components/ui/button";
 import { Input } from "@/presentation/components/ui/input";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/presentation/components/ui/tooltip";
@@ -12,6 +12,7 @@ export function UploadPicture() {
     handleOpenFileSelectorTree,
     handleSubmit,
     handleResetStates,
+    isLoading,
     filePreviewUrl,
     inputFileRef,
     isCancelDisabled,
@@ -67,11 +68,11 @@ export function UploadPicture() {
 
       <div className="flex flex-col gap-4 mt-6">
         <Button onClick={handleSubmit} disabled={isSaveDisabled}>
-          Save
+          {isLoading ? <Loader2Icon className="mr-2 h-4 w-4 animate-spin" /> : <>Save</>}
         </Button>
 
         <Button onClick={handleResetStates} variant="secondary" disabled={isCancelDisabled}>
-          Cancel
+          {isLoading ? <Loader2Icon className="mr-2 h-4 w-4 animate-spin" /> : <>Cancel</>}
         </Button>
       </div>
     </>
