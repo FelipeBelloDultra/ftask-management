@@ -20,7 +20,7 @@ export function SidebarMenuItem({
   isActive,
 }: SidebarMenuItemProps) {
   return (
-    <li className={cn("rounded-md", isActive && "bg-zinc-900")}>
+    <li className={cn("rounded-md", isActive && "bg-accent/50")}>
       <Button
         variant="ghost"
         className={cn("w-full justify-start", isActive && "underline")}

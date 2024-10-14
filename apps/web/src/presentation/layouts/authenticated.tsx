@@ -46,7 +46,7 @@ export function AuthenticatedLayout() {
         <main className="pl-72 pt-20 relative min-h-screen">
           <Sidebar.Root />
 
-          <div className="fixed top-0 right-0 left-72 bg-zinc-950">
+          <div className="fixed top-0 right-0 left-72 bg-background">
             <Suspense fallback={<Header.Loading />}>
               <Header.Root />
             </Suspense>

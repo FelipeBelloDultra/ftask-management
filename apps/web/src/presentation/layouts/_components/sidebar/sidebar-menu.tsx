@@ -41,7 +41,7 @@ export function SidebarMenu() {
                 key={menu.key}
                 className="relative before:right-0 before:left-0 before:h-px before:absolute before:bg-muted before:top-1/2 text-center my-4"
               >
-                <span className="px-2 bg-zinc-950 relative">{menu.label}</span>
+                <span className="px-2 bg-background relative">{menu.label}</span>
               </li>
             );
 

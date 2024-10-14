@@ -6,6 +6,7 @@ import { getTotalUnreadNotificationsService } from "@/services/get-total-unread-
 import { HeaderNavigation } from "./header-navigation";
 import { HeaderNotificationsButton } from "./header-notifications-button";
 import { HeaderProfileDropdown } from "./header-profile-dropdown";
+import { HeaderToggleTheme } from "./header-toggle-theme";
 
 export function Header() {
   const { state } = useUserStore();
@@ -19,6 +20,8 @@ export function Header() {
       <HeaderNavigation />
 
       <section className="flex gap-4 items-center">
+        <HeaderToggleTheme />
+
         <HeaderNotificationsButton total={data.total} />
 
         <HeaderProfileDropdown

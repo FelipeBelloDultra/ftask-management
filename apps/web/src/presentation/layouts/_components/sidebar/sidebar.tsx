@@ -4,7 +4,7 @@ import { SidebarMenu } from "./sidebar-menu";
 
 export function Sidebar() {
   return (
-    <aside className="fixed w-72 h-full left-0 bottom-0 border-r flex flex-col bg-zinc-950 flex-shrink-0">
+    <aside className="fixed w-72 h-full left-0 bottom-0 border-r flex flex-col bg-background flex-shrink-0">
       <SidebarHeader />
 
       <SidebarMenu />

@@ -12,7 +12,7 @@ export function HeaderLoading() {
 
       <section className="flex gap-4 items-center">
         <Skeleton className="h-10 w-10" />
-
+        <Skeleton className="h-10 w-10" />
         <Skeleton className="h-10 w-10 rounded-full" />
       </section>
     </header>

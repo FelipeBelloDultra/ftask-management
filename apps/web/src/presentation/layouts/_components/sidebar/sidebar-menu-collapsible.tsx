@@ -29,7 +29,7 @@ export function SidebarMenuCollapsible({
   const isSomeSubmenuActive = submenus.some((submenu) => submenu.isSubmenuActive);
 
   return (
-    <li className={cn("rounded-md", isSomeSubmenuActive && "bg-zinc-900")}>
+    <li className={cn("rounded-md", isSomeSubmenuActive && "bg-accent/50")}>
       <Collapsible onOpenChange={onSubmenuCollapsibleToggled} open={isSomeSubmenuActive || openedMenuKey === menuKey}>
         <CollapsibleTrigger asChild>
           <Button variant="ghost" className={cn("w-full justify-start")}>
