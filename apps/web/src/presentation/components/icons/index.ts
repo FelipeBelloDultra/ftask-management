@@ -25,5 +25,7 @@ export {
   EyeIcon,
   EyeOffIcon,
   InfoIcon,
+  MoonIcon,
+  SunIcon,
   type LucideIcon as LucideIconType,
 } from "lucide-react";
