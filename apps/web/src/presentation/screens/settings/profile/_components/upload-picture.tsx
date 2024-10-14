@@ -27,6 +27,7 @@ export function UploadPicture() {
           variant="outline"
           size="icon"
           onClick={handleOpenFileSelectorTree}
+          disabled={isLoading}
         >
           <UploadIcon size={20} />
         </Button>
