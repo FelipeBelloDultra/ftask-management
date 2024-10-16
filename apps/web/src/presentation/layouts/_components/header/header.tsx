@@ -3,7 +3,6 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useUserStore } from "@/presentation/store/user";
 import { getTotalUnreadNotificationsService } from "@/services/get-total-unread-notifications";
 
-import { HeaderNavigation } from "./header-navigation";
 import { HeaderNotificationsButton } from "./header-notifications-button";
 import { HeaderProfileDropdown } from "./header-profile-dropdown";
 import { HeaderToggleTheme } from "./header-toggle-theme";
@@ -17,7 +16,7 @@ export function Header() {
 
   return (
     <header className="flex justify-between items-center h-14 px-4 border-b w-full">
-      <HeaderNavigation />
+      <p>My Projects</p>
 
       <section className="flex gap-4 items-center">
         <HeaderToggleTheme />
