@@ -1,11 +1,8 @@
 import { Link } from "react-router-dom";
 
-import { BellDotIcon, BellIcon } from "@/presentation/components/icons";
+import { If } from "@/presentation/components/conditionals";
+import { BellIcon } from "@/presentation/components/icons";
 import { Button } from "@/presentation/components/ui/button";
-
-function getNotificationIcon(hasUnread = false) {
-  return hasUnread ? BellDotIcon : BellIcon;
-}
 
 interface HeaderNotificationsButtonProps {
   total: number;
@@ -13,12 +10,17 @@ interface HeaderNotificationsButtonProps {
 
 export function HeaderNotificationsButton({ total = 0 }: HeaderNotificationsButtonProps) {
   const hasUnreadNotification = total > 0;
-  const NotificationIcon = getNotificationIcon(hasUnreadNotification);
 
   return (
-    <Button size="icon" asChild variant="outline">
+    <Button size="icon" asChild variant="outline" className="relative">
       <Link to="/dash/notifications?read=false">
-        <NotificationIcon size={20} />
+        <BellIcon size={20} />
+
+        <If condition={hasUnreadNotification}>
+          <span className="absolute text-sm text-white font-bold bg-blue-500 -top-1 -right-2 flex justify-center items-center rounded-full size-2 p-3">
+            {total}
+          </span>
+        </If>
       </Link>
     </Button>
   );
