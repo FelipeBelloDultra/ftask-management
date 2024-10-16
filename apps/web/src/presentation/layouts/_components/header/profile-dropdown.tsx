@@ -13,7 +13,7 @@ import {
 } from "@/presentation/components/ui/dropdown-menu";
 import { useAuth } from "@/presentation/hooks/use-auth";
 
-interface HeaderProfileProps {
+interface ProfileDropdownProps {
   user: {
     email: string;
     pictureUrl: string | null;
@@ -34,7 +34,7 @@ function getInitials(name: string) {
   return initials;
 }
 
-export function HeaderProfileDropdown({ user }: HeaderProfileProps) {
+export function ProfileDropdown({ user }: ProfileDropdownProps) {
   const { signOut } = useAuth();
 
   return (

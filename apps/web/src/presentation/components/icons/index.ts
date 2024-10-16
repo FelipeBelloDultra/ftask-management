@@ -1,4 +1,5 @@
 export {
+  type LucideIcon as LucideIconType,
   Loader2Icon,
   ChevronDownIcon,
   ChevronRightIcon,
@@ -27,5 +28,5 @@ export {
   InfoIcon,
   MoonIcon,
   SunIcon,
-  type LucideIcon as LucideIconType,
+  PlusCircleIcon,
 } from "lucide-react";

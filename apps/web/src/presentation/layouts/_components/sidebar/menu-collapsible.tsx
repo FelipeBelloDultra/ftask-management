@@ -5,7 +5,7 @@ import { LucideIconType } from "@/presentation/components/icons";
 import { Button } from "@/presentation/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/presentation/components/ui/collapsible";
 
-interface SidebarMenuCollapsibleProps {
+interface MenuCollapsibleProps {
   onSubmenuCollapsibleToggled(): void;
   openedMenuKey: string | null;
   menuKey: string;
@@ -18,14 +18,14 @@ interface SidebarMenuCollapsibleProps {
   }>;
 }
 
-export function SidebarMenuCollapsible({
+export function MenuCollapsible({
   onSubmenuCollapsibleToggled,
   menuKey,
   openedMenuKey,
   icon: Icon,
   label,
   submenus,
-}: SidebarMenuCollapsibleProps) {
+}: MenuCollapsibleProps) {
   const isSomeSubmenuActive = submenus.some((submenu) => submenu.isSubmenuActive);
 
   return (

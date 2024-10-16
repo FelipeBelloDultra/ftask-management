@@ -1,9 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 
 import { LogInIcon, UserPlusIcon } from "@/presentation/components/icons";
+import { ThemeToggle } from "@/presentation/components/theme-toggle";
 import { Button } from "@/presentation/components/ui/button";
-
-import { Header } from "./header";
 
 export function AuthActionButton() {
   const location = useLocation();
@@ -11,7 +10,7 @@ export function AuthActionButton() {
 
   return (
     <div className="absolute right-8 top-8 flex gap-4">
-      <Header.ToggleTheme />
+      <ThemeToggle />
 
       <Button asChild variant="outline" className="font-bold">
         {isInLoginPage ? (

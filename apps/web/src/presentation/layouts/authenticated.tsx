@@ -11,6 +11,7 @@ import { Skeleton } from "../components/ui/skeleton";
 import { useAuth } from "../hooks/use-auth";
 
 import { Header } from "./_components/header";
+import { SkeletonHeaderLoading } from "./_components/header/loadings";
 import { Sidebar } from "./_components/sidebar";
 
 export function AuthenticatedLayout() {
@@ -44,7 +45,7 @@ export function AuthenticatedLayout() {
     <Choose>
       <When condition={isSuccess}>
         <main className="h-screen flex flex-col">
-          <Suspense fallback={<Header.Loading />}>
+          <Suspense fallback={<SkeletonHeaderLoading />}>
             <Header.Root />
           </Suspense>
 

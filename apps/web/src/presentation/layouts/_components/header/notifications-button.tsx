@@ -4,11 +4,11 @@ import { If } from "@/presentation/components/conditionals";
 import { BellIcon } from "@/presentation/components/icons";
 import { Button } from "@/presentation/components/ui/button";
 
-interface HeaderNotificationsButtonProps {
+interface NotificationsButtonProps {
   total: number;
 }
 
-export function HeaderNotificationsButton({ total = 0 }: HeaderNotificationsButtonProps) {
+export function NotificationsButton({ total = 0 }: NotificationsButtonProps) {
   const hasUnreadNotification = total > 0;
 
   return (

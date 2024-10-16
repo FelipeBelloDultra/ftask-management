@@ -3,10 +3,10 @@ import { useLocation } from "react-router-dom";
 
 import { getSidebarMenuList } from "@/constants/menu-options";
 
-import { SidebarMenuCollapsible } from "./sidebar-menu-collapsible";
-import { SidebarMenuItem } from "./sidebar-menu-item";
+import { MenuCollapsible } from "./menu-collapsible";
+import { MenuItem } from "./menu-item";
 
-export function SidebarMenu() {
+export function Menu() {
   const [openedSubmenuKey, setOpenedSubmenuKey] = useState<null | string>(null);
   const { pathname } = useLocation();
   const menus = getSidebarMenuList(pathname);
@@ -47,7 +47,7 @@ export function SidebarMenu() {
 
           if (menu.submenus?.length) {
             return (
-              <SidebarMenuCollapsible
+              <MenuCollapsible
                 key={menu.href}
                 icon={menu.icon}
                 label={menu.label}
@@ -60,7 +60,7 @@ export function SidebarMenu() {
           }
 
           return (
-            <SidebarMenuItem
+            <MenuItem
               key={menu.href}
               href={menu.href}
               icon={menu.icon}

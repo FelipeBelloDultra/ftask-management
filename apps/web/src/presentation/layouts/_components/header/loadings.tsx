@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from "@/presentation/components/icons";
 import { Skeleton } from "@/presentation/components/ui/skeleton";
 
-export function HeaderLoading() {
+export function SkeletonHeaderLoading() {
   return (
     <header className="flex justify-between items-center h-14 px-4 border-b w-full bg-accent/50">
       <span className="inline-flex items-center h-5 gap-1.5">

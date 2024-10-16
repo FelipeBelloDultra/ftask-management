@@ -1,11 +1,11 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 
+import { ThemeToggle } from "@/presentation/components/theme-toggle";
 import { useUserStore } from "@/presentation/store/user";
 import { getTotalUnreadNotificationsService } from "@/services/get-total-unread-notifications";
 
-import { HeaderNotificationsButton } from "./header-notifications-button";
-import { HeaderProfileDropdown } from "./header-profile-dropdown";
-import { HeaderToggleTheme } from "./header-toggle-theme";
+import { NotificationsButton } from "./notifications-button";
+import { ProfileDropdown } from "./profile-dropdown";
 
 export function Header() {
   const { state } = useUserStore();
@@ -16,14 +16,14 @@ export function Header() {
 
   return (
     <header className="flex justify-between items-center h-14 px-4 border-b w-full flex-shrink-0 bg-accent/50">
-      <p>My Projects</p>
+      <h1 className="text-2xl font-semibold tracking-wider">FTask Management</h1>
 
       <section className="flex gap-3 items-center">
-        <HeaderToggleTheme />
+        <ThemeToggle />
 
-        <HeaderNotificationsButton total={data.total} />
+        <NotificationsButton total={data.total} />
 
-        <HeaderProfileDropdown
+        <ProfileDropdown
           user={{
             email: state.user.email,
             pictureUrl: state.user.pictureUrl,

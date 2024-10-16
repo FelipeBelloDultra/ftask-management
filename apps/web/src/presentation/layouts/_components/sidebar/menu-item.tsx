@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { LucideIconType } from "@/presentation/components/icons";
 import { Button } from "@/presentation/components/ui/button";
 
-interface SidebarMenuItemProps {
+interface MenuItemProps {
   onSubmenuCollapsibleToggled(): void;
   icon: LucideIconType;
   href: string;
@@ -12,13 +12,7 @@ interface SidebarMenuItemProps {
   isActive: boolean;
 }
 
-export function SidebarMenuItem({
-  onSubmenuCollapsibleToggled,
-  href,
-  icon: Icon,
-  label,
-  isActive,
-}: SidebarMenuItemProps) {
+export function MenuItem({ onSubmenuCollapsibleToggled, href, icon: Icon, label, isActive }: MenuItemProps) {
   return (
     <li className={cn("rounded-md", isActive && "bg-accent/50")}>
       <Button

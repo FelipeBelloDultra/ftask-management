@@ -8,7 +8,7 @@ import {
 } from "@/presentation/components/ui/dropdown-menu";
 import { useTheme } from "@/presentation/hooks/use-theme";
 
-export function HeaderToggleTheme() {
+export function ThemeToggle() {
   const { setTheme } = useTheme();
 
   return (
