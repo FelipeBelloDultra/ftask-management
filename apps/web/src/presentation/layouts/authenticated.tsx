@@ -43,20 +43,22 @@ export function AuthenticatedLayout() {
   return (
     <Choose>
       <When condition={isSuccess}>
-        <main className="pl-72 pt-20 relative min-h-screen">
-          <Sidebar.Root />
+        <main className="h-screen flex flex-col">
+          <Suspense fallback={<Header.Loading />}>
+            <Header.Root />
+          </Suspense>
 
-          <div className="fixed top-0 right-0 left-72 bg-background">
-            <Suspense fallback={<Header.Loading />}>
-              <Header.Root />
-            </Suspense>
+          <div className="flex flex-1">
+            <div className="h-[calc(100vh-3.5rem)]">
+              <Sidebar.Root />
+            </div>
+
+            <PageContent>
+              <Suspense fallback={<Skeleton className="w-full top-20 left-72 z-50 h-3 rounded-none" />}>
+                <Outlet />
+              </Suspense>
+            </PageContent>
           </div>
-
-          <PageContent>
-            <Suspense fallback={<Skeleton className="fixed w-full top-20 left-72 z-50 h-3 rounded-none" />}>
-              <Outlet />
-            </Suspense>
-          </PageContent>
         </main>
       </When>
       <Otherwise>

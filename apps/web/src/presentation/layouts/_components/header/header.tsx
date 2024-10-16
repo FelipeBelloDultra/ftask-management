@@ -15,10 +15,10 @@ export function Header() {
   });
 
   return (
-    <header className="flex justify-between items-center h-14 px-4 border-b w-full">
+    <header className="flex justify-between items-center h-14 px-4 border-b w-full flex-shrink-0 bg-accent/50">
       <p>My Projects</p>
 
-      <section className="flex gap-4 items-center">
+      <section className="flex gap-3 items-center">
         <HeaderToggleTheme />
 
         <HeaderNotificationsButton total={data.total} />
