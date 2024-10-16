@@ -16,7 +16,7 @@ export function Header() {
   });
 
   return (
-    <header className="flex justify-between items-center h-20 px-4 border-b w-full">
+    <header className="flex justify-between items-center h-14 px-4 border-b w-full">
       <HeaderNavigation />
 
       <section className="flex gap-4 items-center">
