@@ -4,7 +4,10 @@ import { inject, injectable } from "tsyringe";
 import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { CacheRepository } from "@/infra/cache/cache.repository";
-import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
+import {
+  FetchManyByOwnerIdFilters,
+  ProjectRepository,
+} from "@/modules/project/application/repositories/project.repository";
 import { Project } from "@/modules/project/domain/entity/project";
 import { Slug } from "@/modules/project/domain/entity/value-objects/slug";
 
@@ -56,16 +59,17 @@ export class PrismaProjectRepository implements ProjectRepository {
   public async fetchManyByOwnerId(
     ownerId: UniqueEntityID,
     pagination: Pagination,
+    filters: FetchManyByOwnerIdFilters,
   ): Promise<{
     projects: Array<Project>;
     total: number;
   }> {
-    const CACHE_KEY = this.cache.createKey([
-      `account-${ownerId.toValue()}`,
-      "projects",
-      `limit-${pagination.limit}`,
-      `page-${pagination.page}`,
-    ]);
+    const keys = [`account-${ownerId.toValue()}`, "projects", `limit-${pagination.limit}`, `page-${pagination.page}`];
+    if (filters.role !== undefined && typeof filters.role === "string") {
+      keys.push(`role-${filters.role}`);
+    }
+
+    const CACHE_KEY = this.cache.createKey(keys);
     const cacheHit = await this.cache.get(CACHE_KEY);
 
     if (cacheHit) {
@@ -77,12 +81,14 @@ export class PrismaProjectRepository implements ProjectRepository {
       };
     }
 
+    const filter = this.makeRoleFilter(ownerId, filters.role);
+
     const [projects, total] = await Promise.all([
       this.prismaConnection.project.findMany({
         take: pagination.take,
         skip: pagination.skip,
         where: {
-          ownerId: ownerId.toValue(),
+          ...filter,
         },
         orderBy: [
           {
@@ -92,7 +98,7 @@ export class PrismaProjectRepository implements ProjectRepository {
       }),
       this.prismaConnection.project.count({
         where: {
-          ownerId: ownerId.toValue(),
+          ...filter,
         },
       }),
     ]);
@@ -103,5 +109,41 @@ export class PrismaProjectRepository implements ProjectRepository {
       projects: projects.map(ProjectMapper.toDomain),
       total,
     };
+  }
+
+  private makeRoleFilter(ownerId: UniqueEntityID, role?: "owner" | "member") {
+    switch (role) {
+      case "owner":
+        return {
+          ownerId: ownerId.toValue(),
+        };
+      case "member":
+        return {
+          members: {
+            some: {
+              member: {
+                accountId: ownerId.toValue(),
+              },
+            },
+          },
+        };
+      default:
+        return {
+          OR: [
+            {
+              ownerId: ownerId.toValue(),
+            },
+            {
+              members: {
+                some: {
+                  member: {
+                    accountId: ownerId.toValue(),
+                  },
+                },
+              },
+            },
+          ],
+        };
+    }
   }
 }

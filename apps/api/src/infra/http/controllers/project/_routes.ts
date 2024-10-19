@@ -5,7 +5,7 @@ import { ensureAuthenticatedMiddleware } from "@/infra/http/middlewares/factorie
 import { AddProjectMemberController } from "./add-project-member.controller";
 import { CreateProjectController } from "./create-project.controller";
 import { CreateTaskController } from "./create-task.controller";
-import { FetchProjectsByAccountController } from "./fetch-projects-by-owner.controller";
+import { FetchProjectsByAccountController } from "./fetch-projects-by-account.controller";
 
 const router = Router();
 
