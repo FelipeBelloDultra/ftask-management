@@ -4,17 +4,17 @@ import { makeAccount } from "@/test/factories/make-account";
 import { makeProject } from "@/test/factories/make-project";
 import { InMemoryProjectRepository } from "@/test/repositories/in-memory-project.repository";
 
-import { FetchProjectsByOwnerDto } from "../dtos/fetch-projects-by-owner-dto";
+import { FetchProjectsByAccountDto } from "../dtos/fetch-projects-by-account-dto";
 
-import { FetchProjectsByOwnerUseCase } from "./fetch-projects-by-owner.use-case";
+import { FetchProjectsByAccountUseCase } from "./fetch-projects-by-account.use-case";
 
-describe("FetchProjectsByOwnerUseCase", () => {
-  let sut: FetchProjectsByOwnerUseCase;
+describe("FetchProjectsByAccountUseCase", () => {
+  let sut: FetchProjectsByAccountUseCase;
   let inMemoryProjectRepository: InMemoryProjectRepository;
 
   beforeEach(() => {
     inMemoryProjectRepository = new InMemoryProjectRepository();
-    sut = new FetchProjectsByOwnerUseCase(inMemoryProjectRepository);
+    sut = new FetchProjectsByAccountUseCase(inMemoryProjectRepository);
   });
 
   it("should fetch projects by owner id", async () => {
@@ -29,7 +29,7 @@ describe("FetchProjectsByOwnerUseCase", () => {
     await Promise.all(projects.map((n) => inMemoryProjectRepository.create(n)));
 
     const result = (await sut.execute(
-      FetchProjectsByOwnerDto.create({
+      FetchProjectsByAccountDto.create({
         ownerId: account.id.toValue(),
         limit: 10,
         page: 1,

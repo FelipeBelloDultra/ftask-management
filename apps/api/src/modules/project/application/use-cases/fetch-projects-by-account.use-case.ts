@@ -6,20 +6,20 @@ import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
 import { Project } from "@/modules/project/domain/entity/project";
 
-import { FetchProjectsByOwnerDto } from "../dtos/fetch-projects-by-owner-dto";
+import { FetchProjectsByAccountDto } from "../dtos/fetch-projects-by-account-dto";
 
 type OnError = never;
 type OnSuccess = { projects: Project[]; pagination: Pagination; total: number };
 type Output = Either<OnError, OnSuccess>;
 
 @injectable()
-export class FetchProjectsByOwnerUseCase {
+export class FetchProjectsByAccountUseCase {
   public constructor(
     @inject("ProjectRepository")
     private readonly projectRepository: ProjectRepository,
   ) {}
 
-  public async execute(input: FetchProjectsByOwnerDto): Promise<Output> {
+  public async execute(input: FetchProjectsByAccountDto): Promise<Output> {
     const ownerId = UniqueEntityID.create(input.ownerId);
 
     const pagination = Pagination.create({

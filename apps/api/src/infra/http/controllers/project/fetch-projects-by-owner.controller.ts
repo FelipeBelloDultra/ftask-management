@@ -4,24 +4,26 @@ import { z } from "zod";
 import { Controller } from "@/infra/http/controller";
 import { PaginationPresenter } from "@/infra/presenters/pagination-presenter";
 import { ProjectPresenter } from "@/infra/presenters/project-presenter";
-import { FetchProjectsByOwnerDto } from "@/modules/project/application/dtos/fetch-projects-by-owner-dto";
-import { makeFetchProjectsByOwner } from "@/modules/project/application/use-cases/factories/make-fetch-projects-by-owner";
+import { FetchProjectsByAccountDto } from "@/modules/project/application/dtos/fetch-projects-by-account-dto";
+import { makeFetchProjectsByAccount } from "@/modules/project/application/use-cases/factories/make-fetch-projects-by-account";
 
 const paramSchema = z.object({
+  role: z.union([z.literal("owner"), z.literal("member")]).optional(),
   page: z.string().optional().default("1").transform(Number).pipe(z.number().min(1)),
   limit: z.string().optional().default("10").transform(Number).pipe(z.number().min(5)),
 });
 
-export class FetchProjectsByOwnerController implements Controller {
+export class FetchProjectsByAccountController implements Controller {
   public async handler(req: Request, res: Response): Promise<Response> {
-    const { limit, page } = paramSchema.parse(req.query);
+    const { limit, page, role } = paramSchema.parse(req.query);
     const { id } = req.account;
 
-    const fetchProjectsByOwner = makeFetchProjectsByOwner();
+    const fetchProjectsByAccount = makeFetchProjectsByAccount();
 
-    const result = await fetchProjectsByOwner.execute(
-      FetchProjectsByOwnerDto.create({
+    const result = await fetchProjectsByAccount.execute(
+      FetchProjectsByAccountDto.create({
         ownerId: id,
+        role,
         limit,
         page,
       }),

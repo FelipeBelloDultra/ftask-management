@@ -5,7 +5,7 @@ import { ensureAuthenticatedMiddleware } from "@/infra/http/middlewares/factorie
 import { AddProjectMemberController } from "./add-project-member.controller";
 import { CreateProjectController } from "./create-project.controller";
 import { CreateTaskController } from "./create-task.controller";
-import { FetchProjectsByOwnerController } from "./fetch-projects-by-owner.controller";
+import { FetchProjectsByAccountController } from "./fetch-projects-by-owner.controller";
 
 const router = Router();
 
@@ -16,6 +16,6 @@ router.post(
 );
 router.post("/projects", ensureAuthenticatedMiddleware.handle(), new CreateProjectController().handler);
 router.post("/projects/:projectId/task", ensureAuthenticatedMiddleware.handle(), new CreateTaskController().handler);
-router.get("/projects", ensureAuthenticatedMiddleware.handle(), new FetchProjectsByOwnerController().handler);
+router.get("/projects", ensureAuthenticatedMiddleware.handle(), new FetchProjectsByAccountController().handler);
 
 export { router };
