@@ -14,9 +14,10 @@ model Account {
   name       String
   pictureUrl String? @map("picture_url")
 
-  members       Member[]
-  projects      Project[]
-  notifications Notification[]
+  members         Member[]
+  projects        Project[]
+  notifications   Notification[]
+  favoriteProject AccountHasFavoriteProject[]
 
   @@map("accounts")
 }
@@ -58,9 +59,10 @@ model Project {
   createdAt   DateTime      @default(now()) @map("created_at")
   ownerId     String        @map("owner_id")
 
-  owner   Account            @relation(fields: [ownerId], references: [id])
-  members ProjectHasMember[]
-  tasks   Task[]
+  owner           Account                     @relation(fields: [ownerId], references: [id])
+  members         ProjectHasMember[]
+  tasks           Task[]
+  favoriteProject AccountHasFavoriteProject[]
 
   @@map("projects")
 }
@@ -107,6 +109,18 @@ model NotificationsMetadata {
   notification Notification @relation(fields: [notificationId], references: [id])
 
   @@map("notifications_metadata")
+}
+
+model AccountHasFavoriteProject {
+  id        String @id @default(uuid())
+  accountId String @map("account_id")
+  projectId String @map("project_id")
+
+  account Account @relation(fields: [accountId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@unique([accountId, projectId])
+  @@map("account_has_favorite_project")
 }
 
 enum ProjectStatus {
