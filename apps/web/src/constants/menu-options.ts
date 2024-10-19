@@ -4,6 +4,7 @@ import {
   LayoutDashboardIcon,
   LucideIconType,
   SettingsIcon,
+  StarIcon,
 } from "@/presentation/components/icons";
 
 interface SubmenuItem {
@@ -61,9 +62,9 @@ export function getSidebarMenuList(pathname: string): Array<Menu> {
     },
     {
       isDivider: false,
-      label: "Projects",
-      icon: Building2Icon,
-      href: "/dash/projects",
+      label: "Favorite projects",
+      icon: StarIcon,
+      href: "/dash/projects-favorites",
       isActive: pathname === "/dash/projects",
       submenus: [
         {
@@ -72,6 +73,13 @@ export function getSidebarMenuList(pathname: string): Array<Menu> {
           isSubmenuActive: pathname === "/dash/projects/my",
         },
       ],
+    },
+    {
+      isDivider: false,
+      label: "Selected projects",
+      icon: Building2Icon,
+      href: "/dash/projects",
+      isActive: pathname === "/dash/projects",
     },
   ];
 }

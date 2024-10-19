@@ -38,7 +38,7 @@ export function MenuCollapsible({
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="py-2">
-          <div className="h-px bg-muted"></div>
+          {/* <div className="h-px bg-muted"></div> */}
 
           <div className="my-2 pr-2 pl-7">
             {submenus.map((submenu) => (
@@ -53,7 +53,7 @@ export function MenuCollapsible({
             ))}
           </div>
 
-          <div className="h-px bg-muted"></div>
+          {/* <div className="h-px bg-muted"></div> */}
         </CollapsibleContent>
       </Collapsible>
     </li>

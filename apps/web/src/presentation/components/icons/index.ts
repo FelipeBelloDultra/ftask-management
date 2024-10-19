@@ -29,4 +29,6 @@ export {
   MoonIcon,
   SunIcon,
   PlusCircleIcon,
+  StarIcon,
+  ArrowDownIcon,
 } from "lucide-react";
