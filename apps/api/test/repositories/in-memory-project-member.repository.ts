@@ -23,4 +23,12 @@ export class InMemoryProjectMemberRepository implements ProjectMemberRepository 
 
     DomainEvents.dispatchEventsForAggregate(memberWithProject.id);
   }
+
+  public async save(memberWithProject: MemberWithProject): Promise<void> {
+    const memberWithProjectsIndex = this.memberWithProjects.findIndex((n) => n.id.equals(memberWithProject.id));
+
+    if (memberWithProjectsIndex !== -1) {
+      this.memberWithProjects[memberWithProjectsIndex] = memberWithProject;
+    }
+  }
 }

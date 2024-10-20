@@ -43,4 +43,13 @@ export class PrismaProjectMemberRepository implements ProjectMemberRepository {
 
     DomainEvents.dispatchEventsForAggregate(memberWithProject.id);
   }
+
+  public async save(projectMember: MemberWithProject): Promise<void> {
+    await this.prismaConnection.projectHasMember.update({
+      where: {
+        id: projectMember.id.toValue(),
+      },
+      data: MemberWithProjectMapper.toPersistence(projectMember),
+    });
+  }
 }
