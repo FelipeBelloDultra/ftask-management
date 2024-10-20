@@ -121,9 +121,7 @@ export class PrismaProjectRepository implements ProjectRepository {
         return {
           members: {
             some: {
-              member: {
-                accountId: ownerId.toValue(),
-              },
+              accountId: ownerId.toValue(),
             },
           },
         };
@@ -136,9 +134,7 @@ export class PrismaProjectRepository implements ProjectRepository {
             {
               members: {
                 some: {
-                  member: {
-                    accountId: ownerId.toValue(),
-                  },
+                  accountId: ownerId.toValue(),
                 },
               },
             },
