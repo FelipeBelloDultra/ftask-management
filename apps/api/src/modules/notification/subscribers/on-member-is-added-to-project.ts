@@ -24,12 +24,16 @@ export class OnMemberIsAddedToProject implements EventHandler {
     await this.sendNotificationUseCase.execute(
       SendNotificationDto.create({
         title: "New Project Member",
-        content: `Hello! You was added to the project ${memberWithProject.project.name} as member`,
+        content: `You have received an invitation to join the project ${memberWithProject.project.name} as a member. Use the links below to accept or decline the invitation.`,
         recipientId: memberWithProject.member.accountId.toValue(),
         additionalInfos: [
           {
-            key: "project_id",
-            value: memberWithProject.project.id.toValue(),
+            key: "accept_invite_link",
+            value: `invites/${memberWithProject.id.toValue()}/accept`,
+          },
+          {
+            key: "refuse_invite_link",
+            value: `invites/${memberWithProject.id.toValue()}/refuse`,
           },
         ],
       }),
