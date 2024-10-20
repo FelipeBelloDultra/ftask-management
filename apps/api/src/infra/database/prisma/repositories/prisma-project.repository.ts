@@ -56,7 +56,7 @@ export class PrismaProjectRepository implements ProjectRepository {
     ]);
   }
 
-  public async fetchManyByOwnerId(
+  public async fetchManyByAccountId(
     ownerId: UniqueEntityID,
     pagination: Pagination,
     filters: FetchManyByOwnerIdFilters,

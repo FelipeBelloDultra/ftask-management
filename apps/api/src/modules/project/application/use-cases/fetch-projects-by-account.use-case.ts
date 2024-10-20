@@ -26,7 +26,7 @@ export class FetchProjectsByAccountUseCase {
       limit: input.limit,
       page: input.page,
     });
-    const { projects, total } = await this.projectRepository.fetchManyByOwnerId(ownerId, pagination, {
+    const { projects, total } = await this.projectRepository.fetchManyByAccountId(ownerId, pagination, {
       role: input.role,
     });
 
