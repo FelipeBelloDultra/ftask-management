@@ -25,26 +25,15 @@ model Account {
 model Member {
   id        String @id @default(uuid())
   accountId String @unique @map("account_id")
+  projectId String @map("project_id")
 
-  account  Account            @relation(fields: [accountId], references: [id])
-  tasks    Task[]
-  projects ProjectHasMember[]
+  account        Account          @relation(fields: [accountId], references: [id])
+  project        Project          @relation(fields: [projectId], references: [id])
+  tasks          Task[]
+  projectInvites ProjectInvites[]
 
-  @@unique([id, accountId])
+  @@unique([accountId, projectId])
   @@map("members")
-}
-
-model ProjectHasMember {
-  id               String           @id @default(uuid())
-  projectId        String           @map("project_id")
-  memberId         String           @map("member_id")
-  invitationStatus InvitationStatus @default(pending) @map("invitation_status")
-
-  project Project @relation(fields: [projectId], references: [id])
-  member  Member  @relation(fields: [memberId], references: [id])
-
-  @@unique([projectId, memberId])
-  @@map("project_has_member")
 }
 
 model Project {
@@ -61,9 +50,10 @@ model Project {
   ownerId     String        @map("owner_id")
 
   owner           Account                     @relation(fields: [ownerId], references: [id])
-  members         ProjectHasMember[]
+  members         Member[]
   tasks           Task[]
   favoriteProject AccountHasFavoriteProject[]
+  projectInvites  ProjectInvites[]
 
   @@map("projects")
 }
@@ -122,6 +112,20 @@ model AccountHasFavoriteProject {
 
   @@unique([accountId, projectId])
   @@map("account_has_favorite_project")
+}
+
+model ProjectInvites {
+  id        String           @id @default(uuid())
+  memberId  String           @map("member_id")
+  projectId String           @map("project_id")
+  status    InvitationStatus @default(pending)
+  expiresAt DateTime         @map("expires_at")
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  member  Member  @relation(fields: [memberId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@map("project_invites")
 }
 
 enum ProjectStatus {
