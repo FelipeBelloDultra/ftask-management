@@ -4,12 +4,14 @@ import { AccountRepository } from "@/modules/account/application/repositories/ac
 import { MemberRepository } from "@/modules/account/application/repositories/member.repository";
 import { NotificationMetadataRepository } from "@/modules/notification/application/repositories/notification-metadata.repository";
 import { NotificationRepository } from "@/modules/notification/application/repositories/notification.repository";
+import { InviteRepository } from "@/modules/project/application/repositories/invite.repository";
 import { ProjectMemberRepository } from "@/modules/project/application/repositories/project-member.repository";
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
 import { TaskRepository } from "@/modules/project/application/repositories/task.repository";
 
 import { PrismaConnection } from "./prisma-connection";
 import { PrismaAccountRepository } from "./repositories/prisma-account.repository";
+import { PrismaInviteRepository } from "./repositories/prisma-invite.repository";
 import { PrismaMemberRepository } from "./repositories/prisma-member.repository";
 import { PrismaNotificationMetadataRepository } from "./repositories/prisma-notification-metadata.repository";
 import { PrismaNotificationRepository } from "./repositories/prisma-notification.repository";
@@ -84,6 +86,15 @@ container.register<NotificationMetadataRepository>(
   "NotificationMetadataRepository",
   {
     useClass: PrismaNotificationMetadataRepository,
+  },
+  {
+    lifecycle: Lifecycle.Singleton,
+  },
+);
+container.register<InviteRepository>(
+  "InviteRepository",
+  {
+    useClass: PrismaInviteRepository,
   },
   {
     lifecycle: Lifecycle.Singleton,

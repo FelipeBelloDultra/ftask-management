@@ -43,6 +43,10 @@ export class Invite extends Entity<InviteProps> {
     return currentDate;
   }
 
+  public canChangeStatus() {
+    return this.status.canAccept() || this.status.canDecline();
+  }
+
   public static create(props: Optional<InviteProps, "expirationDate" | "createdAt" | "status">, id?: UniqueEntityID) {
     return new Invite(
       {

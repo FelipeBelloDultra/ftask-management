@@ -17,7 +17,7 @@ router.post(
 router.post("/projects", ensureAuthenticatedMiddleware.handle(), new CreateProjectController().handler);
 router.post("/projects/:projectId/task", ensureAuthenticatedMiddleware.handle(), new CreateTaskController().handler);
 router.get("/projects", ensureAuthenticatedMiddleware.handle(), new FetchProjectsByAccountController().handler);
-router.patch("/projects/invites/:projectMemberId/:inviteStatus", (_, res) => {
+router.patch("/projects/invites/:inviteId/:inviteStatus", (_, res) => {
   return res
     .json({
       message: "Not implemented yet",
