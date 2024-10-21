@@ -8,6 +8,7 @@ export class MemberMapper {
     return Member.create(
       {
         accountId: UniqueEntityID.create(prismaMember.accountId),
+        projectId: UniqueEntityID.create(prismaMember.projectId),
       },
       UniqueEntityID.create(prismaMember.id),
     );
@@ -17,6 +18,7 @@ export class MemberMapper {
     return {
       id: member.id.toValue(),
       accountId: member.accountId.toValue(),
+      projectId: member.projectId.toValue(),
     };
   }
 }
