@@ -6,9 +6,9 @@ import { AccountRepository } from "@/modules/account/application/repositories/ac
 import { MemberRepository } from "@/modules/account/application/repositories/member.repository";
 import { Member } from "@/modules/account/domain/entity/member";
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
-import { MemberWithProject } from "@/modules/project/domain/entity/member-with-project";
 
 import { Invite } from "../../domain/entity/invite";
+import { InviteDetail } from "../../domain/entity/value-objects/invite-detail";
 import { AddProjectMemberDto } from "../dtos/add-project-member-dto";
 import { InviteRepository } from "../repositories/invite.repository";
 
@@ -24,7 +24,7 @@ type OnError =
   | ProjectMemberAlreadyExistsError
   | ProjectNotFoundError
   | OwnerCannotBeAddedAsMemberError;
-type OnSuccess = { memberWithProject: MemberWithProject };
+type OnSuccess = { inviteDetail: InviteDetail };
 type Output = Either<OnError, OnSuccess>;
 
 @injectable()
@@ -76,13 +76,11 @@ export class AddProjectMemberUseCase {
       memberId: newMember.id,
       projectId: project.id,
     });
+    const inviteDetail = project.createInviteDetail(newMember, invite);
     await this.inviteRepository.create(invite);
 
     return right({
-      memberWithProject: MemberWithProject.create({
-        member: newMember,
-        project,
-      }),
+      inviteDetail,
     });
   }
 }

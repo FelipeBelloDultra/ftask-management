@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { Controller } from "@/infra/http/controller";
 import { HttpException } from "@/infra/http/http-exception";
-import { MemberWithProjectPresenter } from "@/infra/presenters/member-with-project-presenter";
+import { InviteDetailPresenter } from "@/infra/presenters/invite-detail-presenter";
 import { AddProjectMemberDto } from "@/modules/project/application/dtos/add-project-member-dto";
 import { MemberNotFoundError } from "@/modules/project/application/use-cases/errors/member-not-found.error";
 import { NotAllowedError } from "@/modules/project/application/use-cases/errors/not-allowed.error";
@@ -37,7 +37,7 @@ export class AddProjectMemberController implements Controller {
 
     if (result.isRight()) {
       return res.status(201).json({
-        data: MemberWithProjectPresenter.toHTTP(result.value.memberWithProject),
+        data: InviteDetailPresenter.toHTTP(result.value.inviteDetail),
       });
     }
 

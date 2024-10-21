@@ -1,8 +1,13 @@
-import { Entity } from "@/core/entity/entity";
+import { AggregateRoot } from "@/core/entity/aggregate-root";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { Optional } from "@/core/types/optional";
+import { Member } from "@/modules/account/domain/entity/member";
 
+import { ProjectInviteWasCreatedEvent } from "../events/project-invite-was-created-event";
+
+import { Invite } from "./invite";
 import { DueDate } from "./value-objects/due-date";
+import { InviteDetail } from "./value-objects/invite-detail";
 import { ProjectStatus } from "./value-objects/project-status";
 import { Slug } from "./value-objects/slug";
 
@@ -19,7 +24,7 @@ export interface ProjectProps {
   iconUrl: string | null;
 }
 
-export class Project extends Entity<ProjectProps> {
+export class Project extends AggregateRoot<ProjectProps> {
   public get name() {
     return this.props.name;
   }
@@ -90,6 +95,20 @@ export class Project extends Entity<ProjectProps> {
     this.props.status.setDeleted();
     this.props.deletedAt = new Date();
     this.edited();
+  }
+
+  public createInviteDetail(member: Member, invite: Invite) {
+    const inviteDetail = InviteDetail.create({
+      createdAt: invite.createdAt,
+      expirationDate: invite.expirationDate,
+      id: invite.id,
+      member,
+      project: this,
+      status: invite.status,
+    });
+    this.addDomainEvent(new ProjectInviteWasCreatedEvent(inviteDetail));
+
+    return inviteDetail;
   }
 
   public static create(
