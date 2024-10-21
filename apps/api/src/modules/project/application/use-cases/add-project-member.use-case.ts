@@ -5,11 +5,12 @@ import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { AccountRepository } from "@/modules/account/application/repositories/account.repository";
 import { MemberRepository } from "@/modules/account/application/repositories/member.repository";
 import { Member } from "@/modules/account/domain/entity/member";
-import { ProjectMemberRepository } from "@/modules/project/application/repositories/project-member.repository";
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
 import { MemberWithProject } from "@/modules/project/domain/entity/member-with-project";
 
+import { Invite } from "../../domain/entity/invite";
 import { AddProjectMemberDto } from "../dtos/add-project-member-dto";
+import { InviteRepository } from "../repositories/invite.repository";
 
 import { MemberNotFoundError } from "./errors/member-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";
@@ -35,8 +36,8 @@ export class AddProjectMemberUseCase {
     private readonly projectRepository: ProjectRepository,
     @inject("AccountRepository")
     private readonly accountRepository: AccountRepository,
-    @inject("ProjectMemberRepository")
-    private readonly projectMemberRepository: ProjectMemberRepository,
+    @inject("InviteRepository")
+    private readonly inviteRepository: InviteRepository,
   ) {}
 
   public async execute(input: AddProjectMemberDto): Promise<Output> {
@@ -56,36 +57,32 @@ export class AddProjectMemberUseCase {
       return left(new MemberNotFoundError());
     }
 
-    let member: Member | null = null;
-    member = await this.memberRepository.findByAccountId(account.id);
-
+    const member = await this.memberRepository.findByAccountAndProjectId(account.id, project.id);
     if (member && member.accountId.equals(ownerAccountId)) {
       return left(new OwnerCannotBeAddedAsMemberError());
     }
 
-    if (!member) {
-      member = Member.create({
-        accountId: account.id,
-      });
-
-      await this.memberRepository.create(member);
-    }
-
-    const projectMemberAlreadyExists = await this.projectMemberRepository.findByMemberAndProjectId(
-      member.id,
-      project.id,
-    );
-    if (projectMemberAlreadyExists) {
+    if (member) {
       return left(new ProjectMemberAlreadyExistsError());
     }
 
-    const memberWithProject = MemberWithProject.create({
-      member,
-      project,
+    const newMember = Member.create({
+      accountId: account.id,
+      projectId: project.id,
     });
+    await this.memberRepository.create(newMember);
 
-    await this.projectMemberRepository.create(memberWithProject);
+    const invite = Invite.create({
+      memberId: newMember.id,
+      projectId: project.id,
+    });
+    await this.inviteRepository.create(invite);
 
-    return right({ memberWithProject });
+    return right({
+      memberWithProject: MemberWithProject.create({
+        member: newMember,
+        project,
+      }),
+    });
   }
 }

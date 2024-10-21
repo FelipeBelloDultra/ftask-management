@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { DomainEvents } from "@/core/events/domain-events";
 import { InviteRepository } from "@/modules/project/application/repositories/invite.repository";
 import { Invite } from "@/modules/project/domain/entity/invite";
 
@@ -39,5 +40,7 @@ export class PrismaInviteRepository implements InviteRepository {
     await this.prismaConnection.projectInvites.create({
       data: InviteMapper.toPersistence(invite),
     });
+
+    DomainEvents.dispatchEventsForAggregate(invite.id);
   }
 }

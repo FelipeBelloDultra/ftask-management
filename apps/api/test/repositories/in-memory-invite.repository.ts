@@ -1,4 +1,5 @@
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
+import { DomainEvents } from "@/core/events/domain-events";
 import { InviteRepository } from "@/modules/project/application/repositories/invite.repository";
 import { Invite } from "@/modules/project/domain/entity/invite";
 
@@ -13,6 +14,8 @@ export class InMemoryInviteRepository implements InviteRepository {
 
   public async create(invite: Invite): Promise<void> {
     this.invites.push(invite);
+
+    DomainEvents.dispatchEventsForAggregate(invite.id);
   }
 
   public async save(invite: Invite): Promise<void> {
