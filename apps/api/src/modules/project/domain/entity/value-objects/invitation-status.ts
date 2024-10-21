@@ -24,11 +24,23 @@ export class InvitationStatus extends ValueObject<InvitationStatusValues> {
   }
 
   public canAccept() {
-    return this.props === InvitationStatusValues.Pending;
+    return this.isPending();
   }
 
   public canDecline() {
     return this.props === InvitationStatusValues.Pending;
+  }
+
+  private isPending() {
+    return this.props === InvitationStatusValues.Pending;
+  }
+
+  private isDeclined() {
+    return this.props === InvitationStatusValues.Declined;
+  }
+
+  public isBlocked() {
+    return this.isDeclined() || this.isPending();
   }
 
   public static create(value?: InvitationStatusValues) {

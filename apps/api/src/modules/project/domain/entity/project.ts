@@ -77,6 +77,10 @@ export class Project extends AggregateRoot<ProjectProps> {
     return this.props.dueDate.isExpired();
   }
 
+  public isOwner(externalOwnerId: UniqueEntityID) {
+    return this.props.ownerId.equals(externalOwnerId);
+  }
+
   public reactivate() {
     if (!this.props.status.canActivate()) return;
 

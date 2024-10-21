@@ -25,4 +25,12 @@ export class InMemoryInviteRepository implements InviteRepository {
       this.invites[invitesIndex] = invite;
     }
   }
+
+  public async findLastByMemberId(memberId: UniqueEntityID): Promise<Invite | null> {
+    const lastInvite = this.invites
+      .filter((invite) => invite.memberId.equals(memberId))
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[0];
+
+    return lastInvite || null;
+  }
 }

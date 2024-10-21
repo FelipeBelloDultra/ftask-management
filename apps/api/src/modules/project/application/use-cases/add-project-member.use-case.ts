@@ -48,7 +48,7 @@ export class AddProjectMemberUseCase {
     }
 
     const ownerAccountId = UniqueEntityID.create(input.ownerAccountId);
-    if (!project.ownerId.equals(ownerAccountId)) {
+    if (!project.isOwner(ownerAccountId)) {
       return left(new NotAllowedError());
     }
 

@@ -43,4 +43,19 @@ export class PrismaInviteRepository implements InviteRepository {
 
     DomainEvents.dispatchEventsForAggregate(invite.id);
   }
+
+  public async findLastByMemberId(inviteId: UniqueEntityID): Promise<Invite | null> {
+    const invite = await this.prismaConnection.projectInvites.findFirst({
+      where: {
+        memberId: inviteId.toValue(),
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    if (!invite) return null;
+
+    return InviteMapper.toDomain(invite);
+  }
 }

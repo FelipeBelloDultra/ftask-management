@@ -110,19 +110,15 @@ describe("AddProjectMemberUseCase", () => {
     expect(result.value).toBeInstanceOf(MemberNotFoundError);
   });
 
-  it("should ble to create a project member if member was already registered", async () => {
+  it("should be able to create add member to project", async () => {
     const account = makeAccount();
     const ownerAccount = makeAccount();
     const project = makeProject({
       ownerId: ownerAccount.id,
     });
-    const member = makeMember({
-      accountId: account.id,
-    });
 
     await Promise.all([
       inMemoryAccountRepository.create(ownerAccount),
-      inMemoryMemberRepository.create(member),
       inMemoryAccountRepository.create(account),
       inMemoryProjectRepository.create(project),
     ]);
@@ -134,6 +130,8 @@ describe("AddProjectMemberUseCase", () => {
     });
 
     const result = await sut.execute(input);
+
+    console.log(result);
 
     expect(result.isRight()).toBeTruthy();
     expect(inMemoryMemberRepository.members.length).toBe(1);
@@ -147,6 +145,7 @@ describe("AddProjectMemberUseCase", () => {
     });
     const member = makeMember({
       accountId: account.id,
+      projectId: project.id,
     });
 
     await Promise.all([
