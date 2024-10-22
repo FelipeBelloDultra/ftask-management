@@ -17,13 +17,16 @@ export function useUploadPicture() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const { toast } = useToast();
   const { mutate, isPending } = useMutation<User, DefaultError, File>({
-    mutationFn: (uploadedFile: File) =>
-      uploadProfilePicture({
-        pictureFile: uploadedFile,
-      }),
+    mutationFn: (uploadedFile: File) => uploadProfilePicture({ pictureFile: uploadedFile }),
     onSuccess: (user) => {
       actions.addUser(user);
       handleResetStates();
+      toast({
+        title: "Profile picture uploaded successfully",
+        description: "Your profile picture has been updated",
+        variant: "default",
+        duration: 3000,
+      });
     },
     onError: () => {
       toast({
