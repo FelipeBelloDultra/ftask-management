@@ -23,7 +23,7 @@ export class InMemoryProjectRepository implements ProjectRepository {
     this.projects.push(project);
   }
 
-  public async fetchManyByOwnerId(
+  public async fetchManyByAccountId(
     ownerId: UniqueEntityID,
     pagination: Pagination,
   ): Promise<{

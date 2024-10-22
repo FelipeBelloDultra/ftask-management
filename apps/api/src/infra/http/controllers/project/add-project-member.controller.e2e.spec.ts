@@ -45,7 +45,7 @@ describe("[E2E] - Add project member - [POST /projects/:projectId/member]", () =
       });
 
     expect(sut.status).toBe(201);
-    expect(await prismaConnection.projectHasMember.count()).toBe(1);
+    expect(await prismaConnection.projectInvites.count()).toBe(1);
     expect(sut.body).toEqual({
       data: expect.objectContaining({
         project_id: project.id.toValue(),

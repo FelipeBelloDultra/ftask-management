@@ -2,8 +2,8 @@ import { makeAccount } from "@/test/factories/make-account";
 import { makeMember } from "@/test/factories/make-member";
 import { makeProject } from "@/test/factories/make-project";
 import { InMemoryAccountRepository } from "@/test/repositories/in-memory-account.repository";
+import { InMemoryInviteRepository } from "@/test/repositories/in-memory-invite.repository";
 import { InMemoryMemberRepository } from "@/test/repositories/in-memory-member.repository";
-import { InMemoryProjectMemberRepository } from "@/test/repositories/in-memory-project-member.repository";
 import { InMemoryProjectRepository } from "@/test/repositories/in-memory-project.repository";
 
 import { AddProjectMemberDto } from "../dtos/add-project-member-dto";
@@ -20,19 +20,19 @@ describe("AddProjectMemberUseCase", () => {
   let inMemoryProjectRepository: InMemoryProjectRepository;
   let inMemoryAccountRepository: InMemoryAccountRepository;
   let inMemoryMemberRepository: InMemoryMemberRepository;
-  let inMemoryProjectMemberRepository: InMemoryProjectMemberRepository;
+  let inMemoryInviteRepository: InMemoryInviteRepository;
 
   beforeEach(() => {
     inMemoryProjectRepository = new InMemoryProjectRepository();
     inMemoryAccountRepository = new InMemoryAccountRepository();
     inMemoryMemberRepository = new InMemoryMemberRepository();
-    inMemoryProjectMemberRepository = new InMemoryProjectMemberRepository();
+    inMemoryInviteRepository = new InMemoryInviteRepository();
 
     sut = new AddProjectMemberUseCase(
       inMemoryMemberRepository,
       inMemoryProjectRepository,
       inMemoryAccountRepository,
-      inMemoryProjectMemberRepository,
+      inMemoryInviteRepository,
     );
   });
 
@@ -58,7 +58,7 @@ describe("AddProjectMemberUseCase", () => {
 
     expect(result.isRight()).toBeTruthy();
     expect(inMemoryMemberRepository.members.length).toBe(1);
-    expect(inMemoryProjectMemberRepository.memberWithProjects.length).toBe(1);
+    expect(inMemoryInviteRepository.invites.length).toBe(1);
   });
 
   it("should not be able to add project member if project does not exists", async () => {
@@ -110,19 +110,15 @@ describe("AddProjectMemberUseCase", () => {
     expect(result.value).toBeInstanceOf(MemberNotFoundError);
   });
 
-  it("should ble to create a project member if member was already registered", async () => {
+  it("should be able to create add member to project", async () => {
     const account = makeAccount();
     const ownerAccount = makeAccount();
     const project = makeProject({
       ownerId: ownerAccount.id,
     });
-    const member = makeMember({
-      accountId: account.id,
-    });
 
     await Promise.all([
       inMemoryAccountRepository.create(ownerAccount),
-      inMemoryMemberRepository.create(member),
       inMemoryAccountRepository.create(account),
       inMemoryProjectRepository.create(project),
     ]);
@@ -135,9 +131,11 @@ describe("AddProjectMemberUseCase", () => {
 
     const result = await sut.execute(input);
 
+    console.log(result);
+
     expect(result.isRight()).toBeTruthy();
     expect(inMemoryMemberRepository.members.length).toBe(1);
-    expect(inMemoryProjectMemberRepository.memberWithProjects.length).toBe(1);
+    expect(inMemoryInviteRepository.invites.length).toBe(1);
   });
 
   it("should not be able to create a member if member is owner from this project", async () => {
@@ -147,6 +145,7 @@ describe("AddProjectMemberUseCase", () => {
     });
     const member = makeMember({
       accountId: account.id,
+      projectId: project.id,
     });
 
     await Promise.all([

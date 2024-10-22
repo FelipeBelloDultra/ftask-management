@@ -4,7 +4,7 @@ import { UniqueEntityID } from "../entity/unique-entity-id";
 import { DomainEvent } from "./domain-event";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type DomainEventCallback = (event: any) => void;
+type DomainEventCallback = (event: any) => unknown;
 
 export class DomainEvents {
   private static handlersMap: Record<string, DomainEventCallback[]> = {};

@@ -11,7 +11,7 @@ export interface ProjectRepository {
   findById(projectId: UniqueEntityID): Promise<Project | null>;
   findBySlug(slug: Slug): Promise<Project | null>;
   create(project: Project): Promise<void>;
-  fetchManyByOwnerId(
+  fetchManyByAccountId(
     ownerId: UniqueEntityID,
     pagination: Pagination,
     filters: FetchManyByOwnerIdFilters,

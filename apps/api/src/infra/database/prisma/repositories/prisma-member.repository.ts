@@ -43,4 +43,19 @@ export class PrismaMemberRepository implements MemberRepository {
 
     return MemberMapper.toDomain(member);
   }
+
+  public async findByAccountAndProjectId(accountId: UniqueEntityID, projectId: UniqueEntityID): Promise<Member | null> {
+    const member = await this.prismaConnection.member.findUnique({
+      where: {
+        accountId_projectId: {
+          accountId: accountId.toValue(),
+          projectId: projectId.toValue(),
+        },
+      },
+    });
+
+    if (!member) return null;
+
+    return MemberMapper.toDomain(member);
+  }
 }

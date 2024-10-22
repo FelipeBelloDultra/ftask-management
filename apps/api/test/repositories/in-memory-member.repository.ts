@@ -20,4 +20,12 @@ export class InMemoryMemberRepository implements MemberRepository {
 
     return member || null;
   }
+
+  public async findByAccountAndProjectId(accountId: UniqueEntityID, projectId: UniqueEntityID): Promise<Member | null> {
+    const member = this.members.find(
+      (member) => member.accountId.equals(accountId) && member.projectId.equals(projectId),
+    );
+
+    return member || null;
+  }
 }

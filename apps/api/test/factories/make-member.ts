@@ -9,6 +9,7 @@ export function makeMember(override: Partial<MemberProps> = {}, id?: UniqueEntit
   const member = Member.create(
     {
       accountId: UniqueEntityID.create(),
+      projectId: UniqueEntityID.create(),
       ...override,
     },
     id,

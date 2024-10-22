@@ -56,7 +56,7 @@ export class PrismaProjectRepository implements ProjectRepository {
     ]);
   }
 
-  public async fetchManyByOwnerId(
+  public async fetchManyByAccountId(
     ownerId: UniqueEntityID,
     pagination: Pagination,
     filters: FetchManyByOwnerIdFilters,
@@ -121,9 +121,7 @@ export class PrismaProjectRepository implements ProjectRepository {
         return {
           members: {
             some: {
-              member: {
-                accountId: ownerId.toValue(),
-              },
+              accountId: ownerId.toValue(),
             },
           },
         };
@@ -136,9 +134,7 @@ export class PrismaProjectRepository implements ProjectRepository {
             {
               members: {
                 some: {
-                  member: {
-                    accountId: ownerId.toValue(),
-                  },
+                  accountId: ownerId.toValue(),
                 },
               },
             },

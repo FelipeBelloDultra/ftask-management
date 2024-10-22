@@ -2,13 +2,14 @@ import { inject, injectable } from "tsyringe";
 
 import { Either, left, right } from "@/core/either";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
-import { ProjectMemberRepository } from "@/modules/project/application/repositories/project-member.repository";
+import { MemberRepository } from "@/modules/account/application/repositories/member.repository";
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
 import { TaskRepository } from "@/modules/project/application/repositories/task.repository";
 import { Task } from "@/modules/project/domain/entity/task";
 import { DueDate } from "@/modules/project/domain/entity/value-objects/due-date";
 
 import { CreateTaskDto } from "../dtos/create-task-dto";
+import { InviteRepository } from "../repositories/invite.repository";
 
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "./errors/project-member-not-found.error";
@@ -25,31 +26,37 @@ export class CreateTaskUseCase {
     private readonly taskRepository: TaskRepository,
     @inject("ProjectRepository")
     private readonly projectRepository: ProjectRepository,
-    @inject("ProjectMemberRepository")
-    private readonly projectMemberRepository: ProjectMemberRepository,
+    @inject("InviteRepository")
+    private readonly inviteRepository: InviteRepository,
+    @inject("MemberRepository")
+    private readonly memberRepository: MemberRepository,
   ) {}
 
   public async execute(input: CreateTaskDto): Promise<Output> {
-    const project = await this.projectRepository.findById(UniqueEntityID.create(input.projectId));
+    const projectId = UniqueEntityID.create(input.projectId);
+    const project = await this.projectRepository.findById(projectId);
     if (!project) {
       return left(new ProjectNotFoundError());
     }
 
     const ownerAccountId = UniqueEntityID.create(input.ownerAccountId);
-    if (!project.ownerId.equals(ownerAccountId)) {
+    if (!project.isOwner(ownerAccountId)) {
       return left(new NotAllowedError());
     }
 
-    const projectMember = await this.projectMemberRepository.findByMemberAndProjectId(
-      UniqueEntityID.create(input.assigneeId),
-      project.id,
-    );
-    if (!projectMember) {
+    const assigneeId = UniqueEntityID.create(input.assigneeId);
+    const member = await this.memberRepository.findByAccountAndProjectId(assigneeId, project.id);
+    if (!member) {
       return left(new ProjectMemberNotFoundError());
     }
 
+    const invite = await this.inviteRepository.findLastByMemberId(member.id);
+    if (!invite || invite.status.isBlocked()) {
+      return left(new NotAllowedError());
+    }
+
     const task = Task.create({
-      assigneeId: projectMember.member.id,
+      assigneeId: member.id,
       description: input.description,
       dueDate: DueDate.create(input.dueDate),
       projectId: project.id,

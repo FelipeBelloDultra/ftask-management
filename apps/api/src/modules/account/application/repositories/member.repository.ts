@@ -5,4 +5,5 @@ export interface MemberRepository {
   create(member: Member): Promise<void>;
   findById(id: UniqueEntityID): Promise<Member | null>;
   findByAccountId(accountId: UniqueEntityID): Promise<Member | null>;
+  findByAccountAndProjectId(accountId: UniqueEntityID, projectId: UniqueEntityID): Promise<Member | null>;
 }
