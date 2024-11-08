@@ -7,7 +7,6 @@ export class ProjectPresenter {
       name: project.name,
       slug: project.slug.value,
       description: project.description || null,
-      owner_id: project.ownerId.toValue(),
       status: project.status.value,
       due_date: project.dueDate?.value || null,
       created_at: project.createdAt,

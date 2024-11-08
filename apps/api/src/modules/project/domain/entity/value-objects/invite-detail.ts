@@ -1,6 +1,6 @@
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { ValueObject } from "@/core/entity/value-object";
-import { Member } from "@/modules/account/domain/entity/member";
+import { Account } from "@/modules/account/domain/entity/account";
 
 import { Project } from "../project";
 
@@ -10,7 +10,7 @@ import { InvitationStatus } from "./invitation-status";
 interface InviteDetailProps {
   id: UniqueEntityID;
   project: Project;
-  member: Member;
+  member: Account;
   expirationDate: DueDate;
   status: InvitationStatus;
   createdAt: Date;

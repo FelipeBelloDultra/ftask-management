@@ -25,7 +25,7 @@ export class OnProjectInviteWasCreated implements EventHandler {
       SendNotificationDto.create({
         title: "New Project Member",
         content: `You have received an invitation to join the project ${inviteDetail.project.name} as a member. Use the links below to accept or decline the invitation.`,
-        recipientId: inviteDetail.member.accountId.toValue(),
+        recipientId: inviteDetail.member.id.toValue(),
         additionalInfos: [
           {
             key: "accept_invite_link",

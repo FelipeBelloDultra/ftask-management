@@ -1,5 +1,5 @@
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
-import { makeMember } from "@/test/factories/make-member";
+import { makeAccount } from "@/test/factories/make-account";
 import { makeProject } from "@/test/factories/make-project";
 
 import { DueDate } from "./due-date";
@@ -12,7 +12,7 @@ describe("InviteDetail", () => {
       createdAt: new Date(),
       expirationDate: DueDate.create(new Date()),
       id: UniqueEntityID.create(),
-      member: makeMember(),
+      member: makeAccount(),
       project: makeProject(),
       status: InvitationStatus.create(),
     };

@@ -1,7 +1,7 @@
 import { AggregateRoot } from "@/core/entity/aggregate-root";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { Optional } from "@/core/types/optional";
-import { Member } from "@/modules/account/domain/entity/member";
+import { Account } from "@/modules/account/domain/entity/account";
 
 import { ProjectInviteWasCreatedEvent } from "../events/project-invite-was-created-event";
 
@@ -15,7 +15,6 @@ export interface ProjectProps {
   name: string;
   slug: Slug;
   description: string | null;
-  ownerId: UniqueEntityID;
   dueDate: DueDate | null;
   status: ProjectStatus;
   deletedAt: Date | null;
@@ -35,10 +34,6 @@ export class Project extends AggregateRoot<ProjectProps> {
 
   public get description() {
     return this.props.description;
-  }
-
-  public get ownerId() {
-    return this.props.ownerId;
   }
 
   public get dueDate() {
@@ -77,10 +72,6 @@ export class Project extends AggregateRoot<ProjectProps> {
     return this.props.dueDate.isExpired();
   }
 
-  public isOwner(externalOwnerId: UniqueEntityID) {
-    return this.props.ownerId.equals(externalOwnerId);
-  }
-
   public reactivate() {
     if (!this.props.status.canActivate()) return;
 
@@ -101,7 +92,7 @@ export class Project extends AggregateRoot<ProjectProps> {
     this.edited();
   }
 
-  public createInviteDetail(member: Member, invite: Invite) {
+  public createInviteDetail(member: Account, invite: Invite) {
     const inviteDetail = InviteDetail.create({
       createdAt: invite.createdAt,
       expirationDate: invite.expirationDate,
