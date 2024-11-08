@@ -18,6 +18,7 @@ model Account {
   notifications   Notification[]
   favoriteProject AccountHasFavoriteProject[]
   involved        Participant[]
+  invites         ProjectInvites[]
 
   @@map("accounts")
 }
@@ -28,9 +29,8 @@ model Participant {
   projectId String          @map("project_id")
   role      ParticipantRole @default(member)
 
-  account        Account          @relation(fields: [accountId], references: [id])
-  project        Project          @relation(fields: [projectId], references: [id])
-  projectInvites ProjectInvites[]
+  account Account @relation(fields: [accountId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
 
   @@unique([accountId, projectId])
   @@map("participants")
@@ -51,6 +51,7 @@ model Project {
   tasks           Task[]
   favoriteProject AccountHasFavoriteProject[]
   participants    Participant[]
+  invitations     ProjectInvites[]
 
   @@map("projects")
 }
@@ -112,13 +113,15 @@ model AccountHasFavoriteProject {
 }
 
 model ProjectInvites {
-  id            String           @id @default(uuid())
-  participantId String           @map("participant_id")
-  status        InvitationStatus @default(pending)
-  expiresAt     DateTime         @map("expires_at")
-  createdAt     DateTime         @default(now()) @map("created_at")
+  id        String           @id @default(uuid())
+  memberId  String           @map("member_id")
+  projectId String           @map("project_id")
+  status    InvitationStatus @default(pending)
+  expiresAt DateTime         @map("expires_at")
+  createdAt DateTime         @default(now()) @map("created_at")
 
-  participant Participant @relation(fields: [participantId], references: [id])
+  member  Account @relation(fields: [memberId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
 
   @@map("project_invites")
 }
