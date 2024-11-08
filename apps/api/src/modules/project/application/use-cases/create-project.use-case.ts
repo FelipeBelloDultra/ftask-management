@@ -7,7 +7,10 @@ import { ProjectRepository } from "@/modules/project/application/repositories/pr
 import { Project } from "@/modules/project/domain/entity/project";
 import { DueDate } from "@/modules/project/domain/entity/value-objects/due-date";
 
+import { Participant } from "../../domain/entity/participant";
+import { ParticipantRole } from "../../domain/entity/value-objects/participant-role";
 import { CreateProjectDto } from "../dtos/create-project-dto";
+import { ParticipantRepository } from "../repositories/participant.repository";
 
 import { AccountNotFoundError } from "./errors/account-not-found.error";
 import { DuplicatedProjectSlugError } from "./errors/duplicated-project-slug.error";
@@ -23,6 +26,8 @@ export class CreateProjectUseCase {
     private readonly projectRepository: ProjectRepository,
     @inject("AccountRepository")
     private readonly accountRepository: AccountRepository,
+    @inject("ParticipantRepository")
+    private readonly participantRepository: ParticipantRepository,
   ) {}
 
   public async execute(input: CreateProjectDto): Promise<Output> {
@@ -37,7 +42,6 @@ export class CreateProjectUseCase {
       name: input.name,
       description: input.description,
       dueDate: input.dueDate ? DueDate.create(input.dueDate) : null,
-      ownerId: accountId,
     });
 
     const projectBySlug = await this.projectRepository.findBySlug(project.slug);
@@ -46,6 +50,13 @@ export class CreateProjectUseCase {
     }
 
     await this.projectRepository.create(project);
+
+    const projectOwner = Participant.create({
+      accountId: account.id,
+      projectId: project.id,
+      role: ParticipantRole.createAsOwner(),
+    });
+    await this.participantRepository.create(projectOwner);
 
     return right({ project });
   }

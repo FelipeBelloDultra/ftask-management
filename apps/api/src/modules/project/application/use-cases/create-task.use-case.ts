@@ -2,7 +2,6 @@ import { inject, injectable } from "tsyringe";
 
 import { Either, left, right } from "@/core/either";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
-import { MemberRepository } from "@/modules/account/application/repositories/member.repository";
 import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
 import { TaskRepository } from "@/modules/project/application/repositories/task.repository";
 import { Task } from "@/modules/project/domain/entity/task";
@@ -10,6 +9,7 @@ import { DueDate } from "@/modules/project/domain/entity/value-objects/due-date"
 
 import { CreateTaskDto } from "../dtos/create-task-dto";
 import { InviteRepository } from "../repositories/invite.repository";
+import { ParticipantRepository } from "../repositories/participant.repository";
 
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "./errors/project-member-not-found.error";
@@ -28,8 +28,8 @@ export class CreateTaskUseCase {
     private readonly projectRepository: ProjectRepository,
     @inject("InviteRepository")
     private readonly inviteRepository: InviteRepository,
-    @inject("MemberRepository")
-    private readonly memberRepository: MemberRepository,
+    @inject("ParticipantRepository")
+    private readonly participantRepository: ParticipantRepository,
   ) {}
 
   public async execute(input: CreateTaskDto): Promise<Output> {
@@ -40,17 +40,19 @@ export class CreateTaskUseCase {
     }
 
     const ownerAccountId = UniqueEntityID.create(input.ownerAccountId);
-    if (!project.isOwner(ownerAccountId)) {
+    const participant = await this.participantRepository.findByProjectIdAndAccountId(projectId, ownerAccountId);
+
+    if (!participant || !participant.role.isOwner()) {
       return left(new NotAllowedError());
     }
 
     const assigneeId = UniqueEntityID.create(input.assigneeId);
-    const member = await this.memberRepository.findByAccountAndProjectId(assigneeId, project.id);
+    const member = await this.participantRepository.findByProjectIdAndAccountId(project.id, assigneeId);
     if (!member) {
       return left(new ProjectMemberNotFoundError());
     }
 
-    const invite = await this.inviteRepository.findLastByMemberId(member.id);
+    const invite = await this.inviteRepository.findLastByMemberId(assigneeId);
     if (!invite || invite.status.isBlocked()) {
       return left(new NotAllowedError());
     }

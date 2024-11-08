@@ -3,14 +3,14 @@ import { inject, injectable } from "tsyringe";
 import { Either, left, right } from "@/core/either";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { AccountRepository } from "@/modules/account/application/repositories/account.repository";
-import { MemberRepository } from "@/modules/account/application/repositories/member.repository";
-import { Member } from "@/modules/account/domain/entity/member";
-import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
 
 import { Invite } from "../../domain/entity/invite";
+import { Participant } from "../../domain/entity/participant";
 import { InviteDetail } from "../../domain/entity/value-objects/invite-detail";
+import { ParticipantRole } from "../../domain/entity/value-objects/participant-role";
 import { AddProjectMemberDto } from "../dtos/add-project-member-dto";
 import { InviteRepository } from "../repositories/invite.repository";
+import { ParticipantRepository } from "../repositories/participant.repository";
 
 import { MemberNotFoundError } from "./errors/member-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";
@@ -30,26 +30,31 @@ type Output = Either<OnError, OnSuccess>;
 @injectable()
 export class AddProjectMemberUseCase {
   public constructor(
-    @inject("MemberRepository")
-    private readonly memberRepository: MemberRepository,
-    @inject("ProjectRepository")
-    private readonly projectRepository: ProjectRepository,
     @inject("AccountRepository")
     private readonly accountRepository: AccountRepository,
     @inject("InviteRepository")
     private readonly inviteRepository: InviteRepository,
+    @inject("ParticipantRepository")
+    private readonly participantRepository: ParticipantRepository,
   ) {}
 
   public async execute(input: AddProjectMemberDto): Promise<Output> {
     const projectId = UniqueEntityID.create(input.projectId);
-    const project = await this.projectRepository.findById(projectId);
-    if (!project) {
-      return left(new ProjectNotFoundError());
+    const ownerAccountId = UniqueEntityID.create(input.ownerAccountId);
+
+    const ownerParticipant = await this.participantRepository.findDetailedByProjectIdAndAccountId(
+      projectId,
+      ownerAccountId,
+    );
+    const cannotBeAdded = !ownerParticipant || !ownerParticipant.role.isOwner();
+
+    if (cannotBeAdded) {
+      return left(new NotAllowedError());
     }
 
-    const ownerAccountId = UniqueEntityID.create(input.ownerAccountId);
-    if (!project.isOwner(ownerAccountId)) {
-      return left(new NotAllowedError());
+    const isMemberEmailEqualOwnerEmail = input.memberAccountEmail === ownerParticipant.account.email;
+    if (isMemberEmailEqualOwnerEmail) {
+      return left(new OwnerCannotBeAddedAsMemberError());
     }
 
     const account = await this.accountRepository.findByEmail(input.memberAccountEmail);
@@ -57,26 +62,24 @@ export class AddProjectMemberUseCase {
       return left(new MemberNotFoundError());
     }
 
-    const member = await this.memberRepository.findByAccountAndProjectId(account.id, project.id);
-    if (member && member.accountId.equals(ownerAccountId)) {
-      return left(new OwnerCannotBeAddedAsMemberError());
-    }
-
+    const member = await this.participantRepository.findByProjectIdAndAccountId(projectId, account.id);
     if (member) {
       return left(new ProjectMemberAlreadyExistsError());
     }
 
-    const newMember = Member.create({
+    const memberParticipant = Participant.create({
       accountId: account.id,
-      projectId: project.id,
+      projectId: projectId,
+      role: ParticipantRole.createAsMember(),
     });
-    await this.memberRepository.create(newMember);
+    await this.participantRepository.create(memberParticipant);
 
     const invite = Invite.create({
-      memberId: newMember.id,
-      projectId: project.id,
+      memberId: memberParticipant.id,
+      projectId: projectId,
     });
-    const inviteDetail = project.createInviteDetail(newMember, invite);
+    const inviteDetail = ownerParticipant.project.createInviteDetail(account, invite);
+
     await this.inviteRepository.create(invite);
 
     return right({
