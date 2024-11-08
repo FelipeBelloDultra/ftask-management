@@ -1,6 +1,7 @@
 import { makeAccount } from "@/test/factories/make-account";
 import { makeProject } from "@/test/factories/make-project";
 import { InMemoryAccountRepository } from "@/test/repositories/in-memory-account.repository";
+import { InMemoryParticipantRepository } from "@/test/repositories/in-memory-participant.repository";
 import { InMemoryProjectRepository } from "@/test/repositories/in-memory-project.repository";
 
 import { CreateProjectDto } from "../dtos/create-project-dto";
@@ -13,33 +14,20 @@ describe("CreateProjectUseCase", () => {
   let sut: CreateProjectUseCase;
   let inMemoryProjectRepository: InMemoryProjectRepository;
   let inMemoryAccountRepository: InMemoryAccountRepository;
+  let inMemoryParticipantRepository: InMemoryParticipantRepository;
 
   beforeEach(() => {
     inMemoryProjectRepository = new InMemoryProjectRepository();
     inMemoryAccountRepository = new InMemoryAccountRepository();
+    inMemoryParticipantRepository = new InMemoryParticipantRepository(
+      inMemoryProjectRepository,
+      inMemoryAccountRepository,
+    );
 
-    sut = new CreateProjectUseCase(inMemoryProjectRepository, inMemoryAccountRepository);
+    sut = new CreateProjectUseCase(inMemoryProjectRepository, inMemoryAccountRepository, inMemoryParticipantRepository);
   });
 
-  it("should create new project and create owner for this one", async () => {
-    const account = makeAccount();
-
-    await inMemoryAccountRepository.create(account);
-
-    const input = CreateProjectDto.create({
-      ownerAccountId: account.id.toValue(),
-      name: "Project name",
-      description: "Project description",
-      dueDate: new Date("2000-01-01T08:00:00"),
-    });
-
-    const result = await sut.execute(input);
-
-    expect(result.isRight()).toBeTruthy();
-    expect(inMemoryProjectRepository.projects.length).toBe(1);
-  });
-
-  it("should create new project and use older owner", async () => {
+  it("should create new project", async () => {
     const account = makeAccount();
     await inMemoryAccountRepository.create(account);
 
@@ -54,6 +42,7 @@ describe("CreateProjectUseCase", () => {
 
     expect(result.isRight()).toBeTruthy();
     expect(inMemoryProjectRepository.projects.length).toBe(1);
+    expect(inMemoryParticipantRepository.participants.length).toBe(1);
   });
 
   it("should not be able to create project with duplicated slug", async () => {

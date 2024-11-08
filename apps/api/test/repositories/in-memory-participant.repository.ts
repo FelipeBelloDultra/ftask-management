@@ -6,7 +6,7 @@ import { ParticipantDetail } from "@/modules/project/domain/entity/value-objects
 import { InMemoryAccountRepository } from "./in-memory-account.repository";
 import { InMemoryProjectRepository } from "./in-memory-project.repository";
 
-export class InMemoryParticipantR implements ParticipantRepository {
+export class InMemoryParticipantRepository implements ParticipantRepository {
   public readonly participants: Participant[] = [];
 
   public constructor(
