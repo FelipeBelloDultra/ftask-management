@@ -131,8 +131,6 @@ describe("AddProjectMemberUseCase", () => {
 
     const result = await sut.execute(input);
 
-    console.log(result);
-
     expect(result.isRight()).toBeTruthy();
     expect(inMemoryMemberRepository.members.length).toBe(1);
     expect(inMemoryInviteRepository.invites.length).toBe(1);
