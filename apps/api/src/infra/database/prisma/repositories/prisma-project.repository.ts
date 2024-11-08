@@ -9,6 +9,7 @@ import {
   ProjectRepository,
 } from "@/modules/project/application/repositories/project.repository";
 import { Project } from "@/modules/project/domain/entity/project";
+import { ParticipantRoleValues } from "@/modules/project/domain/entity/value-objects/participant-role";
 import { Slug } from "@/modules/project/domain/entity/value-objects/slug";
 
 import { ProjectMapper } from "../mappers/project-mapper";
@@ -81,14 +82,19 @@ export class PrismaProjectRepository implements ProjectRepository {
       };
     }
 
-    const filter = this.makeRoleFilter(ownerId, filters.role);
+    const filter = this.makeRoleFilter(filters.role);
 
     const [projects, total] = await Promise.all([
       this.prismaConnection.project.findMany({
         take: pagination.take,
         skip: pagination.skip,
         where: {
-          ...filter,
+          participants: {
+            some: {
+              accountId: ownerId.toValue(),
+              ...filter,
+            },
+          },
         },
         orderBy: [
           {
@@ -98,7 +104,12 @@ export class PrismaProjectRepository implements ProjectRepository {
       }),
       this.prismaConnection.project.count({
         where: {
-          ...filter,
+          participants: {
+            some: {
+              accountId: ownerId.toValue(),
+              ...filter,
+            },
+          },
         },
       }),
     ]);
@@ -111,35 +122,18 @@ export class PrismaProjectRepository implements ProjectRepository {
     };
   }
 
-  private makeRoleFilter(ownerId: UniqueEntityID, role?: "owner" | "member") {
+  private makeRoleFilter(role?: "owner" | "member") {
     switch (role) {
       case "owner":
         return {
-          ownerId: ownerId.toValue(),
+          role: ParticipantRoleValues.Owner,
         };
       case "member":
         return {
-          members: {
-            some: {
-              accountId: ownerId.toValue(),
-            },
-          },
+          role: ParticipantRoleValues.Member,
         };
       default:
-        return {
-          OR: [
-            {
-              ownerId: ownerId.toValue(),
-            },
-            {
-              members: {
-                some: {
-                  accountId: ownerId.toValue(),
-                },
-              },
-            },
-          ],
-        };
+        return {};
     }
   }
 }

@@ -12,6 +12,7 @@ export function makeProject(override: Partial<ProjectProps> = {}, id?: UniqueEnt
       description: faker.lorem.paragraph(),
       dueDate: null,
       name: faker.lorem.words(4),
+      ownerId: UniqueEntityID.create(),
       ...override,
     },
     id,

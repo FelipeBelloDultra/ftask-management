@@ -16,6 +16,7 @@ export class ProjectMapper {
 
     return Project.create(
       {
+        ownerId: UniqueEntityID.create(prismaProject.ownerId),
         description: prismaProject.description,
         dueDate: prismaProject.dueDate ? DueDate.create(prismaProject.dueDate) : null,
         status: ProjectStatus.create(status[prismaProject.status]),
@@ -38,6 +39,7 @@ export class ProjectMapper {
       slug: project.slug.value,
       description: project.description,
       dueDate: project.dueDate ? project.dueDate.value : null,
+      ownerId: project.ownerId.toValue(),
       status: project.status.value,
       createdAt: project.createdAt,
       updatedAt: project.updatedAt,

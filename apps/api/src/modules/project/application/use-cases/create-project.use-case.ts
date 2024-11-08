@@ -42,6 +42,7 @@ export class CreateProjectUseCase {
       name: input.name,
       description: input.description,
       dueDate: input.dueDate ? DueDate.create(input.dueDate) : null,
+      ownerId: accountId,
     });
 
     const projectBySlug = await this.projectRepository.findBySlug(project.slug);

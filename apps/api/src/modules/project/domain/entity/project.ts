@@ -19,6 +19,7 @@ export interface ProjectProps {
   status: ProjectStatus;
   deletedAt: Date | null;
   updatedAt: Date;
+  ownerId: UniqueEntityID;
   createdAt: Date;
   iconUrl: string | null;
 }
@@ -26,6 +27,10 @@ export interface ProjectProps {
 export class Project extends AggregateRoot<ProjectProps> {
   public get name() {
     return this.props.name;
+  }
+
+  public get ownerId() {
+    return this.props.ownerId;
   }
 
   public get slug() {
