@@ -12,7 +12,7 @@ import { PrismaConnection } from "../prisma-connection";
 @injectable()
 export class PrismaParticipantRepository implements ParticipantRepository {
   public constructor(
-    @inject("ParticipantRepository")
+    @inject("PrismaConnection")
     private readonly prismaConnection: PrismaConnection,
   ) {}
 
