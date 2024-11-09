@@ -73,7 +73,7 @@ export class AddProjectMemberUseCase {
     await this.participantRepository.create(memberParticipant);
 
     const invite = Invite.create({
-      memberId: memberParticipant.id,
+      memberId: account.id,
       projectId: projectId,
     });
     const inviteDetail = ownerParticipant.project.createInviteDetail(account, invite);
