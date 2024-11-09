@@ -7,7 +7,6 @@ import { TaskPresenter } from "@/infra/presenters/task-presenter";
 import { CreateTaskDto } from "@/modules/project/application/dtos/create-task-dto";
 import { NotAllowedError } from "@/modules/project/application/use-cases/errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "@/modules/project/application/use-cases/errors/project-member-not-found.error";
-import { ProjectNotFoundError } from "@/modules/project/application/use-cases/errors/project-not-found.error";
 import { makeCreateTask } from "@/modules/project/application/use-cases/factories/make-create-task";
 
 const schema = z.object({
@@ -48,11 +47,6 @@ export class CreateTaskController implements Controller {
     }
 
     switch (result.value.constructor) {
-      case ProjectNotFoundError:
-        throw new HttpException({
-          message: `Project ${projectId} not found`,
-          statusCode: 404,
-        });
       case NotAllowedError:
         throw new HttpException({
           message: "Not allowed",

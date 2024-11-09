@@ -13,9 +13,8 @@ import { ParticipantRepository } from "../repositories/participant.repository";
 
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "./errors/project-member-not-found.error";
-import { ProjectNotFoundError } from "./errors/project-not-found.error";
 
-type OnError = ProjectNotFoundError | NotAllowedError | ProjectMemberNotFoundError;
+type OnError = NotAllowedError | ProjectMemberNotFoundError;
 type OnSuccess = { task: Task };
 type Output = Either<OnError, OnSuccess>;
 

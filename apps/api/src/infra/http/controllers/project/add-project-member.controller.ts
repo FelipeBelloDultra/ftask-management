@@ -9,7 +9,6 @@ import { MemberNotFoundError } from "@/modules/project/application/use-cases/err
 import { NotAllowedError } from "@/modules/project/application/use-cases/errors/not-allowed.error";
 import { OwnerCannotBeAddedAsMemberError } from "@/modules/project/application/use-cases/errors/owner-cannot-be-added-as-member.error";
 import { ProjectMemberAlreadyExistsError } from "@/modules/project/application/use-cases/errors/project-member-already-exists.error";
-import { ProjectNotFoundError } from "@/modules/project/application/use-cases/errors/project-not-found.error";
 import { makeAddProjectMember } from "@/modules/project/application/use-cases/factories/make-add-project-member";
 
 const schema = z.object({
@@ -42,11 +41,6 @@ export class AddProjectMemberController implements Controller {
     }
 
     switch (result.value.constructor) {
-      case ProjectNotFoundError:
-        throw new HttpException({
-          message: `Project ${projectId} not found`,
-          statusCode: 404,
-        });
       case NotAllowedError:
         throw new HttpException({
           message: "Not allowed",

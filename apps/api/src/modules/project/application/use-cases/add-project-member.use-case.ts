@@ -16,13 +16,11 @@ import { MemberNotFoundError } from "./errors/member-not-found.error";
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { OwnerCannotBeAddedAsMemberError } from "./errors/owner-cannot-be-added-as-member.error";
 import { ProjectMemberAlreadyExistsError } from "./errors/project-member-already-exists.error";
-import { ProjectNotFoundError } from "./errors/project-not-found.error";
 
 type OnError =
   | NotAllowedError
   | MemberNotFoundError
   | ProjectMemberAlreadyExistsError
-  | ProjectNotFoundError
   | OwnerCannotBeAddedAsMemberError;
 type OnSuccess = { inviteDetail: InviteDetail };
 type Output = Either<OnError, OnSuccess>;
