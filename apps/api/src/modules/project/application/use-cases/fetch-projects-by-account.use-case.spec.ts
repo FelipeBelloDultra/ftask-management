@@ -20,7 +20,11 @@ describe("FetchProjectsByAccountUseCase", () => {
   it("should fetch projects by owner id", async () => {
     const PROJECTS_LENGTH = 21;
     const account = makeAccount();
-    const projects = Array.from({ length: PROJECTS_LENGTH }, () => makeProject());
+    const projects = Array.from({ length: PROJECTS_LENGTH }, () =>
+      makeProject({
+        ownerId: account.id,
+      }),
+    );
 
     await Promise.all(projects.map((n) => inMemoryProjectRepository.create(n)));
 
