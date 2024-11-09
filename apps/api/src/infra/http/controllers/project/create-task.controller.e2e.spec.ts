@@ -5,8 +5,13 @@ import { JwtProvider } from "@/application/providers/jwt.provider";
 import { PrismaConnection } from "@/infra/database/prisma/prisma-connection";
 import { App } from "@/infra/http/app";
 import { DueDate } from "@/modules/project/domain/entity/value-objects/due-date";
+import {
+  InvitationStatus,
+  InvitationStatusValues,
+} from "@/modules/project/domain/entity/value-objects/invitation-status";
 import { ParticipantRole } from "@/modules/project/domain/entity/value-objects/participant-role";
 import { AccountFactory } from "@/test/factories/make-account";
+import { InviteFactory } from "@/test/factories/make-invite";
 import { ParticipantFactory } from "@/test/factories/make-participant";
 import { ProjectFactory } from "@/test/factories/make-project";
 import { makeTask } from "@/test/factories/make-task";
@@ -16,6 +21,7 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
   let accountFactory: AccountFactory;
   let participantFactory: ParticipantFactory;
   let projectFactory: ProjectFactory;
+  let inviteFactory: InviteFactory;
   let jwtProvider: JwtProvider;
   let prismaConnection: PrismaConnection;
 
@@ -24,6 +30,7 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
     accountFactory = container.resolve(AccountFactory);
     participantFactory = container.resolve(ParticipantFactory);
     projectFactory = container.resolve(ProjectFactory);
+    inviteFactory = container.resolve(InviteFactory);
     jwtProvider = container.resolve("JwtProvider");
     prismaConnection = container.resolve(PrismaConnection);
     await app.startServices();
@@ -42,7 +49,7 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
       ownerId: ownerAccount.id,
     });
 
-    const [, member] = await Promise.all([
+    await Promise.all([
       participantFactory.makePrismaParticipant({
         projectId: project.id,
         accountId: ownerAccount.id,
@@ -51,6 +58,11 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
       participantFactory.makePrismaParticipant({
         projectId: project.id,
         accountId: memberAccount.id,
+      }),
+      inviteFactory.makePrismaInvite({
+        memberId: memberAccount.id,
+        projectId: project.id,
+        status: InvitationStatus.create(InvitationStatusValues.Accepted),
       }),
     ]);
 
@@ -64,7 +76,7 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
       .send({
         title: task.title,
         description: task.description,
-        assignee_id: member.id.toValue(),
+        assignee_id: memberAccount.id.toValue(),
         due_date: task.dueDate.value,
       });
 
@@ -74,7 +86,7 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
       data: expect.objectContaining({
         id: expect.any(String),
         project_id: project.id.toValue(),
-        assignee_id: member.id.toValue(),
+        assignee_id: memberAccount.id.toValue(),
         slug: task.slug.value,
         title: task.title,
         due_date: task.dueDate.value.toISOString(),

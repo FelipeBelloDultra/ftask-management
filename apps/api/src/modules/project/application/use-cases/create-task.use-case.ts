@@ -2,7 +2,6 @@ import { inject, injectable } from "tsyringe";
 
 import { Either, left, right } from "@/core/either";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
-import { ProjectRepository } from "@/modules/project/application/repositories/project.repository";
 import { TaskRepository } from "@/modules/project/application/repositories/task.repository";
 import { Task } from "@/modules/project/domain/entity/task";
 import { DueDate } from "@/modules/project/domain/entity/value-objects/due-date";
@@ -23,8 +22,6 @@ export class CreateTaskUseCase {
   public constructor(
     @inject("TaskRepository")
     private readonly taskRepository: TaskRepository,
-    @inject("ProjectRepository")
-    private readonly projectRepository: ProjectRepository,
     @inject("InviteRepository")
     private readonly inviteRepository: InviteRepository,
     @inject("ParticipantRepository")
@@ -54,7 +51,7 @@ export class CreateTaskUseCase {
     }
 
     const task = Task.create({
-      assigneeId: member.id,
+      assigneeId: assigneeId,
       description: input.description,
       dueDate: DueDate.create(input.dueDate),
       projectId: projectId,

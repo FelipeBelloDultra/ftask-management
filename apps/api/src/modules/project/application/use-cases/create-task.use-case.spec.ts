@@ -34,12 +34,7 @@ describe("CreateTaskUseCase", () => {
       inMemoryAccountRepository,
     );
 
-    sut = new CreateTaskUseCase(
-      inMemoryTaskRepository,
-      inMemoryProjectRepository,
-      inMemoryInviteRepository,
-      inMemoryParticipantRepository,
-    );
+    sut = new CreateTaskUseCase(inMemoryTaskRepository, inMemoryInviteRepository, inMemoryParticipantRepository);
   });
 
   it("should be able to create a new task", async () => {

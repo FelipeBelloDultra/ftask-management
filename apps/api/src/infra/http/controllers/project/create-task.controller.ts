@@ -54,7 +54,7 @@ export class CreateTaskController implements Controller {
         });
       case ProjectMemberNotFoundError:
         throw new HttpException({
-          message: "Assignee not found",
+          message: "Member not found",
           statusCode: 404,
         });
       default:
