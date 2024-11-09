@@ -45,6 +45,26 @@ describe("CreateProjectUseCase", () => {
     expect(inMemoryParticipantRepository.participants.length).toBe(1);
   });
 
+  it("should create new project with due date", async () => {
+    const account = makeAccount();
+    const currentDate = new Date();
+    await inMemoryAccountRepository.create(account);
+
+    const input = CreateProjectDto.create({
+      ownerAccountId: account.id.toValue(),
+      name: "Project name",
+      description: "Project description",
+      dueDate: new Date(currentDate.setMonth(currentDate.getMonth() + 1)),
+    });
+
+    const result = await sut.execute(input);
+
+    expect(result.isRight()).toBeTruthy();
+    expect(inMemoryProjectRepository.projects.length).toBe(1);
+    expect(inMemoryParticipantRepository.participants.length).toBe(1);
+    expect(inMemoryProjectRepository.projects[0].dueDate?.value).toBeInstanceOf(Date);
+  });
+
   it("should not be able to create project with duplicated slug", async () => {
     const account = makeAccount();
     const project = makeProject({

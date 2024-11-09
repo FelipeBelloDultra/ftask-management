@@ -14,8 +14,8 @@ export class ParticipantRole extends ValueObject<ParticipantRoleValues> {
     return this.props === ParticipantRoleValues.Owner;
   }
 
-  public static create(props: ParticipantRoleValues): ParticipantRole {
-    return new ParticipantRole(props);
+  public static create(props?: ParticipantRoleValues): ParticipantRole {
+    return new ParticipantRole(props ?? ParticipantRoleValues.Member);
   }
 
   public static createAsOwner() {
