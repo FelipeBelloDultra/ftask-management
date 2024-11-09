@@ -34,20 +34,17 @@ export class CreateTaskUseCase {
 
   public async execute(input: CreateTaskDto): Promise<Output> {
     const projectId = UniqueEntityID.create(input.projectId);
-    const project = await this.projectRepository.findById(projectId);
-    if (!project) {
-      return left(new ProjectNotFoundError());
-    }
-
     const ownerAccountId = UniqueEntityID.create(input.ownerAccountId);
-    const participant = await this.participantRepository.findByProjectIdAndAccountId(projectId, ownerAccountId);
 
-    if (!participant || !participant.role.isOwner()) {
+    const ownerParticipant = await this.participantRepository.findByProjectIdAndAccountId(projectId, ownerAccountId);
+    const cannotBeAdded = !ownerParticipant || !ownerParticipant.role.isOwner();
+
+    if (cannotBeAdded) {
       return left(new NotAllowedError());
     }
 
     const assigneeId = UniqueEntityID.create(input.assigneeId);
-    const member = await this.participantRepository.findByProjectIdAndAccountId(project.id, assigneeId);
+    const member = await this.participantRepository.findByProjectIdAndAccountId(projectId, assigneeId);
     if (!member) {
       return left(new ProjectMemberNotFoundError());
     }
@@ -61,7 +58,7 @@ export class CreateTaskUseCase {
       assigneeId: member.id,
       description: input.description,
       dueDate: DueDate.create(input.dueDate),
-      projectId: project.id,
+      projectId: projectId,
       title: input.title,
     });
 

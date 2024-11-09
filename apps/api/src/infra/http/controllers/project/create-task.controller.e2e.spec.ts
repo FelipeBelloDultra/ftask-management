@@ -5,15 +5,16 @@ import { JwtProvider } from "@/application/providers/jwt.provider";
 import { PrismaConnection } from "@/infra/database/prisma/prisma-connection";
 import { App } from "@/infra/http/app";
 import { DueDate } from "@/modules/project/domain/entity/value-objects/due-date";
+import { ParticipantRole } from "@/modules/project/domain/entity/value-objects/participant-role";
 import { AccountFactory } from "@/test/factories/make-account";
-import { MemberFactory } from "@/test/factories/make-member";
+import { ParticipantFactory } from "@/test/factories/make-participant";
 import { ProjectFactory } from "@/test/factories/make-project";
 import { makeTask } from "@/test/factories/make-task";
 
 describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
   let app: App;
   let accountFactory: AccountFactory;
-  let memberFactory: MemberFactory;
+  let participantFactory: ParticipantFactory;
   let projectFactory: ProjectFactory;
   let jwtProvider: JwtProvider;
   let prismaConnection: PrismaConnection;
@@ -21,7 +22,7 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
   beforeAll(async () => {
     app = new App();
     accountFactory = container.resolve(AccountFactory);
-    memberFactory = container.resolve(MemberFactory);
+    participantFactory = container.resolve(ParticipantFactory);
     projectFactory = container.resolve(ProjectFactory);
     jwtProvider = container.resolve("JwtProvider");
     prismaConnection = container.resolve(PrismaConnection);
@@ -40,10 +41,18 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
     const project = await projectFactory.makePrismaProject({
       ownerId: ownerAccount.id,
     });
-    const member = await memberFactory.makePrismaMember({
-      accountId: memberAccount.id,
-      projectId: project.id,
-    });
+
+    const [, member] = await Promise.all([
+      participantFactory.makePrismaParticipant({
+        projectId: project.id,
+        accountId: ownerAccount.id,
+        role: ParticipantRole.createAsOwner(),
+      }),
+      participantFactory.makePrismaParticipant({
+        projectId: project.id,
+        accountId: memberAccount.id,
+      }),
+    ]);
 
     const accessToken = await jwtProvider.encrypt({
       sub: ownerAccount.id.toValue(),
