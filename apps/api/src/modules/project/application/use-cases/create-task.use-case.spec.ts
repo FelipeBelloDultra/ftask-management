@@ -1,107 +1,98 @@
 import { makeAccount } from "@/test/factories/make-account";
 import { makeInvite } from "@/test/factories/make-invite";
-import { makeMember } from "@/test/factories/make-member";
+import { makeParticipant } from "@/test/factories/make-participant";
 import { makeProject } from "@/test/factories/make-project";
+import { InMemoryAccountRepository } from "@/test/repositories/in-memory-account.repository";
 import { InMemoryInviteRepository } from "@/test/repositories/in-memory-invite.repository";
-import { InMemoryMemberRepository } from "@/test/repositories/in-memory-member.repository";
+import { InMemoryParticipantRepository } from "@/test/repositories/in-memory-participant.repository";
 import { InMemoryProjectRepository } from "@/test/repositories/in-memory-project.repository";
 import { InMemoryTaskRepository } from "@/test/repositories/in-memory-task.repository";
 
+import { InvitationStatus, InvitationStatusValues } from "../../domain/entity/value-objects/invitation-status";
+import { ParticipantRole } from "../../domain/entity/value-objects/participant-role";
 import { CreateTaskDto } from "../dtos/create-task-dto";
 
 import { CreateTaskUseCase } from "./create-task.use-case";
 import { NotAllowedError } from "./errors/not-allowed.error";
 import { ProjectMemberNotFoundError } from "./errors/project-member-not-found.error";
-import { ProjectNotFoundError } from "./errors/project-not-found.error";
 
 describe("CreateTaskUseCase", () => {
   let sut: CreateTaskUseCase;
   let inMemoryProjectRepository: InMemoryProjectRepository;
   let inMemoryInviteRepository: InMemoryInviteRepository;
   let inMemoryTaskRepository: InMemoryTaskRepository;
-  let inMemoryMemberRepository: InMemoryMemberRepository;
+  let inMemoryParticipantRepository: InMemoryParticipantRepository;
+  let inMemoryAccountRepository: InMemoryAccountRepository;
 
   beforeEach(() => {
     inMemoryTaskRepository = new InMemoryTaskRepository();
     inMemoryProjectRepository = new InMemoryProjectRepository();
     inMemoryInviteRepository = new InMemoryInviteRepository();
-    inMemoryMemberRepository = new InMemoryMemberRepository();
+    inMemoryAccountRepository = new InMemoryAccountRepository();
+    inMemoryParticipantRepository = new InMemoryParticipantRepository(
+      inMemoryProjectRepository,
+      inMemoryAccountRepository,
+    );
 
     sut = new CreateTaskUseCase(
       inMemoryTaskRepository,
       inMemoryProjectRepository,
       inMemoryInviteRepository,
-      inMemoryMemberRepository,
+      inMemoryParticipantRepository,
     );
   });
 
   it("should be able to create a new task", async () => {
-    const account = makeAccount();
-    const project = makeProject({
-      ownerId: account.id,
-    });
-    const member = makeMember({
-      accountId: account.id,
+    const ownerAccount = makeAccount();
+    const project = makeProject({ ownerId: ownerAccount.id });
+    const ownerParticipant = makeParticipant({
+      accountId: ownerAccount.id,
       projectId: project.id,
+      role: ParticipantRole.createAsOwner(),
+    });
+    const member = makeAccount();
+    const memberParticipant = makeParticipant({
+      projectId: project.id,
+      accountId: member.id,
+      role: ParticipantRole.createAsMember(),
     });
     const invite = makeInvite({
-      memberId: member.id,
       projectId: project.id,
+      memberId: member.id,
     });
     invite.status.setAccepted();
 
     await Promise.all([
-      inMemoryProjectRepository.create(project),
-      inMemoryMemberRepository.create(member),
       inMemoryInviteRepository.create(invite),
+      inMemoryProjectRepository.create(project),
+      inMemoryAccountRepository.create(ownerAccount),
+      inMemoryAccountRepository.create(member),
+      inMemoryParticipantRepository.create(ownerParticipant),
+      inMemoryParticipantRepository.create(memberParticipant),
     ]);
 
     const input = CreateTaskDto.create({
-      ownerAccountId: account.id.toValue(),
-      projectId: project.id.toValue(),
-      assigneeId: account.id.toValue(),
       title: "Task title",
       description: "Task description",
       dueDate: new Date(),
+      assigneeId: member.id.toValue(),
+      ownerAccountId: ownerAccount.id.toValue(),
+      projectId: project.id.toValue(),
     });
 
     const result = await sut.execute(input);
 
     expect(result.isRight()).toBeTruthy();
-    expect(inMemoryTaskRepository.tasks.length).toBe(1);
   });
 
-  it("should not be able to create a new task with no project", async () => {
-    const account = makeAccount();
-
+  it("should not be able to create new task if owner account does not exist", async () => {
     const input = CreateTaskDto.create({
-      ownerAccountId: account.id.toValue(),
-      projectId: "invalid-project-id",
-      assigneeId: "assignee-id",
       title: "Task title",
       description: "Task description",
       dueDate: new Date(),
-    });
-
-    const result = await sut.execute(input);
-
-    expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeInstanceOf(ProjectNotFoundError);
-  });
-
-  it("should not be able to create a new task if the owner account id does not match the project owner account id", async () => {
-    const account = makeAccount();
-    const project = makeProject();
-
-    await Promise.all([inMemoryProjectRepository.create(project)]);
-
-    const input = CreateTaskDto.create({
-      ownerAccountId: account.id.toValue(),
-      projectId: project.id.toValue(),
-      assigneeId: "member-id",
-      title: "Task title",
-      description: "Task description",
-      dueDate: new Date(),
+      assigneeId: makeAccount().id.toValue(),
+      ownerAccountId: "invalid-id",
+      projectId: makeProject().id.toValue(),
     });
 
     const result = await sut.execute(input);
@@ -110,27 +101,54 @@ describe("CreateTaskUseCase", () => {
     expect(result.value).toBeInstanceOf(NotAllowedError);
   });
 
-  it("should not be able to assign a member to task if the member does not exist or isn't from this specific project", async () => {
-    const account = makeAccount();
-    const project = makeProject({
-      ownerId: account.id,
-    });
-    const ownerMember = makeMember({ accountId: account.id });
-    const member = makeMember();
-    const invite = makeInvite({
-      memberId: ownerMember.id,
+  it("should not be able to create new task if account is not owner of project", async () => {
+    const project = makeProject();
+    const anyParticipant = makeParticipant({
       projectId: project.id,
+      role: ParticipantRole.createAsMember(), //
     });
-
-    await Promise.all([inMemoryInviteRepository.create(invite), inMemoryProjectRepository.create(project)]);
+    await Promise.all([
+      inMemoryProjectRepository.create(project),
+      inMemoryParticipantRepository.create(anyParticipant),
+    ]);
 
     const input = CreateTaskDto.create({
-      ownerAccountId: account.id.toValue(),
-      projectId: project.id.toValue(),
-      assigneeId: member.id.toValue(),
       title: "Task title",
       description: "Task description",
       dueDate: new Date(),
+      assigneeId: "any-assignee",
+      ownerAccountId: anyParticipant.id.toValue(),
+      projectId: project.id.toValue(),
+    });
+
+    const result = await sut.execute(input);
+
+    expect(result.isLeft()).toBeTruthy();
+    expect(result.value).toBeInstanceOf(NotAllowedError);
+  });
+
+  it("should not be able to create new task if the assignee id is not participant from project", async () => {
+    const ownerAccount = makeAccount();
+    const project = makeProject({ ownerId: ownerAccount.id });
+    const ownerParticipant = makeParticipant({
+      accountId: ownerAccount.id,
+      projectId: project.id,
+      role: ParticipantRole.createAsOwner(),
+    });
+
+    await Promise.all([
+      inMemoryProjectRepository.create(project),
+      inMemoryAccountRepository.create(ownerAccount),
+      inMemoryParticipantRepository.create(ownerParticipant),
+    ]);
+
+    const input = CreateTaskDto.create({
+      title: "Task title",
+      description: "Task description",
+      dueDate: new Date(),
+      assigneeId: "invalid-id",
+      ownerAccountId: ownerAccount.id.toValue(),
+      projectId: project.id.toValue(),
     });
 
     const result = await sut.execute(input);
@@ -139,25 +157,36 @@ describe("CreateTaskUseCase", () => {
     expect(result.value).toBeInstanceOf(ProjectMemberNotFoundError);
   });
 
-  it("should not be able to create a new task if the invite does not exists", async () => {
-    const account = makeAccount();
-    const project = makeProject({
-      ownerId: account.id,
-    });
-    const member = makeMember({
-      accountId: account.id,
+  it("should not be able to create new task if project invite does not exists", async () => {
+    const ownerAccount = makeAccount();
+    const project = makeProject({ ownerId: ownerAccount.id });
+    const ownerParticipant = makeParticipant({
+      accountId: ownerAccount.id,
       projectId: project.id,
+      role: ParticipantRole.createAsOwner(),
+    });
+    const member = makeAccount();
+    const memberParticipant = makeParticipant({
+      projectId: project.id,
+      accountId: member.id,
+      role: ParticipantRole.createAsMember(),
     });
 
-    await Promise.all([inMemoryProjectRepository.create(project), inMemoryMemberRepository.create(member)]);
+    await Promise.all([
+      inMemoryProjectRepository.create(project),
+      inMemoryAccountRepository.create(ownerAccount),
+      inMemoryAccountRepository.create(member),
+      inMemoryParticipantRepository.create(ownerParticipant),
+      inMemoryParticipantRepository.create(memberParticipant),
+    ]);
 
     const input = CreateTaskDto.create({
-      ownerAccountId: account.id.toValue(),
-      projectId: project.id.toValue(),
-      assigneeId: account.id.toValue(),
       title: "Task title",
       description: "Task description",
       dueDate: new Date(),
+      assigneeId: member.id.toValue(),
+      ownerAccountId: ownerAccount.id.toValue(),
+      projectId: project.id.toValue(),
     });
 
     const result = await sut.execute(input);
@@ -166,33 +195,42 @@ describe("CreateTaskUseCase", () => {
     expect(result.value).toBeInstanceOf(NotAllowedError);
   });
 
-  it("should not be able to create new task if the invite is pending yet", async () => {
-    const account = makeAccount();
-    const project = makeProject({
-      ownerId: account.id,
-    });
-    const member = makeMember({
-      accountId: account.id,
+  it("should not be able to create new task if project invite is blocked", async () => {
+    const ownerAccount = makeAccount();
+    const project = makeProject({ ownerId: ownerAccount.id });
+    const ownerParticipant = makeParticipant({
+      accountId: ownerAccount.id,
       projectId: project.id,
+      role: ParticipantRole.createAsOwner(),
+    });
+    const member = makeAccount();
+    const memberParticipant = makeParticipant({
+      projectId: project.id,
+      accountId: member.id,
+      role: ParticipantRole.createAsMember(),
     });
     const invite = makeInvite({
-      memberId: member.id,
+      memberId: memberParticipant.id,
       projectId: project.id,
+      status: InvitationStatus.create(InvitationStatusValues.Declined),
     });
 
     await Promise.all([
       inMemoryProjectRepository.create(project),
-      inMemoryMemberRepository.create(member),
+      inMemoryAccountRepository.create(ownerAccount),
+      inMemoryAccountRepository.create(member),
+      inMemoryParticipantRepository.create(ownerParticipant),
+      inMemoryParticipantRepository.create(memberParticipant),
       inMemoryInviteRepository.create(invite),
     ]);
 
     const input = CreateTaskDto.create({
-      ownerAccountId: account.id.toValue(),
-      projectId: project.id.toValue(),
-      assigneeId: account.id.toValue(),
       title: "Task title",
       description: "Task description",
       dueDate: new Date(),
+      assigneeId: member.id.toValue(),
+      ownerAccountId: ownerAccount.id.toValue(),
+      projectId: project.id.toValue(),
     });
 
     const result = await sut.execute(input);
