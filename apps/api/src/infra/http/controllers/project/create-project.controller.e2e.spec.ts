@@ -40,7 +40,7 @@ describe("[E2E] - Add project - [POST /projects]", () => {
     expect(sut.body).toEqual({
       data: expect.objectContaining({
         id: expect.any(String),
-        owner_id: ownerAccount.id.toValue(),
+        is_owner: true,
         name: project.name,
       }),
     });

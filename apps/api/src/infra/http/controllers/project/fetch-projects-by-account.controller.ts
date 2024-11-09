@@ -32,7 +32,7 @@ export class FetchProjectsByAccountController implements Controller {
     if (result.isRight()) {
       return res.status(200).json({
         data: {
-          projects: result.value.projects.map(ProjectPresenter.toHTTP),
+          projects: result.value.projects.map((project) => ProjectPresenter.toHTTP(project, id)),
           pagination: PaginationPresenter.toHTTP({
             items: result.value.projects,
             pagination: result.value.pagination,

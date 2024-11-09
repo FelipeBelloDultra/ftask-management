@@ -71,7 +71,7 @@ describe("[E2E] - List projects by ownerId - [GET /projects]", () => {
         projects: expect.arrayContaining([
           expect.objectContaining({
             id: expect.any(String),
-            owner_id: account.id.toValue(),
+            is_owner: true,
           }),
         ]),
         pagination: {

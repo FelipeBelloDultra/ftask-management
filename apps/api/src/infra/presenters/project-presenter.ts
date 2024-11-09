@@ -1,7 +1,7 @@
 import { Project } from "@/modules/project/domain/entity/project";
 
 export class ProjectPresenter {
-  public static toHTTP(project: Project) {
+  public static toHTTP(project: Project, callerId?: string) {
     return {
       id: project.id.toValue(),
       name: project.name,
@@ -9,7 +9,7 @@ export class ProjectPresenter {
       description: project.description || null,
       status: project.status.value,
       due_date: project.dueDate?.value || null,
-      owner_id: project.ownerId.toValue(),
+      is_owner: callerId ? project.ownerId.toValue() === callerId : false,
       created_at: project.createdAt,
       updated_at: project.updatedAt,
     };

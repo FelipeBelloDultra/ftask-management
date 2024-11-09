@@ -39,7 +39,7 @@ export class CreateProjectController implements Controller {
 
     if (result.isRight()) {
       return res.status(201).json({
-        data: ProjectPresenter.toHTTP(result.value.project),
+        data: ProjectPresenter.toHTTP(result.value.project, id),
       });
     }
 
