@@ -7,4 +7,12 @@ export class InMemoryTaskRepository implements TaskRepository {
   public async create(task: Task): Promise<void> {
     this.tasks.push(task);
   }
+
+  public async save(task: Task): Promise<void> {
+    const index = this.tasks.findIndex((t) => t.id.equals(task.id));
+
+    if (index !== -1) {
+      this.tasks[index] = task;
+    }
+  }
 }

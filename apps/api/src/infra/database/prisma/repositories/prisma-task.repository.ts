@@ -18,4 +18,13 @@ export class PrismaTaskRepository implements TaskRepository {
       data: TaskMapper.toPersistence(task),
     });
   }
+
+  public async save(task: Task): Promise<void> {
+    await this.prismaConnection.task.update({
+      where: {
+        id: task.id.toValue(),
+      },
+      data: TaskMapper.toPersistence(task),
+    });
+  }
 }
