@@ -122,6 +122,18 @@ export class PrismaProjectRepository implements ProjectRepository {
     };
   }
 
+  public async save(project: Project): Promise<void> {
+    await Promise.all([
+      this.prismaConnection.project.update({
+        where: {
+          id: project.id.toValue(),
+        },
+        data: ProjectMapper.toPersistence(project),
+      }),
+      this.cache.deleteByPrefix(this.cache.createKey([`account-${project.ownerId.toValue()}`, "projects"])),
+    ]);
+  }
+
   private makeRoleFilter(role?: "owner" | "member") {
     switch (role) {
       case "owner":
