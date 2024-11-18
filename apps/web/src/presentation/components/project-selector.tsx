@@ -13,6 +13,8 @@ import {
 } from "@/presentation/components/ui/dropdown-menu";
 // import { fetchInvolvedProjectsService } from "@/services/fetch-involved-projects";
 
+import { useCreateProject } from "../hooks/use-create-project";
+
 import { ScrollArea } from "./ui/scroll-area";
 
 function EmptyProjectSelector() {
@@ -121,6 +123,7 @@ const PROJECTS = [
 ];
 
 export function ProjectSelector() {
+  const { navigateToRoute } = useCreateProject();
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   // const { data } = useSuspenseQuery({
   //   queryKey: ["projects"],
@@ -156,7 +159,12 @@ export function ProjectSelector() {
           </ScrollArea>
         </div>
 
-        <Button asChild size="sm" className="w-full cursor-pointer focus:bg-primary/90 focus:text-primary-foreground">
+        <Button
+          asChild
+          size="sm"
+          className="w-full cursor-pointer focus:bg-primary/90 focus:text-primary-foreground"
+          onClick={navigateToRoute}
+        >
           <DropdownMenuItem>
             <PlusCircleIcon className="mr-2" size={20} />
             New project

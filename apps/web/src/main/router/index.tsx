@@ -36,7 +36,7 @@ export function Router() {
           </Route>
           <Route path="projects">
             <Route index element={<div>main projects page</div>} />
-            <Route path="my" element={<div>My projects</div>} />
+            <Route path="new" element={<div>New project</div>} />
           </Route>
         </Route>
       </Route>
