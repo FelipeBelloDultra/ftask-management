@@ -1,10 +1,10 @@
 import {
   BellRingIcon,
-  Building2Icon,
   LayoutDashboardIcon,
+  ListCheckIcon,
   LucideIconType,
+  MailWarningIcon,
   SettingsIcon,
-  StarIcon,
 } from "@/presentation/components/icons";
 
 interface SubmenuItem {
@@ -48,6 +48,13 @@ export function getSidebarMenuList(pathname: string): Array<Menu> {
     },
     {
       isDivider: false,
+      label: "Invites",
+      icon: MailWarningIcon,
+      href: "/dash/invites",
+      isActive: pathname === "/dash/invites",
+    },
+    {
+      isDivider: false,
       label: "Settings",
       icon: SettingsIcon,
       href: "/dash/settings",
@@ -62,24 +69,10 @@ export function getSidebarMenuList(pathname: string): Array<Menu> {
     },
     {
       isDivider: false,
-      label: "Favorite projects",
-      icon: StarIcon,
-      href: "/dash/projects-favorites",
-      isActive: pathname === "/dash/projects",
-      submenus: [
-        {
-          label: "My Projects",
-          href: "/dash/projects/my",
-          isSubmenuActive: pathname === "/dash/projects/my",
-        },
-      ],
-    },
-    {
-      isDivider: false,
-      label: "Selected projects",
-      icon: Building2Icon,
-      href: "/dash/projects",
-      isActive: pathname === "/dash/projects",
+      label: "My tasks",
+      icon: ListCheckIcon,
+      href: "/dash/my-tasks",
+      isActive: pathname === "/dash/my-tasks",
     },
   ];
 }
