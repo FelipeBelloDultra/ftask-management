@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { Suspense } from "react";
 import { Link } from "react-router-dom";
 
 import { ProjectSelector } from "@/presentation/components/project-selector";
@@ -24,7 +25,9 @@ export function Header() {
           <Link to="/dash">FTask Management</Link>
         </Button>
 
-        <ProjectSelector />
+        <Suspense fallback={<div>loading...</div>}>
+          <ProjectSelector />
+        </Suspense>
       </section>
 
       <section className="flex gap-3 items-center">

@@ -1,3 +1,4 @@
+// import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -10,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/presentation/components/ui/dropdown-menu";
+// import { fetchInvolvedProjectsService } from "@/services/fetch-involved-projects";
 
 import { ScrollArea } from "./ui/scroll-area";
 
@@ -120,6 +122,12 @@ const PROJECTS = [
 
 export function ProjectSelector() {
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  // const { data } = useSuspenseQuery({
+  //   queryKey: ["projects"],
+  //   queryFn: () => fetchInvolvedProjectsService(),
+  // });
+
+  // console.log({ data });
 
   return (
     <DropdownMenu modal={false} onOpenChange={(isOpened) => setIsDropdownOpened(isOpened)}>
