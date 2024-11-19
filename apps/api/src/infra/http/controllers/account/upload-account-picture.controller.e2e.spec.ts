@@ -7,7 +7,7 @@ import { JwtProvider } from "@/application/providers/jwt.provider";
 import { App } from "@/infra/http/app";
 import { AccountFactory } from "@/test/factories/make-account";
 
-describe("[E2E] - Upload account picture - [GET /account/upload/picture]", () => {
+describe("[E2E] - Upload account picture - [PATCH /account/upload/picture]", () => {
   let app: App;
   let accountFactory: AccountFactory;
   let jwtProvider: JwtProvider;
