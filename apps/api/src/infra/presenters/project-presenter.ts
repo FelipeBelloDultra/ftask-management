@@ -10,6 +10,7 @@ export class ProjectPresenter {
       status: project.status.value,
       due_date: project.dueDate?.value || null,
       created_at: project.createdAt,
+      icon_url: project.iconUrl?.value || null,
       updated_at: project.updatedAt,
       ...(callerId && {
         is_owner: project.ownerId.toValue() === callerId,
