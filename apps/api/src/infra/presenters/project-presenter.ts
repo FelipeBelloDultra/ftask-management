@@ -9,9 +9,11 @@ export class ProjectPresenter {
       description: project.description || null,
       status: project.status.value,
       due_date: project.dueDate?.value || null,
-      is_owner: callerId ? project.ownerId.toValue() === callerId : false,
       created_at: project.createdAt,
       updated_at: project.updatedAt,
+      ...(callerId && {
+        is_owner: project.ownerId.toValue() === callerId,
+      }),
     };
   }
 }
