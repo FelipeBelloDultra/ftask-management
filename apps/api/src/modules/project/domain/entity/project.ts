@@ -7,6 +7,7 @@ import { ProjectInviteWasCreatedEvent } from "../events/project-invite-was-creat
 
 import { Invite } from "./invite";
 import { DueDate } from "./value-objects/due-date";
+import { IconUrl } from "./value-objects/icon-url";
 import { InviteDetail } from "./value-objects/invite-detail";
 import { ProjectStatus } from "./value-objects/project-status";
 import { Slug } from "./value-objects/slug";
@@ -21,7 +22,7 @@ export interface ProjectProps {
   updatedAt: Date;
   ownerId: UniqueEntityID;
   createdAt: Date;
-  iconUrl: string | null;
+  iconUrl: IconUrl | null;
 }
 
 export class Project extends AggregateRoot<ProjectProps> {
@@ -63,6 +64,11 @@ export class Project extends AggregateRoot<ProjectProps> {
 
   public get iconUrl() {
     return this.props.iconUrl;
+  }
+
+  public set iconUrl(value: IconUrl | null) {
+    this.props.iconUrl = value;
+    this.edited();
   }
 
   private edited() {

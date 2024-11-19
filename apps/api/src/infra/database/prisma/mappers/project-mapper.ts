@@ -3,6 +3,7 @@ import { Project as PrismaProject } from "@prisma/client";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { Project } from "@/modules/project/domain/entity/project";
 import { DueDate } from "@/modules/project/domain/entity/value-objects/due-date";
+import { IconUrl } from "@/modules/project/domain/entity/value-objects/icon-url";
 import { ProjectStatus, ProjectStatusValues } from "@/modules/project/domain/entity/value-objects/project-status";
 import { Slug } from "@/modules/project/domain/entity/value-objects/slug";
 
@@ -25,7 +26,7 @@ export class ProjectMapper {
         createdAt: prismaProject.createdAt,
         updatedAt: prismaProject.updatedAt,
         deletedAt: prismaProject.deletedAt,
-        iconUrl: prismaProject.iconUrl,
+        iconUrl: prismaProject.iconUrl ? IconUrl.create(prismaProject.iconUrl) : null,
       },
       UniqueEntityID.create(prismaProject.id),
     );
@@ -34,7 +35,7 @@ export class ProjectMapper {
   public static toPersistence(project: Project): PrismaProject {
     return {
       id: project.id.toValue(),
-      iconUrl: project.iconUrl,
+      iconUrl: project.iconUrl?.value || null,
       name: project.name,
       slug: project.slug.value,
       description: project.description,
