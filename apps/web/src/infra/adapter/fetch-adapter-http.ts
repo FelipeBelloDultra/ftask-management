@@ -3,7 +3,7 @@ import { REFRESH_TOKEN } from "@/services/endpoints";
 
 import { HttpClient, HttpMethods, HttpRequest } from "../http";
 
-class HttpClientAdapter implements HttpClient {
+export class HttpClientAdapter implements HttpClient {
   public constructor(private readonly baseUrl = env.apiUrl) {}
 
   public async sendRequest<TResponse = unknown, TBody = unknown>({
