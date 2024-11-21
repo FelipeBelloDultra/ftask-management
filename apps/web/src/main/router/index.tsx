@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import { AuthenticatedLayout } from "@/presentation/layouts/authenticated";
 import { UnauthenticatedLayout } from "@/presentation/layouts/unauthenticated";
+import { WithSelectedProjectLayout } from "@/presentation/layouts/with-selected-project";
 import {
   DashboardScreen,
   NotificationDetailScreen,
@@ -37,6 +38,10 @@ export function Router() {
           <Route path="projects">
             <Route index element={<div>main projects page</div>} />
             <Route path="new" element={<div>New project</div>} />
+
+            <Route path=":projectId" element={<WithSelectedProjectLayout />}>
+              <Route index element={<div>page with :projectId</div>} />
+            </Route>
           </Route>
         </Route>
       </Route>
