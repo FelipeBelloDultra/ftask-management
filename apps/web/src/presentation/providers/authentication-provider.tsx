@@ -2,7 +2,8 @@ import { createContext, ReactNode, useCallback, useState } from "react";
 
 import { env } from "@/config/env";
 import { useUserStore } from "@/presentation/store/user";
-import { authenticateUserService } from "@/services/authenticate-user-service";
+
+import { useDependencies } from "../hooks/use-dependencies";
 
 interface SignInData {
   email: string;
@@ -22,6 +23,7 @@ interface AuthenticationProviderProps {
 export const AuthenticationContext = createContext({} as AuthenticationContextProps);
 
 export function AuthenticationProvider({ children }: AuthenticationProviderProps) {
+  const { authAdapter } = useDependencies();
   const [signedIn, setSignedIn] = useState(() => !!localStorage.getItem(env.jwtPrefix));
   const { actions } = useUserStore();
 
@@ -32,7 +34,7 @@ export function AuthenticationProvider({ children }: AuthenticationProviderProps
   }, []);
 
   const signIn = useCallback(async (data: SignInData) => {
-    const { token } = await authenticateUserService(data);
+    const { token } = await authAdapter.signIn(data);
 
     localStorage.setItem(env.jwtPrefix, token);
 

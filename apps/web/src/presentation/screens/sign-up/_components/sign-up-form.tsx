@@ -3,11 +3,13 @@ import { PasswordInput } from "@/presentation/components/input-password";
 import { Button } from "@/presentation/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/presentation/components/ui/form";
 import { Input } from "@/presentation/components/ui/input";
+import { useDependencies } from "@/presentation/hooks/use-dependencies";
 
 import { useSignUp } from "../_hooks/use-sign-up";
 
 export function SignUpForm() {
-  const { form, submitForm } = useSignUp();
+  const { authAdapter } = useDependencies();
+  const { form, submitForm } = useSignUp({ authAdapter });
 
   return (
     <Form {...form}>

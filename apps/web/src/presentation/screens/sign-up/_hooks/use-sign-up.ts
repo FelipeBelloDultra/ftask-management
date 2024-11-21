@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
+import { AuthAdapter } from "@/adapters/auth-adapter";
 import { useToast } from "@/presentation/components/ui/use-toast";
-import { createUserService } from "@/services/create-user-service";
 
 const signUpSchema = z.object({
   name: z.string().min(6).max(255),
@@ -14,7 +14,11 @@ const signUpSchema = z.object({
 
 type SignUpFormSchema = z.infer<typeof signUpSchema>;
 
-export function useSignUp() {
+interface UseSignUpProps {
+  authAdapter: AuthAdapter;
+}
+
+export function useSignUp({ authAdapter }: UseSignUpProps) {
   const { toast } = useToast();
   const navigate = useNavigate();
   const form = useForm<SignUpFormSchema>({
@@ -28,7 +32,7 @@ export function useSignUp() {
 
   async function submitForm(data: SignUpFormSchema) {
     try {
-      await createUserService(data);
+      await authAdapter.signUp(data);
 
       toast({
         title: "Sign up successfully",
