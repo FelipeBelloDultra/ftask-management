@@ -23,7 +23,7 @@ export interface AuthAdapter {
   signUp(data: SignUpData): Promise<User>;
 }
 
-export type BuildAuthAdapter = (http: HttpClient) => AuthAdapter;
+type BuildAuthAdapter = (http: HttpClient) => AuthAdapter;
 
 enum AuthRoutes {
   SignIn = "/account/session",
