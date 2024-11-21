@@ -1,14 +1,14 @@
-import { EyeIcon, EyeOffIcon } from "lucide-react";
-import * as React from "react";
+import { forwardRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
 import { Choose, Otherwise, When } from "./conditionals";
+import { EyeIcon, EyeOffIcon } from "./icons";
 import { Button } from "./ui/button";
 import { Input, InputProps } from "./ui/input";
 
-const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(({ className, ...props }, ref) => {
-  const [showPassword, setShowPassword] = React.useState(false);
+const PasswordInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...props }, ref) => {
+  const [showPassword, setShowPassword] = useState(false);
 
   function handleToggleShowPassword() {
     setShowPassword((prev) => !prev);
@@ -42,14 +42,16 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(({ classNam
       </Button>
 
       {/* hides browsers password toggles */}
-      <style>{`
+      <style>
+        {`
 					.hide-password-toggle::-ms-reveal,
 					.hide-password-toggle::-ms-clear {
 						visibility: hidden;
 						pointer-events: none;
 						display: none;
 					}
-				`}</style>
+				`}
+      </style>
     </div>
   );
 });
