@@ -1,6 +1,6 @@
 import { createContext, ReactNode } from "react";
 
-import { AuthAdapter, buildAuthAdapter } from "@/adapters/auth-adapter";
+import { AuthAdapter, AuthHttpAdapter } from "@/adapters/auth-adapter";
 import { HttpClientAdapter } from "@/infra/adapter/fetch-adapter-http";
 
 interface DependenciesProviderProps {
@@ -13,11 +13,11 @@ interface DependenciesContextProps {
 
 export const DependenciesContext = createContext({} as DependenciesContextProps);
 
-export function DependenciesProvider({ children }: DependenciesProviderProps) {
-  const httpClient = new HttpClientAdapter();
+const httpClient = new HttpClientAdapter();
 
+export function DependenciesProvider({ children }: DependenciesProviderProps) {
   const dependencies: DependenciesContextProps = {
-    authAdapter: buildAuthAdapter(httpClient),
+    authAdapter: new AuthHttpAdapter(httpClient),
   };
 
   return <DependenciesContext.Provider value={dependencies}>{children}</DependenciesContext.Provider>;
