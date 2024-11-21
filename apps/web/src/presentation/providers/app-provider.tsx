@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ReactNode } from "react";
 
 import { AuthenticationProvider } from "./authentication-provider";
+import { DependenciesProvider } from "./dependencies-provider";
 import { ThemeProvider } from "./theme-provider";
 
 interface AppProviderProps {
@@ -20,11 +21,13 @@ const client = new QueryClient({
 
 export function AppProvider({ children }: AppProviderProps) {
   return (
-    <QueryClientProvider client={client}>
-      <ThemeProvider>
-        <AuthenticationProvider>{children}</AuthenticationProvider>
-        <ReactQueryDevtools />
-      </ThemeProvider>
-    </QueryClientProvider>
+    <DependenciesProvider>
+      <QueryClientProvider client={client}>
+        <ThemeProvider>
+          <AuthenticationProvider>{children}</AuthenticationProvider>
+          <ReactQueryDevtools />
+        </ThemeProvider>
+      </QueryClientProvider>
+    </DependenciesProvider>
   );
 }
