@@ -55,35 +55,3 @@ export class AuthHttpAdapter implements AuthAdapter {
     });
   }
 }
-
-// export const buildAuthAdapter: BuildAuthAdapter = (http = httpClientAdapter) => {
-//   async function signIn(data: SignInData): Promise<SignInResponse> {
-//     const response = await http.sendRequest<SignInResponse, SignInData>({
-//       method: HttpMethods.POST,
-//       url: AuthRoutes.SignIn,
-//       body: data,
-//     });
-
-//     return response;
-//   }
-
-//   async function signUp(data: SignUpData): Promise<User> {
-//     const response = await http.sendRequest<PersistenceUser, SignUpData>({
-//       method: HttpMethods.POST,
-//       url: AuthRoutes.SignUp,
-//       body: data,
-//     });
-
-//     return UserMapper.toDomain({
-//       id: response.id,
-//       picture_url: response.picture_url,
-//       email: response.email,
-//       name: response.name,
-//     });
-//   }
-
-//   return {
-//     signIn,
-//     signUp,
-//   };
-// };
