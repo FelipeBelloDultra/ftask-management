@@ -5,7 +5,6 @@ import { z } from "zod";
 
 import { AuthAdapter } from "@/adapters/auth-adapter";
 import { useToast } from "@/presentation/components/ui/use-toast";
-// import { createUserService } from "@/services/create-user-service"; TODO::: Remove and delete this file/line
 
 const signUpSchema = z.object({
   name: z.string().min(6).max(255),

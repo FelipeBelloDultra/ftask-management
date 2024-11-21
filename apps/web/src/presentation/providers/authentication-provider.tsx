@@ -3,7 +3,6 @@ import { createContext, ReactNode, useCallback, useState } from "react";
 import { env } from "@/config/env";
 import { useUserStore } from "@/presentation/store/user";
 
-// import { authenticateUserService } from "@/services/authenticate-user-service"; TODO::: Remove and delete this file/line
 import { useDependencies } from "../hooks/use-dependencies";
 
 interface SignInData {
