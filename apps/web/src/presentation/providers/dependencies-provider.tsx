@@ -16,13 +16,9 @@ export const DependenciesContext = createContext({} as DependenciesContextProps)
 export function DependenciesProvider({ children }: DependenciesProviderProps) {
   const httpClient = new HttpClientAdapter();
 
-  return (
-    <DependenciesContext.Provider
-      value={{
-        authAdapter: buildAuthAdapter(httpClient),
-      }}
-    >
-      {children}
-    </DependenciesContext.Provider>
-  );
+  const dependencies: DependenciesContextProps = {
+    authAdapter: buildAuthAdapter(httpClient),
+  };
+
+  return <DependenciesContext.Provider value={dependencies}>{children}</DependenciesContext.Provider>;
 }
