@@ -1,4 +1,5 @@
 import { Loader2Icon } from "@/presentation/components/icons";
+import { PasswordInput } from "@/presentation/components/input-password";
 import { Button } from "@/presentation/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/presentation/components/ui/form";
 import { Input } from "@/presentation/components/ui/input";
@@ -38,13 +39,7 @@ export function SignInForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input
-                  autoFocus={!mustFocusEmail}
-                  type="password"
-                  placeholder="my-password"
-                  className="w-full"
-                  {...field}
-                />
+                <PasswordInput autoFocus={!mustFocusEmail} placeholder="my-password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
