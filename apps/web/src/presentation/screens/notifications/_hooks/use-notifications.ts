@@ -1,8 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
+import { NotificationAdapter } from "@/adapters/notification-adapter";
 import { fetchAllNotifications } from "@/services/fetch-all-notifications";
-import { readNotificationService } from "@/services/mark-notification-as-read";
 
 function createReadCacheKey(read: boolean | undefined) {
   if (read === undefined) {
@@ -16,7 +16,11 @@ function createReadCacheKey(read: boolean | undefined) {
   return "read:read";
 }
 
-export function useNotifications() {
+interface UseNotificationsProps {
+  notificationAdapter: NotificationAdapter;
+}
+
+export function useNotifications({ notificationAdapter }: UseNotificationsProps) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const limit = Number(searchParams.get("limit") || "10");
@@ -52,9 +56,7 @@ export function useNotifications() {
   }
 
   async function handleReadNotification(notificationId: string) {
-    await readNotificationService({
-      notificationId,
-    });
+    await notificationAdapter.markAsReadById(notificationId);
     await queryClient.invalidateQueries({
       queryKey: ["notifications"],
     });

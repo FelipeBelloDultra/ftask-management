@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/presentation/components/ui/dropdown-menu";
-import { useAuth } from "@/presentation/hooks/use-auth";
+import { useLogout } from "@/presentation/hooks/use-logout";
 
 interface ProfileDropdownProps {
   user: {
@@ -35,7 +35,7 @@ function getInitials(name: string) {
 }
 
 export function ProfileDropdown({ user }: ProfileDropdownProps) {
-  const { signOut } = useAuth();
+  const logout = useLogout();
 
   return (
     <DropdownMenu>
@@ -62,7 +62,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
             </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuItem className="cursor-pointer text-muted-foreground" onClick={signOut}>
+          <DropdownMenuItem className="cursor-pointer text-muted-foreground" onClick={logout}>
             <LogOutIcon className="mr-2" size={20} />
             Logout
           </DropdownMenuItem>

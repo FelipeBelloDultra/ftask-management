@@ -1,10 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { z } from "zod";
 
+import { AuthAdapter } from "@/adapters/auth-adapter";
+import { env } from "@/config/env";
 import { useToast } from "@/presentation/components/ui/use-toast";
-import { useAuth } from "@/presentation/hooks/use-auth";
+import { useSignedInStore } from "@/presentation/store/user";
 
 const signInSchema = z.object({
   email: z
@@ -26,6 +29,10 @@ const signInSchema = z.object({
 
 type SignInFormSchema = z.infer<typeof signInSchema>;
 
+interface UseSignInProps {
+  authAdapter: AuthAdapter;
+}
+
 function validateExternalEmail(email: string | null): string {
   if (!email) return "";
 
@@ -34,12 +41,11 @@ function validateExternalEmail(email: string | null): string {
   return !success ? "" : data;
 }
 
-export function useSignIn() {
+export function useSignIn({ authAdapter }: UseSignInProps) {
   const [searchParams] = useSearchParams();
   const email = validateExternalEmail(searchParams.get("email"));
   const mustFocusEmail = Boolean(!email);
-  const { signIn } = useAuth();
-  const { toast } = useToast();
+
   const form = useForm<SignInFormSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -47,10 +53,13 @@ export function useSignIn() {
       password: "",
     },
   });
-
-  async function submitForm(data: SignInFormSchema) {
-    try {
-      await signIn(data);
+  const { toast } = useToast();
+  const { actions } = useSignedInStore();
+  const { mutateAsync } = useMutation({
+    mutationFn: (data: SignInFormSchema) => authAdapter.signIn(data),
+    onSuccess: ({ token }) => {
+      localStorage.setItem(env.jwtPrefix, token);
+      actions.setSignedIn();
 
       toast({
         title: "Login successfully",
@@ -58,14 +67,19 @@ export function useSignIn() {
         variant: "default",
         duration: 3000,
       });
-    } catch (error) {
+    },
+    onError: () => {
       toast({
         title: "Failed to login",
         description: "Please, confirm your email and password combination",
         variant: "destructive",
         duration: 3000,
       });
-    }
+    },
+  });
+
+  async function submitForm(data: SignInFormSchema) {
+    await mutateAsync(data);
   }
 
   return {

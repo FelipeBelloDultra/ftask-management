@@ -5,17 +5,18 @@ import { Link } from "react-router-dom";
 import { ProjectSelector } from "@/presentation/components/project-selector";
 import { ThemeToggle } from "@/presentation/components/theme-toggle";
 import { Button } from "@/presentation/components/ui/button";
+import { useDependencies } from "@/presentation/hooks/use-dependencies";
 import { useUserStore } from "@/presentation/store/user";
-import { getTotalUnreadNotificationsService } from "@/services/get-total-unread-notifications";
 
 import { NotificationsButton } from "./notifications-button";
 import { ProfileDropdown } from "./profile-dropdown";
 
 export function Header() {
+  const { notificationAdapter } = useDependencies();
   const { state } = useUserStore();
   const { data } = useSuspenseQuery({
     queryKey: ["notifications", "read:unread", "total"],
-    queryFn: () => getTotalUnreadNotificationsService(),
+    queryFn: () => notificationAdapter.countUnread(),
   });
 
   return (
