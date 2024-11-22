@@ -23,8 +23,8 @@ interface AuthenticationProviderProps {
 export const AuthenticationContext = createContext({} as AuthenticationContextProps);
 
 export function AuthenticationProvider({ children }: AuthenticationProviderProps) {
-  const { authAdapter } = useDependencies();
   const [signedIn, setSignedIn] = useState(() => !!localStorage.getItem(env.jwtPrefix));
+  const { authAdapter } = useDependencies();
   const { actions } = useUserStore();
 
   const signOut = useCallback(() => {
