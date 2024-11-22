@@ -9,7 +9,7 @@ export interface ProfileAdapter {
 
 enum ProfileRoutes {
   GetAuthenticated = "/account/session/me",
-  UploadProfilePicture = "/account/upload/picture",
+  UploadPicture = "/account/upload/picture",
 }
 
 export class ProfileHttpAdapter implements ProfileAdapter {
@@ -30,7 +30,7 @@ export class ProfileHttpAdapter implements ProfileAdapter {
 
     const response = await this.http.sendRequest<PersistenceUser, FormData>({
       method: HttpMethods.PATCH,
-      url: ProfileRoutes.UploadProfilePicture,
+      url: ProfileRoutes.UploadPicture,
       body: formData,
     });
 
