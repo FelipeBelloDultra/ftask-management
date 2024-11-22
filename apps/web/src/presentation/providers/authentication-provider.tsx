@@ -1,7 +1,6 @@
 import { createContext, ReactNode, useCallback, useState } from "react";
 
 import { env } from "@/config/env";
-import { useUserStore } from "@/presentation/store/user";
 
 import { useDependencies } from "../hooks/use-dependencies";
 
@@ -11,7 +10,6 @@ interface SignInData {
 }
 
 interface AuthenticationContextProps {
-  signOut(): void;
   signIn(data: SignInData): Promise<void>;
   signedIn: boolean;
 }
@@ -25,13 +23,6 @@ export const AuthenticationContext = createContext({} as AuthenticationContextPr
 export function AuthenticationProvider({ children }: AuthenticationProviderProps) {
   const [signedIn, setSignedIn] = useState(() => !!localStorage.getItem(env.jwtPrefix));
   const { authAdapter } = useDependencies();
-  const { actions } = useUserStore();
-
-  const signOut = useCallback(() => {
-    actions.clearUser();
-    setSignedIn(false);
-    localStorage.removeItem(env.jwtPrefix);
-  }, []);
 
   const signIn = useCallback(async (data: SignInData) => {
     const { token } = await authAdapter.signIn(data);
@@ -45,7 +36,6 @@ export function AuthenticationProvider({ children }: AuthenticationProviderProps
     <AuthenticationContext.Provider
       value={{
         signedIn,
-        signOut,
         signIn,
       }}
     >
