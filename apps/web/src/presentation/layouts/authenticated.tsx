@@ -1,49 +1,24 @@
-import { useQuery } from "@tanstack/react-query";
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 
 import { PageContent } from "@/presentation/components/page-content";
-import { useUserStore } from "@/presentation/store/user";
-import { showAuthenticatedUserService } from "@/services/show-authenticated-user";
 
 import { Choose, Otherwise, When } from "../components/conditionals";
 import { Skeleton } from "../components/ui/skeleton";
-import { useAuth } from "../hooks/use-auth";
+import { useDependencies } from "../hooks/use-dependencies";
+import { useLayouts } from "../hooks/use-layouts";
 
 import { Header } from "./_components/header";
 import { SkeletonHeaderLoading } from "./_components/header/loadings";
 import { Sidebar } from "./_components/sidebar";
 
 export function AuthenticatedLayout() {
-  const { signOut } = useAuth();
-  const { actions } = useUserStore();
-  const { data, error, isSuccess } = useQuery({
-    queryKey: ["authenticated-user"],
-    queryFn: () => showAuthenticatedUserService(),
-    gcTime: 1,
-  });
-
-  useEffect(() => {
-    if (!error) return;
-
-    signOut();
-    actions.clearUser();
-  }, [error]);
-
-  useEffect(() => {
-    if (!data) return;
-
-    actions.addUser({
-      email: data.email,
-      id: data.id,
-      name: data.name,
-      pictureUrl: data.pictureUrl,
-    });
-  }, [data]);
+  const { authAdapter } = useDependencies();
+  const { wasUserDataLoadedSuccessfully } = useLayouts({ authAdapter });
 
   return (
     <Choose>
-      <When condition={isSuccess}>
+      <When condition={wasUserDataLoadedSuccessfully}>
         <main className="h-screen flex flex-col">
           <Suspense fallback={<SkeletonHeaderLoading />}>
             <Header.Root />
