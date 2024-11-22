@@ -2,7 +2,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ReactNode } from "react";
 
-import { AuthenticationProvider } from "./authentication-provider";
 import { DependenciesProvider } from "./dependencies-provider";
 import { ThemeProvider } from "./theme-provider";
 
@@ -24,7 +23,7 @@ export function AppProvider({ children }: AppProviderProps) {
     <DependenciesProvider>
       <QueryClientProvider client={client}>
         <ThemeProvider>
-          <AuthenticationProvider>{children}</AuthenticationProvider>
+          {children}
           <ReactQueryDevtools />
         </ThemeProvider>
       </QueryClientProvider>

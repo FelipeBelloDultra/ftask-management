@@ -42,11 +42,19 @@ function validateExternalEmail(email: string | null): string {
 }
 
 export function useSignIn({ authAdapter }: UseSignInProps) {
-  const { toast } = useToast();
-  const { actions } = useSignedInStore();
   const [searchParams] = useSearchParams();
   const email = validateExternalEmail(searchParams.get("email"));
   const mustFocusEmail = Boolean(!email);
+
+  const form = useForm<SignInFormSchema>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email,
+      password: "",
+    },
+  });
+  const { toast } = useToast();
+  const { actions } = useSignedInStore();
   const { mutateAsync } = useMutation({
     mutationFn: (data: SignInFormSchema) => authAdapter.signIn(data),
     onSuccess: ({ token }) => {
@@ -67,13 +75,6 @@ export function useSignIn({ authAdapter }: UseSignInProps) {
         variant: "destructive",
         duration: 3000,
       });
-    },
-  });
-  const form = useForm<SignInFormSchema>({
-    resolver: zodResolver(signInSchema),
-    defaultValues: {
-      email,
-      password: "",
     },
   });
 
