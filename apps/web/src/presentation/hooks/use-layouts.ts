@@ -1,21 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-import { AuthAdapter } from "@/adapters/auth-adapter";
+import { ProfileAdapter } from "@/adapters/profile-adapter";
 import { useUserStore } from "@/presentation/store/user";
 
 import { useLogout } from "./use-logout";
 
 interface UseLayoutsProps {
-  authAdapter: AuthAdapter;
+  profileAdapter: ProfileAdapter;
 }
 
-export function useLayouts({ authAdapter }: UseLayoutsProps) {
+export function useLayouts({ profileAdapter }: UseLayoutsProps) {
   const logout = useLogout();
   const { actions } = useUserStore();
   const { data, error, isSuccess } = useQuery({
     queryKey: ["authenticated-user"],
-    queryFn: () => authAdapter.getAuthenticated(),
+    queryFn: () => profileAdapter.getAuthenticated(),
     gcTime: 1,
   });
 

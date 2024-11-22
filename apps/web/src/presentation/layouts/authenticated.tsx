@@ -13,8 +13,8 @@ import { SkeletonHeaderLoading } from "./_components/header/loadings";
 import { Sidebar } from "./_components/sidebar";
 
 export function AuthenticatedLayout() {
-  const { authAdapter } = useDependencies();
-  const { wasUserDataLoadedSuccessfully } = useLayouts({ authAdapter });
+  const { profileAdapter } = useDependencies();
+  const { wasUserDataLoadedSuccessfully } = useLayouts({ profileAdapter });
 
   return (
     <Choose>

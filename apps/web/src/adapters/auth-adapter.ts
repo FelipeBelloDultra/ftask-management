@@ -20,26 +20,15 @@ interface SignUpData {
 export interface AuthAdapter {
   signIn(data: SignInData): Promise<SignInResponse>;
   signUp(data: SignUpData): Promise<User>;
-  getAuthenticated(): Promise<User>;
 }
 
 enum AuthRoutes {
   SignIn = "/account/session",
   SignUp = "/account",
-  GetAuthenticated = "/account/session/me",
 }
 
 export class AuthHttpAdapter implements AuthAdapter {
   public constructor(private readonly http: HttpClient) {}
-
-  public async getAuthenticated(): Promise<User> {
-    const response = await this.http.sendRequest<PersistenceUser>({
-      method: HttpMethods.GET,
-      url: AuthRoutes.GetAuthenticated,
-    });
-
-    return UserMapper.toDomain(response);
-  }
 
   public async signIn(data: SignInData): Promise<SignInResponse> {
     const response = await this.http.sendRequest<SignInResponse, SignInData>({
