@@ -11,7 +11,6 @@ interface SignInData {
 
 interface AuthenticationContextProps {
   signIn(data: SignInData): Promise<void>;
-  signedIn: boolean;
 }
 
 interface AuthenticationProviderProps {
@@ -21,21 +20,17 @@ interface AuthenticationProviderProps {
 export const AuthenticationContext = createContext({} as AuthenticationContextProps);
 
 export function AuthenticationProvider({ children }: AuthenticationProviderProps) {
-  const [signedIn, setSignedIn] = useState(() => !!localStorage.getItem(env.jwtPrefix));
   const { authAdapter } = useDependencies();
 
   const signIn = useCallback(async (data: SignInData) => {
     const { token } = await authAdapter.signIn(data);
 
     localStorage.setItem(env.jwtPrefix, token);
-
-    setSignedIn(true);
   }, []);
 
   return (
     <AuthenticationContext.Provider
       value={{
-        signedIn,
         signIn,
       }}
     >
