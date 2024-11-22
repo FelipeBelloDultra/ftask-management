@@ -8,14 +8,16 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/presenta
 import { Dialog } from "@/presentation/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/presentation/components/ui/tooltip";
+import { useDependencies } from "@/presentation/hooks/use-dependencies";
 
 import * as Loadings from "./_components/loadings";
 import { NotificationFilters } from "./_components/notification-filters";
 import { useNotifications } from "./_hooks/use-notifications";
 
 export default function NotificationsScreen() {
+  const { notificationAdapter } = useDependencies();
   const { data, page, read, isLoading, handleSetSearchParams, handleSelectFilter, handleReadNotification } =
-    useNotifications();
+    useNotifications({ notificationAdapter });
   const { search } = useLocation();
   const { notificationId } = useParams() as { notificationId: string | undefined };
   const navigate = useNavigate();
