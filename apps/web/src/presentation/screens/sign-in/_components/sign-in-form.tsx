@@ -3,11 +3,13 @@ import { PasswordInput } from "@/presentation/components/input-password";
 import { Button } from "@/presentation/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/presentation/components/ui/form";
 import { Input } from "@/presentation/components/ui/input";
+import { useDependencies } from "@/presentation/hooks/use-dependencies";
 
 import { useSignIn } from "../_hooks/use-sign-in";
 
 export function SignInForm() {
-  const { form, submitForm, mustFocusEmail } = useSignIn();
+  const { authAdapter } = useDependencies();
+  const { form, submitForm, mustFocusEmail } = useSignIn({ authAdapter });
 
   return (
     <Form {...form}>
