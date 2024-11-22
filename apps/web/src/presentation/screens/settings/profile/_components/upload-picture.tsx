@@ -3,10 +3,12 @@ import { InfoIcon, Loader2Icon, UploadIcon } from "@/presentation/components/ico
 import { Button } from "@/presentation/components/ui/button";
 import { Input } from "@/presentation/components/ui/input";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/presentation/components/ui/tooltip";
+import { useDependencies } from "@/presentation/hooks/use-dependencies";
 
 import { useUploadPicture } from "../_hooks/use-upload-picture";
 
 export function UploadPicture() {
+  const { profileAdapter } = useDependencies();
   const {
     handleFileChange,
     handleOpenFileSelectorTree,
@@ -17,7 +19,7 @@ export function UploadPicture() {
     inputFileRef,
     isCancelDisabled,
     isSaveDisabled,
-  } = useUploadPicture();
+  } = useUploadPicture({ profileAdapter });
 
   return (
     <>
