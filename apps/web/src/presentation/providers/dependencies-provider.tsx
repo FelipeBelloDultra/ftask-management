@@ -3,6 +3,7 @@ import { createContext, ReactNode, useLayoutEffect } from "react";
 import { AuthAdapter, AuthHttpAdapter, AuthRoutes } from "@/adapters/auth-adapter";
 import { NotificationAdapter, NotificationHttpAdapter } from "@/adapters/notification-adapter";
 import { ProfileAdapter, ProfileHttpAdapter } from "@/adapters/profile-adapter";
+import { ProjectAdapter, ProjectHttpAdapter } from "@/adapters/project-adapter";
 import { env } from "@/config/env";
 import { HttpClientAdapter } from "@/infra/adapter/fetch-adapter-http";
 
@@ -16,6 +17,7 @@ interface DependenciesContextProps {
   authAdapter: AuthAdapter;
   profileAdapter: ProfileAdapter;
   notificationAdapter: NotificationAdapter;
+  projectAdapter: ProjectAdapter;
 }
 
 export const DependenciesContext = createContext({} as DependenciesContextProps);
@@ -25,6 +27,7 @@ const httpClient = new HttpClientAdapter();
 const authAdapter = new AuthHttpAdapter(httpClient);
 const profileAdapter = new ProfileHttpAdapter(httpClient);
 const notificationAdapter = new NotificationHttpAdapter(httpClient);
+const projectAdapter = new ProjectHttpAdapter(httpClient);
 
 export function DependenciesProvider({ children }: DependenciesProviderProps) {
   const logout = useLogout();
@@ -65,6 +68,7 @@ export function DependenciesProvider({ children }: DependenciesProviderProps) {
     authAdapter,
     profileAdapter,
     notificationAdapter,
+    projectAdapter,
   };
 
   return <DependenciesContext.Provider value={dependencies}>{children}</DependenciesContext.Provider>;
