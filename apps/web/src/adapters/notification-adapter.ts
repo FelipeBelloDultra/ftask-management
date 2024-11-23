@@ -25,9 +25,37 @@ interface AllNotificationsParams {
   limit: number;
 }
 
+interface GetNotificationDetailById {
+  notification: {
+    id: string;
+    title: string;
+    createdAt: Date;
+    readAt: Date | null;
+    content: string;
+    recipientId: string;
+    metadata: Array<{
+      key: string;
+      value: string;
+    }>;
+  };
+}
+
+interface GetNotificationDetailByIdResponse {
+  id: string;
+  title: string;
+  created_at: string;
+  read_at: string | null;
+  content: string;
+  recipient_id: string;
+  metadata: Array<{
+    key: string;
+    value: string;
+  }>;
+}
+
 export interface NotificationAdapter {
   fetchAll(params: AllNotificationsParams): Promise<FetchAllNotifications>;
-  getDetailById(notificationId: string): Promise<void>;
+  getDetailById(notificationId: string): Promise<GetNotificationDetailById>;
   markAsReadById(notificationId: string): Promise<void>;
   countUnread(): Promise<CountUnreadNotificationsResponse>;
 }
@@ -79,8 +107,24 @@ export class NotificationHttpAdapter implements NotificationAdapter {
     };
   }
 
-  public async getDetailById(notificationId: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  public async getDetailById(notificationId: string): Promise<GetNotificationDetailById> {
+    const url = this.replaceRouteParams(NotificationRoutes.GetDetailById, notificationId);
+    const notification = await this.http.sendRequest<GetNotificationDetailByIdResponse>({
+      method: HttpMethods.GET,
+      url,
+    });
+
+    return {
+      notification: {
+        id: notification.id,
+        title: notification.title,
+        createdAt: new Date(notification.created_at),
+        readAt: notification.read_at ? new Date(notification.read_at) : null,
+        content: notification.content,
+        recipientId: notification.recipient_id,
+        metadata: notification.metadata,
+      },
+    };
   }
 
   public async markAsReadById(notificationId: string): Promise<void> {
