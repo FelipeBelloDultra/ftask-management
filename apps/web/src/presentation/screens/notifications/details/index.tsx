@@ -3,17 +3,18 @@ import { Navigate, useLocation, useParams } from "react-router-dom";
 
 import { Choose, If, Otherwise, When } from "@/presentation/components/conditionals";
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";
-import { showNotificationDetail } from "@/services/show-notification-detail";
+import { useDependencies } from "@/presentation/hooks/use-dependencies";
 
 import { FooterMetadata } from "./_components/footer-metadata";
 import * as Loadings from "./_components/loadings";
 
 export default function NotificationDetailScreen() {
+  const { notificationAdapter } = useDependencies();
   const { search } = useLocation();
   const { notificationId } = useParams() as { notificationId: string };
   const { data, isLoading, error } = useQuery({
     queryKey: ["notifications", notificationId],
-    queryFn: () => showNotificationDetail({ notificationId }),
+    queryFn: () => notificationAdapter.getDetailById(notificationId),
   });
 
   const isNotLoadingAndHasNoData = !isLoading && !data?.notification;
