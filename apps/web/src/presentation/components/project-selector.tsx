@@ -11,9 +11,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/presentation/components/ui/dropdown-menu";
-// import { fetchInvolvedProjectsService } from "@/services/fetch-involved-projects";
 
 import { useCreateProject } from "../hooks/use-create-project";
+// import { useDependencies } from "../hooks/use-dependencies";
 
 import { ScrollArea } from "./ui/scroll-area";
 
@@ -125,9 +125,10 @@ const PROJECTS = [
 export function ProjectSelector() {
   const { navigateToRoute } = useCreateProject();
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  // const { projectAdapter } = useDependencies();
   // const { data } = useSuspenseQuery({
   //   queryKey: ["projects"],
-  //   queryFn: () => fetchInvolvedProjectsService(),
+  //   queryFn: () => projectAdapter.fetchInvolved(),
   // });
 
   // console.log({ data });

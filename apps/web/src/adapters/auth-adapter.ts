@@ -20,15 +20,26 @@ interface SignUpData {
 export interface AuthAdapter {
   signIn(data: SignInData): Promise<SignInResponse>;
   signUp(data: SignUpData): Promise<User>;
+  refreshToken(): Promise<SignInResponse>;
 }
 
-enum AuthRoutes {
+export enum AuthRoutes {
   SignIn = "/account/session",
   SignUp = "/account",
+  RefreshToken = "/account/session/refresh-token",
 }
 
 export class AuthHttpAdapter implements AuthAdapter {
   public constructor(private readonly http: HttpClient) {}
+
+  public async refreshToken(): Promise<SignInResponse> {
+    const response = await this.http.sendRequest<SignInResponse>({
+      method: HttpMethods.PATCH,
+      url: AuthRoutes.RefreshToken,
+    });
+
+    return response;
+  }
 
   public async signIn(data: SignInData): Promise<SignInResponse> {
     const response = await this.http.sendRequest<SignInResponse, SignInData>({

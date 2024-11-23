@@ -7,6 +7,8 @@ export interface HttpRequest<Body> {
 
 export interface HttpClient {
   sendRequest<TResponse = void, TBody = unknown>(request: HttpRequest<TBody>): Promise<TResponse>;
+  registerResponseInterceptor(interceptor: ResponseInterceptor): string;
+  removeResponseInterceptor(id: string): void;
 }
 
 export enum HttpMethods {
@@ -16,3 +18,5 @@ export enum HttpMethods {
   DELETE = "DELETE",
   PUT = "PUT",
 }
+
+export type ResponseInterceptor = (response: Response, originalRequest: Request) => Promise<Response>;
