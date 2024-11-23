@@ -1,10 +1,26 @@
 import { env } from "@/config/env";
-import { REFRESH_TOKEN } from "@/services/endpoints";
 
-import { HttpClient, HttpMethods, HttpRequest } from "../http";
+import { HttpClient, HttpRequest, ResponseInterceptor } from "../http";
 
 export class HttpClientAdapter implements HttpClient {
+  private responseInterceptors = new Map<string, ResponseInterceptor>();
+
   public constructor(private readonly baseUrl = env.apiUrl) {}
+
+  private generateInterceptorId(): string {
+    return Math.random().toString(16).slice(2);
+  }
+
+  public removeResponseInterceptor(id: string): void {
+    this.responseInterceptors.delete(id);
+  }
+
+  public registerResponseInterceptor(interceptor: ResponseInterceptor): string {
+    const interceptorId = this.generateInterceptorId();
+    this.responseInterceptors.set(interceptorId, interceptor);
+
+    return interceptorId;
+  }
 
   public async sendRequest<TResponse = unknown, TBody = unknown>({
     body,
@@ -20,8 +36,8 @@ export class HttpClientAdapter implements HttpClient {
     });
     let response = await fetch(request);
 
-    if (response.status === 401) {
-      response = await this.refreshToken(request);
+    for (const responseInterceptor of this.responseInterceptors.values()) {
+      response = await responseInterceptor(response, request);
     }
 
     return await this.formatResponse<TResponse>(response);
@@ -105,36 +121,6 @@ export class HttpClientAdapter implements HttpClient {
 
     const responseBody = (await response.json()) as { data: TResponse };
     return responseBody.data;
-  }
-
-  private async refreshToken(originalRequest: Request) {
-    const url = this.makeUrl(REFRESH_TOKEN);
-    const headers: Record<string, string> = {};
-    originalRequest.headers.forEach((value, key) => {
-      headers[key] = value;
-    });
-
-    const refreshTokenResponse = await fetch(
-      this.makeRequestObject({
-        method: HttpMethods.PATCH,
-        body: originalRequest.body,
-        headers,
-        url,
-      }),
-    );
-
-    if (!refreshTokenResponse.ok) {
-      return Promise.reject(refreshTokenResponse);
-    }
-
-    const {
-      data: { token },
-    } = (await refreshTokenResponse.json()) as { data: { token: string } };
-
-    localStorage.setItem(env.jwtPrefix, token);
-    originalRequest.headers.append("Authorization", `Bearer ${token}`);
-
-    return await fetch(originalRequest);
   }
 }
 
