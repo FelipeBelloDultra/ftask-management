@@ -25,5 +25,16 @@ router.patch(
   uploadSingleFileMiddleware.handle("picture"),
   new UploadAccountPictureController().handler,
 );
+router.get("/account/invites", (req, res) => {
+  return res
+    .json({
+      message: "Not implemented yet",
+      status: 501,
+      error: {
+        message: "Not implemented yet",
+      },
+    })
+    .status(501);
+});
 
 export { router };

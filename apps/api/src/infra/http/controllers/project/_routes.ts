@@ -25,7 +25,18 @@ router.patch(
   uploadSingleFileMiddleware.handle("icon"),
   new UploadProjectIconController().handler,
 );
-router.patch("/projects/invites/:inviteId/:inviteStatus", (_, res) => {
+router.patch("/projects/:projectId/invites/:inviteId/:inviteStatus", (_, res) => {
+  return res
+    .json({
+      message: "Not implemented yet",
+      status: 501,
+      error: {
+        message: "Not implemented yet",
+      },
+    })
+    .status(501);
+});
+router.get("/projects/:projectId/invites", (req, res) => {
   return res
     .json({
       message: "Not implemented yet",
