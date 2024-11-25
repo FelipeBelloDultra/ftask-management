@@ -58,4 +58,27 @@ export class PrismaInviteRepository implements InviteRepository {
 
     return InviteMapper.toDomain(invite);
   }
+
+  public async findAllByMemberId(memberId: UniqueEntityID): Promise<{ invites: Invite[]; total: number }> {
+    const [invites, totalInvite] = await Promise.all([
+      this.prismaConnection.projectInvites.findMany({
+        where: {
+          memberId: memberId.toValue(),
+        },
+        // orderBy: {
+        //   createdAt: "desc",
+        // },
+      }),
+      this.prismaConnection.projectInvites.count({
+        where: {
+          memberId: memberId.toValue(),
+        },
+      }),
+    ]);
+
+    return {
+      invites: invites.map(InviteMapper.toDomain),
+      total: totalInvite,
+    };
+  }
 }
