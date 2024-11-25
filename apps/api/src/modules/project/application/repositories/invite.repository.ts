@@ -7,4 +7,5 @@ export interface InviteRepository {
   save(invite: Invite): Promise<void>;
   create(invite: Invite): Promise<void>;
   findLastByMemberId(inviteId: UniqueEntityID): Promise<Invite | null>;
+  findAllByMemberId(memberId: UniqueEntityID): Promise<{ invites: Invite[]; total: number }>;
 }
