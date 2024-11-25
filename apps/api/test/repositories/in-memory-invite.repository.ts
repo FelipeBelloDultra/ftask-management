@@ -33,4 +33,13 @@ export class InMemoryInviteRepository implements InviteRepository {
 
     return lastInvite || null;
   }
+
+  public async findAllByMemberId(memberId: UniqueEntityID): Promise<{ invites: Invite[]; total: number }> {
+    const invites = this.invites.filter((invite) => invite.memberId.equals(memberId));
+
+    return {
+      invites,
+      total: invites.length,
+    };
+  }
 }
