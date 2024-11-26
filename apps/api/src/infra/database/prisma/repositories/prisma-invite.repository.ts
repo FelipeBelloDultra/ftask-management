@@ -6,7 +6,7 @@ import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { DomainEvents } from "@/core/events/domain-events";
 import { CacheRepository } from "@/infra/cache/cache.repository";
 import {
-  FindAllByMemberIdFilters,
+  FetchManyByMemberIdFilters,
   InviteRepository,
 } from "@/modules/project/application/repositories/invite.repository";
 import { Invite } from "@/modules/project/domain/entity/invite";
@@ -68,10 +68,10 @@ export class PrismaInviteRepository implements InviteRepository {
     return InviteMapper.toDomain(invite);
   }
 
-  public async findAllByMemberId(
+  public async fetchManyByMemberId(
     memberId: UniqueEntityID,
     pagination: Pagination,
-    filters: FindAllByMemberIdFilters,
+    filters: FetchManyByMemberIdFilters,
   ): Promise<{ invites: Invite[]; total: number }> {
     const keys = [`account-${memberId.toValue()}`, "invites", `limit-${pagination.limit}`, `page-${pagination.page}`];
     if (filters.status !== undefined && typeof filters.status === "string") {

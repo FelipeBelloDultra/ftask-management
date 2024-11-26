@@ -3,7 +3,7 @@ import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 
 import { Invite } from "../../domain/entity/invite";
 
-export interface FindAllByMemberIdFilters {
+export interface FetchManyByMemberIdFilters {
   status?: "pending" | "accepted" | "declined";
 }
 
@@ -12,9 +12,9 @@ export interface InviteRepository {
   save(invite: Invite): Promise<void>;
   create(invite: Invite): Promise<void>;
   findLastByMemberId(inviteId: UniqueEntityID): Promise<Invite | null>;
-  findAllByMemberId(
+  fetchManyByMemberId(
     memberId: UniqueEntityID,
     pagination: Pagination,
-    filters: FindAllByMemberIdFilters,
+    filters: FetchManyByMemberIdFilters,
   ): Promise<{ invites: Invite[]; total: number }>;
 }
