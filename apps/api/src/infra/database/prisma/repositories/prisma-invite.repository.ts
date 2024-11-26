@@ -37,18 +37,24 @@ export class PrismaInviteRepository implements InviteRepository {
   }
 
   public async save(invite: Invite): Promise<void> {
-    await this.prismaConnection.projectInvites.update({
-      where: {
-        id: invite.id.toValue(),
-      },
-      data: InviteMapper.toPersistence(invite),
-    });
+    await Promise.all([
+      this.prismaConnection.projectInvites.update({
+        where: {
+          id: invite.id.toValue(),
+        },
+        data: InviteMapper.toPersistence(invite),
+      }),
+      this.cache.deleteByPrefix(this.cache.createKey([`account-${invite.memberId.toValue()}`, "invites"])),
+    ]);
   }
 
   public async create(invite: Invite): Promise<void> {
-    await this.prismaConnection.projectInvites.create({
-      data: InviteMapper.toPersistence(invite),
-    });
+    await Promise.all([
+      this.prismaConnection.projectInvites.create({
+        data: InviteMapper.toPersistence(invite),
+      }),
+      this.cache.deleteByPrefix(this.cache.createKey([`account-${invite.memberId.toValue()}`, "invites"])),
+    ]);
 
     DomainEvents.dispatchEventsForAggregate(invite.id);
   }
