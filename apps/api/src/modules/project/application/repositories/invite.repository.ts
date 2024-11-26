@@ -4,7 +4,7 @@ import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { Invite } from "../../domain/entity/invite";
 
 export interface FindAllByMemberIdFilters {
-  status: "pending" | "accepted" | "declined";
+  status?: "pending" | "accepted" | "declined";
 }
 
 export interface InviteRepository {

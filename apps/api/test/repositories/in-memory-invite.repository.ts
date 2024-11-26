@@ -1,6 +1,10 @@
+import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { DomainEvents } from "@/core/events/domain-events";
-import { InviteRepository } from "@/modules/project/application/repositories/invite.repository";
+import {
+  FindAllByMemberIdFilters,
+  InviteRepository,
+} from "@/modules/project/application/repositories/invite.repository";
 import { Invite } from "@/modules/project/domain/entity/invite";
 
 export class InMemoryInviteRepository implements InviteRepository {
@@ -34,11 +38,21 @@ export class InMemoryInviteRepository implements InviteRepository {
     return lastInvite || null;
   }
 
-  public async findAllByMemberId(memberId: UniqueEntityID): Promise<{ invites: Invite[]; total: number }> {
-    const invites = this.invites.filter((invite) => invite.memberId.equals(memberId));
+  public async findAllByMemberId(
+    memberId: UniqueEntityID,
+    pagination: Pagination,
+    filters: FindAllByMemberIdFilters,
+  ): Promise<{ invites: Invite[]; total: number }> {
+    const { status } = filters;
+
+    const invites = this.invites.filter((invite) => {
+      const isQueryMatched = invite.memberId.equals(memberId) && (!status || invite.status.value === status);
+
+      return isQueryMatched;
+    });
 
     return {
-      invites,
+      invites: invites.slice(pagination.skip, pagination.take),
       total: invites.length,
     };
   }
