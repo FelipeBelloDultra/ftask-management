@@ -1,8 +1,10 @@
+import { ProjectInvites as PrismaProjectInvites } from "@prisma/client";
 import { inject, injectable } from "tsyringe";
 
 import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { DomainEvents } from "@/core/events/domain-events";
+import { CacheRepository } from "@/infra/cache/cache.repository";
 import {
   FindAllByMemberIdFilters,
   InviteRepository,
@@ -18,6 +20,8 @@ export class PrismaInviteRepository implements InviteRepository {
   public constructor(
     @inject("PrismaConnection")
     private readonly prismaConnection: PrismaConnection,
+    @inject("CacheRepository")
+    private readonly cache: CacheRepository,
   ) {}
 
   public async findById(inviteId: UniqueEntityID): Promise<Invite | null> {
@@ -69,9 +73,26 @@ export class PrismaInviteRepository implements InviteRepository {
     pagination: Pagination,
     filters: FindAllByMemberIdFilters,
   ): Promise<{ invites: Invite[]; total: number }> {
+    const keys = [`account-${memberId.toValue()}`, "invites", `limit-${pagination.limit}`, `page-${pagination.page}`];
+    if (filters.status !== undefined && typeof filters.status === "string") {
+      keys.push(`status-${filters.status}`);
+    }
+
+    const CACHE_KEY = this.cache.createKey(keys);
+    const cacheHit = await this.cache.get(CACHE_KEY);
+
+    if (cacheHit) {
+      const { invites, total } = JSON.parse(cacheHit) as { invites: Array<PrismaProjectInvites>; total: number };
+
+      return {
+        invites: invites.map(InviteMapper.toDomain),
+        total,
+      };
+    }
+
     const filter = this.makeStatusFilter(filters.status);
 
-    const [invites, totalInvite] = await Promise.all([
+    const [invites, total] = await Promise.all([
       this.prismaConnection.projectInvites.findMany({
         where: {
           memberId: memberId.toValue(),
@@ -89,9 +110,11 @@ export class PrismaInviteRepository implements InviteRepository {
       }),
     ]);
 
+    await this.cache.set(CACHE_KEY, JSON.stringify({ invites, total }));
+
     return {
       invites: invites.map(InviteMapper.toDomain),
-      total: totalInvite,
+      total: total,
     };
   }
 
