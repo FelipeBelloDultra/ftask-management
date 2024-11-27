@@ -1,4 +1,3 @@
-import { ProjectInvites as PrismaProjectInvites } from "@prisma/client";
 import { inject, injectable } from "tsyringe";
 
 import { Pagination } from "@/core/entity/pagination";
@@ -11,8 +10,10 @@ import {
 } from "@/modules/project/application/repositories/invite.repository";
 import { Invite } from "@/modules/project/domain/entity/invite";
 import { InvitationStatusValues } from "@/modules/project/domain/entity/value-objects/invitation-status";
+import { InviteWithProject } from "@/modules/project/domain/entity/value-objects/invite-with-project";
 
 import { InviteMapper } from "../mappers/invite-mapper";
+import { InviteWithProjectMapper, PrismaInvitesWithProject } from "../mappers/invite-with-project-mapper";
 import { PrismaConnection } from "../prisma-connection";
 
 @injectable()
@@ -78,7 +79,7 @@ export class PrismaInviteRepository implements InviteRepository {
     memberId: UniqueEntityID,
     pagination: Pagination,
     filters: FetchManyByMemberIdFilters,
-  ): Promise<{ invites: Invite[]; total: number }> {
+  ): Promise<{ invites: InviteWithProject[]; total: number }> {
     const keys = [`account-${memberId.toValue()}`, "invites", `limit-${pagination.limit}`, `page-${pagination.page}`];
     if (filters.status !== undefined && typeof filters.status === "string") {
       keys.push(`status-${filters.status}`);
@@ -88,10 +89,10 @@ export class PrismaInviteRepository implements InviteRepository {
     const cacheHit = await this.cache.get(CACHE_KEY);
 
     if (cacheHit) {
-      const { invites, total } = JSON.parse(cacheHit) as { invites: Array<PrismaProjectInvites>; total: number };
+      const { invites, total } = JSON.parse(cacheHit) as { invites: Array<PrismaInvitesWithProject>; total: number };
 
       return {
-        invites: invites.map(InviteMapper.toDomain),
+        invites: invites.map(InviteWithProjectMapper.toDomain),
         total,
       };
     }
@@ -103,6 +104,23 @@ export class PrismaInviteRepository implements InviteRepository {
         where: {
           memberId: memberId.toValue(),
           ...filter,
+        },
+        select: {
+          id: true,
+          memberId: true,
+          status: true,
+          createdAt: true,
+          expiresAt: true,
+          projectId: true,
+          project: {
+            select: {
+              name: true,
+              createdAt: true,
+              description: true,
+              iconUrl: true,
+              slug: true,
+            },
+          },
         },
         orderBy: {
           createdAt: "desc",
@@ -119,7 +137,7 @@ export class PrismaInviteRepository implements InviteRepository {
     await this.cache.set(CACHE_KEY, JSON.stringify({ invites, total }));
 
     return {
-      invites: invites.map(InviteMapper.toDomain),
+      invites: invites.map(InviteWithProjectMapper.toDomain),
       total: total,
     };
   }
