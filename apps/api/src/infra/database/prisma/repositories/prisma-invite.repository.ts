@@ -101,6 +101,8 @@ export class PrismaInviteRepository implements InviteRepository {
 
     const [invites, total] = await Promise.all([
       this.prismaConnection.projectInvites.findMany({
+        take: pagination.take,
+        skip: pagination.skip,
         where: {
           memberId: memberId.toValue(),
           ...filter,
