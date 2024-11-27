@@ -6,9 +6,14 @@ import {
   InviteRepository,
 } from "@/modules/project/application/repositories/invite.repository";
 import { Invite } from "@/modules/project/domain/entity/invite";
+import { InviteWithProject } from "@/modules/project/domain/entity/value-objects/invite-with-project";
+
+import { InMemoryProjectRepository } from "./in-memory-project.repository";
 
 export class InMemoryInviteRepository implements InviteRepository {
   public readonly invites: Invite[] = [];
+
+  public constructor(private readonly projectRepository: InMemoryProjectRepository) {}
 
   public async findById(inviteId: UniqueEntityID): Promise<Invite | null> {
     const invite = this.invites.find((invite) => invite.id.equals(inviteId));
@@ -42,7 +47,7 @@ export class InMemoryInviteRepository implements InviteRepository {
     memberId: UniqueEntityID,
     pagination: Pagination,
     filters: FetchManyByMemberIdFilters,
-  ): Promise<{ invites: Invite[]; total: number }> {
+  ): Promise<{ invites: InviteWithProject[]; total: number }> {
     const { status } = filters;
 
     const invites = this.invites.filter((invite) => {
@@ -51,8 +56,29 @@ export class InMemoryInviteRepository implements InviteRepository {
       return isQueryMatched;
     });
 
+    const invitesWithProject = invites.map((invite) => {
+      const project = this.projectRepository.projects.find((p) => {
+        return p.id.equals(invite.projectId);
+      });
+
+      if (!project) {
+        throw new Error("there is no project associated with this invite");
+      }
+
+      return InviteWithProject.create({
+        invite,
+        project: {
+          description: project.description,
+          name: project.name,
+          slug: project.slug,
+          createdAt: project.createdAt,
+          iconUrl: project.iconUrl,
+        },
+      });
+    });
+
     return {
-      invites: invites.slice(pagination.skip, pagination.take),
+      invites: invitesWithProject.slice(pagination.skip, pagination.take),
       total: invites.length,
     };
   }
