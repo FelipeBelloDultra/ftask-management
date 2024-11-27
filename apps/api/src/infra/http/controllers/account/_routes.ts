@@ -5,6 +5,7 @@ import { uploadSingleFileMiddleware } from "@/infra/http/middlewares/factories/m
 
 import { AuthenticateAccountController } from "./authenticate-account.controller";
 import { CreateAccountController } from "./create-account.controller";
+import { FetchInvitesByMemberController } from "./fetch-invites-by-member.controller";
 import { RefreshTokenController } from "./refresh-token.controller";
 import { ShowAuthenticatedAccountController } from "./show-authenticated-account.controller";
 import { UploadAccountPictureController } from "./upload-account-picture.controller";
@@ -25,16 +26,6 @@ router.patch(
   uploadSingleFileMiddleware.handle("picture"),
   new UploadAccountPictureController().handler,
 );
-router.get("/account/invites", (req, res) => {
-  return res
-    .json({
-      message: "Not implemented yet",
-      status: 501,
-      error: {
-        message: "Not implemented yet",
-      },
-    })
-    .status(501);
-});
+router.get("/account/invites", ensureAuthenticatedMiddleware.handle(), new FetchInvitesByMemberController().handler);
 
 export { router };
