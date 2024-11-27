@@ -2,6 +2,7 @@ import { Right } from "@/core/either";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 import { makeInvite } from "@/test/factories/make-invite";
 import { InMemoryInviteRepository } from "@/test/repositories/in-memory-invite.repository";
+import { InMemoryProjectRepository } from "@/test/repositories/in-memory-project.repository";
 
 import { Invite } from "../../domain/entity/invite";
 import { DueDate } from "../../domain/entity/value-objects/due-date";
@@ -17,9 +18,11 @@ import { UpdateInviteStatusUseCase } from "./update-invite-status.use-case";
 describe("UpdateInviteStatusUseCase", () => {
   let sut: UpdateInviteStatusUseCase;
   let inMemoryInviteRepository: InMemoryInviteRepository;
+  let inMemoryProjectRepository: InMemoryProjectRepository;
 
   beforeEach(() => {
-    inMemoryInviteRepository = new InMemoryInviteRepository();
+    inMemoryProjectRepository = new InMemoryProjectRepository();
+    inMemoryInviteRepository = new InMemoryInviteRepository(inMemoryProjectRepository);
     sut = new UpdateInviteStatusUseCase(inMemoryInviteRepository);
   });
 

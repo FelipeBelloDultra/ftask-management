@@ -25,7 +25,7 @@ describe("AddProjectMemberUseCase", () => {
   beforeEach(() => {
     inMemoryProjectRepository = new InMemoryProjectRepository();
     inMemoryAccountRepository = new InMemoryAccountRepository();
-    inMemoryInviteRepository = new InMemoryInviteRepository();
+    inMemoryInviteRepository = new InMemoryInviteRepository(inMemoryProjectRepository);
     inMemoryParticipantRepository = new InMemoryParticipantRepository(
       inMemoryProjectRepository,
       inMemoryAccountRepository,

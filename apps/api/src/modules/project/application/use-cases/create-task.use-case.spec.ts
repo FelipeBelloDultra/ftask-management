@@ -27,7 +27,7 @@ describe("CreateTaskUseCase", () => {
   beforeEach(() => {
     inMemoryTaskRepository = new InMemoryTaskRepository();
     inMemoryProjectRepository = new InMemoryProjectRepository();
-    inMemoryInviteRepository = new InMemoryInviteRepository();
+    inMemoryInviteRepository = new InMemoryInviteRepository(inMemoryProjectRepository);
     inMemoryAccountRepository = new InMemoryAccountRepository();
     inMemoryParticipantRepository = new InMemoryParticipantRepository(
       inMemoryProjectRepository,
