@@ -2,6 +2,7 @@ import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 
 import { Invite } from "../../domain/entity/invite";
+import { InviteWithProject } from "../../domain/entity/value-objects/invite-with-project";
 
 export interface FetchManyByMemberIdFilters {
   status?: "pending" | "accepted" | "declined";
@@ -16,5 +17,5 @@ export interface InviteRepository {
     memberId: UniqueEntityID,
     pagination: Pagination,
     filters: FetchManyByMemberIdFilters,
-  ): Promise<{ invites: Invite[]; total: number }>;
+  ): Promise<{ invites: InviteWithProject[]; total: number }>;
 }

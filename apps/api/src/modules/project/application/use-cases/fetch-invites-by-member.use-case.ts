@@ -4,12 +4,12 @@ import { Either, right } from "@/core/either";
 import { Pagination } from "@/core/entity/pagination";
 import { UniqueEntityID } from "@/core/entity/unique-entity-id";
 
-import { Invite } from "../../domain/entity/invite";
+import { InviteWithProject } from "../../domain/entity/value-objects/invite-with-project";
 import { FetchInvitesByMemberDto } from "../dtos/fetch-invites-by-member-dto";
 import { InviteRepository } from "../repositories/invite.repository";
 
 type OnError = never;
-type OnSuccess = { invites: Invite[]; pagination: Pagination; total: number };
+type OnSuccess = { invites: InviteWithProject[]; pagination: Pagination; total: number };
 type Output = Either<OnError, OnSuccess>;
 
 @injectable()
