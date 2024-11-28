@@ -7,6 +7,7 @@ export enum NewStatusOptions {
 
 interface UpdateInviteStatusDtoProps {
   inviteId: string;
+  projectId: string;
   newStatus: NewStatusOptions;
   accountId: string;
 }
@@ -22,6 +23,10 @@ export class UpdateInviteStatusDto extends Dto<UpdateInviteStatusDtoProps> {
 
   public get accountId() {
     return this.props.accountId;
+  }
+
+  public get projectId() {
+    return this.props.projectId;
   }
 
   public static create(props: UpdateInviteStatusDtoProps) {

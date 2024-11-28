@@ -31,6 +31,7 @@ describe("UpdateInviteStatusUseCase", () => {
     await inMemoryInviteRepository.create(invite);
 
     const input = UpdateInviteStatusDto.create({
+      projectId: invite.projectId.toValue(),
       accountId: invite.memberId.toValue(),
       inviteId: invite.id.toValue(),
       newStatus: NewStatusOptions.Accept,
@@ -47,6 +48,7 @@ describe("UpdateInviteStatusUseCase", () => {
     await inMemoryInviteRepository.create(invite);
 
     const input = UpdateInviteStatusDto.create({
+      projectId: invite.projectId.toValue(),
       accountId: invite.memberId.toValue(),
       inviteId: invite.id.toValue(),
       newStatus: NewStatusOptions.Reject,
@@ -60,6 +62,7 @@ describe("UpdateInviteStatusUseCase", () => {
 
   it("should not be to update the status of the invite if the invite not exists", async () => {
     const input = UpdateInviteStatusDto.create({
+      projectId: UniqueEntityID.create().toValue(),
       accountId: makeInvite().memberId.toValue(),
       inviteId: UniqueEntityID.create().toValue(),
       newStatus: NewStatusOptions.Accept,
@@ -78,6 +81,7 @@ describe("UpdateInviteStatusUseCase", () => {
     const invite = makeInvite({ expirationDate: DueDate.create(pastDate) });
     await inMemoryInviteRepository.create(invite);
     const input = UpdateInviteStatusDto.create({
+      projectId: invite.projectId.toValue(),
       accountId: invite.memberId.toValue(),
       inviteId: invite.id.toValue(),
       newStatus: NewStatusOptions.Accept,
@@ -93,6 +97,7 @@ describe("UpdateInviteStatusUseCase", () => {
     const invite = makeInvite();
     await inMemoryInviteRepository.create(invite);
     const input = UpdateInviteStatusDto.create({
+      projectId: invite.projectId.toValue(),
       accountId: "different-account-id",
       inviteId: invite.id.toValue(),
       newStatus: NewStatusOptions.Accept,
@@ -111,6 +116,7 @@ describe("UpdateInviteStatusUseCase", () => {
     await inMemoryInviteRepository.create(invite);
 
     const input = UpdateInviteStatusDto.create({
+      projectId: invite.projectId.toValue(),
       accountId: invite.memberId.toValue(),
       inviteId: invite.id.toValue(),
       newStatus: NewStatusOptions.Accept,
