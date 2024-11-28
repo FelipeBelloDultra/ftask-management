@@ -30,8 +30,12 @@ export class UpdateInviteStatusUseCase {
       return left(new InviteNotFoundError());
     }
 
+    const projectId = UniqueEntityID.create(input.projectId);
     const accountId = UniqueEntityID.create(input.accountId);
-    if (!invite.memberId.equals(accountId)) {
+    const isInviteAccountOwner = invite.memberId.equals(accountId);
+    const isInviteProjectOwner = invite.projectId.equals(projectId);
+    const isAllowedToUpdate = isInviteAccountOwner && isInviteProjectOwner;
+    if (!isAllowedToUpdate) {
       return left(new NotAllowedError());
     }
 

@@ -109,6 +109,22 @@ describe("UpdateInviteStatusUseCase", () => {
     expect(result.value).toBeInstanceOf(NotAllowedError);
   });
 
+  it("should not be to update the status of the invite if the invite is from another project", async () => {
+    const invite = makeInvite();
+    await inMemoryInviteRepository.create(invite);
+    const input = UpdateInviteStatusDto.create({
+      projectId: "different-project-id",
+      accountId: invite.memberId.toValue(),
+      inviteId: invite.id.toValue(),
+      newStatus: NewStatusOptions.Accept,
+    });
+
+    const result = await sut.execute(input);
+
+    expect(result.isLeft()).toBeTruthy();
+    expect(result.value).toBeInstanceOf(NotAllowedError);
+  });
+
   it("should not be able to update the status if status is not 'pending'", async () => {
     const invite = makeInvite({
       status: InvitationStatus.create(InvitationStatusValues.Accepted),
