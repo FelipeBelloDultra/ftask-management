@@ -7,6 +7,7 @@ import { AddProjectMemberController } from "./add-project-member.controller";
 import { CreateProjectController } from "./create-project.controller";
 import { CreateTaskController } from "./create-task.controller";
 import { FetchProjectsByAccountController } from "./fetch-projects-by-account.controller";
+import { UpdateInviteStatusController } from "./update-invite-status.controller";
 import { UploadProjectIconController } from "./upload-project-icon.controller";
 
 const router = Router();
@@ -25,17 +26,11 @@ router.patch(
   uploadSingleFileMiddleware.handle("icon"),
   new UploadProjectIconController().handler,
 );
-router.patch("/projects/:projectId/invites/:inviteId/:inviteStatus", (_, res) => {
-  return res
-    .json({
-      message: "Not implemented yet",
-      status: 501,
-      error: {
-        message: "Not implemented yet",
-      },
-    })
-    .status(501);
-});
+router.patch(
+  "/projects/:projectId/invites/:inviteId/:inviteStatus",
+  ensureAuthenticatedMiddleware.handle(),
+  new UpdateInviteStatusController().handler,
+);
 router.get("/projects/:projectId/invites", (req, res) => {
   return res
     .json({
