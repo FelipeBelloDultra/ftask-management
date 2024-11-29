@@ -62,7 +62,11 @@
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground
+      bg-background
+      font-sans
+      antialiased;
   }
 }
