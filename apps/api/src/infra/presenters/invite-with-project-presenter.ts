@@ -7,6 +7,7 @@ export class InviteWithProjectPresenter {
       expires_at: data.invite.expirationDate.value,
       member_id: data.invite.memberId.toValue(),
       status: data.invite.status.value,
+      created_at: data.invite.createdAt,
       project: {
         created_at: data.project.createdAt,
         slug: data.project.slug.value,
