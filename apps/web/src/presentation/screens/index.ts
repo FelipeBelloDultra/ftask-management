@@ -8,3 +8,4 @@ export const DashboardScreen = lazy(() => import("@/presentation/screens/dashboa
 export const NotificationsScreen = lazy(() => import("@/presentation/screens/notifications"));
 export const SettingsScreen = lazy(() => import("@/presentation/screens/settings"));
 export const SettingsProfileScreen = lazy(() => import("@/presentation/screens/settings-profile"));
+export const InvitesScreen = lazy(() => import("@/presentation/screens/invites"));

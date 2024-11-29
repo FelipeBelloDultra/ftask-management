@@ -5,6 +5,7 @@ import { UnauthenticatedLayout } from "@/presentation/layouts/unauthenticated";
 import { WithSelectedProjectLayout } from "@/presentation/layouts/with-selected-project";
 import {
   DashboardScreen,
+  InvitesScreen,
   NotificationDetailScreen,
   NotificationsScreen,
   SettingsProfileScreen,
@@ -35,6 +36,7 @@ export function Router() {
             <Route index element={<SettingsScreen />} />
             <Route path="profile" element={<SettingsProfileScreen />} />
           </Route>
+          <Route path="invites" element={<InvitesScreen />} />
           <Route path="projects">
             <Route index element={<div>main projects page</div>} />
             <Route path="new" element={<div>New project</div>} />
