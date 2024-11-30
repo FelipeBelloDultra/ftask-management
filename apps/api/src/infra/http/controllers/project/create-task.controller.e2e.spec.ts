@@ -16,7 +16,7 @@ import { ParticipantFactory } from "@/test/factories/make-participant";
 import { ProjectFactory } from "@/test/factories/make-project";
 import { makeTask } from "@/test/factories/make-task";
 
-describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
+describe("[E2E] - Add task - [POST /projects/:projectId/tasks]", () => {
   let app: App;
   let accountFactory: AccountFactory;
   let participantFactory: ParticipantFactory;
@@ -71,7 +71,7 @@ describe("[E2E] - Add task - [POST /projects/:projectId/task]", () => {
     });
 
     const sut = await supertest(app.expressInstance)
-      .post(`/api/projects/${project.id.toValue()}/task`)
+      .post(`/api/projects/${project.id.toValue()}/tasks`)
       .set("Authorization", `Bearer ${accessToken}`)
       .send({
         title: task.title,
