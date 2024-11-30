@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { CommandIcon } from "lucide-react";
 import { Suspense } from "react";
 import { Link } from "react-router-dom";
 
@@ -22,8 +23,11 @@ export function Header() {
   return (
     <header className="flex justify-between items-center h-14 px-4 border-b w-full flex-shrink-0 bg-accent/50">
       <section className="flex items-center gap-16">
-        <Button asChild variant="link" className="text-2xl font-semibold tracking-wider">
-          <Link to="/dash">FTask Management</Link>
+        <Button asChild variant="link" className="text-xl font-semibold tracking-wider gap-2">
+          <Link to="/dash">
+            <CommandIcon />
+            FTask Management
+          </Link>
         </Button>
 
         <Suspense fallback={<div>loading...</div>}>
