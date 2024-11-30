@@ -18,7 +18,18 @@ router.post(
   new AddProjectMemberController().handler,
 );
 router.post("/projects", ensureAuthenticatedMiddleware.handle(), new CreateProjectController().handler);
-router.post("/projects/:projectId/task", ensureAuthenticatedMiddleware.handle(), new CreateTaskController().handler);
+router.post("/projects/:projectId/tasks", ensureAuthenticatedMiddleware.handle(), new CreateTaskController().handler);
+router.get("/projects/:projectId/tasks", (req, res) => {
+  return res
+    .json({
+      message: "Not implemented yet",
+      status: 501,
+      error: {
+        message: "Not implemented yet",
+      },
+    })
+    .status(501);
+});
 router.get("/projects", ensureAuthenticatedMiddleware.handle(), new FetchProjectsByAccountController().handler);
 router.patch(
   "/projects/:projectId/upload/icon",
@@ -31,16 +42,5 @@ router.patch(
   ensureAuthenticatedMiddleware.handle(),
   new UpdateInviteStatusController().handler,
 );
-router.get("/projects/:projectId/invites", (req, res) => {
-  return res
-    .json({
-      message: "Not implemented yet",
-      status: 501,
-      error: {
-        message: "Not implemented yet",
-      },
-    })
-    .status(501);
-});
 
 export { router };
